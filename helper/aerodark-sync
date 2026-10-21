@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+# aerodark-sync — keeps AeroThemePlasma's glass accent colour in step with light/dark.
+#
+# When the active colour scheme becomes Aero Dark, your current accent (the colour of the
+# taskbar, title bars and Start menu glass) is remembered and the black VistaVG accent is
+# applied. When you switch back to a light scheme, your accent is restored. If you tweak the
+# accent while in dark mode, that tweak is remembered as your dark accent for next time.
+#
+#   aerodark-sync          sync once
+#   aerodark-sync --watch  sync now, then keep syncing whenever the colour scheme changes
+#   aerodark-sync --stop   stop a running watcher
+set -u
+
+DATA="${XDG_DATA_HOME:-$HOME/.local/share}"
+CONF="${XDG_CONFIG_HOME:-$HOME/.config}"
+STATE="$DATA/aerodark"
+KWINRC="$CONF/kwinrc"
+DARK_SCHEME="AeroDark"
+KEYS="AccentColorGroup AccentColorName AeroHue AeroSaturation AeroBrightness AeroIntensity CustomColor"
+# VistaVG Black: hue 0, saturation 0, brightness 8, intensity 200 (custom colour)
+DEFAULT_DARK="AccentColorGroup=7
+AccentColorName=0
+AeroHue=0
+AeroSaturation=0
+AeroBrightness=8
+AeroIntensity=200
+CustomColor=#c8141414"
+
+have() { command -v "$1" >/dev/null 2>&1; }
+KREAD=kreadconfig6;  have kreadconfig6  || KREAD=kreadconfig5
+KWRITE=kwriteconfig6; have kwriteconfig6 || KWRITE=kwriteconfig5
+QDBUS=qdbus6; have qdbus6 || QDBUS=qdbus
+mkdir -p "$STATE"
+log() { printf 'aerodark-sync: %s\n' "$*" >&2; }
+
+# The kwinrc group that holds the accent keys (found, not assumed, so ATP versions can differ).
+accent_group() {
+  [ -f "$KWINRC" ] || return 1
+  awk '/^\[.*\]$/ { g = substr($0, 2, length($0) - 2); next }
+       /^(AccentColorGroup|AeroIntensity|CustomColor)=/ && g != "" { print g; exit }' "$KWINRC"
+}
+
+group_args() { # "A][B" -> --group A --group B
+  local g="$1" rest
+  while :; do
+    case "$g" in
+      *"]["*) printf '%s\n' "--group" "${g%%]\[*}"; g="${g#*]\[}" ;;
+      *) printf '%s\n' "--group" "$g"; break ;;
+    esac
+  done
+}
+
+read_key()  { mapfile -t GA < <(group_args "$1"); "$KREAD"  --file kwinrc "${GA[@]}" --key "$2" 2>/dev/null; }
+write_key() { mapfile -t GA < <(group_args "$1"); "$KWRITE" --file kwinrc "${GA[@]}" --key "$2" -- "$3"; }
+del_key()   { mapfile -t GA < <(group_args "$1"); "$KWRITE" --file kwinrc "${GA[@]}" --key "$2" --delete; }
+
+snapshot() { # print current accent as KEY=VALUE lines (KEY=@unset@ when absent)
+  local g="$1" k v
+  for k in $KEYS; do
+    if grep -q "^$k=" <(awk -v g="[$g]" '$0 == g { on = 1; next } /^\[/ { on = 0 } on' "$KWINRC"); then
+      v="$(read_key "$g" "$k")"; printf '%s=%s\n' "$k" "$v"
+    else
+      printf '%s=@unset@\n' "$k"
+    fi
+  done
+}
+
+apply() { # apply KEY=VALUE lines from stdin
+  local g="$1" line k v
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    k="${line%%=*}"; v="${line#*=}"
+    if [ "$v" = "@unset@" ]; then del_key "$g" "$k"; else write_key "$g" "$k" "$v"; fi
+  done
+}
+
+reload_kwin() {
+  have "$QDBUS" || { log "no qdbus found; log out and back in to see the new accent"; return; }
+  "$QDBUS" org.kde.KWin /KWin reconfigure >/dev/null 2>&1
+  local e
+  for e in $("$QDBUS" org.kde.KWin /Effects org.kde.kwin.Effects.loadedEffects 2>/dev/null); do
+    case "$e" in *aero*|*glass*|*blur*|*smod*|*SMOD*) "$QDBUS" org.kde.KWin /Effects org.kde.kwin.Effects.reconfigureEffect "$e" >/dev/null 2>&1 ;; esac
+  done
+}
+
+sync_once() {
+  local scheme mode g
+  scheme="$("$KREAD" --file kdeglobals --group General --key ColorScheme 2>/dev/null)"
+  mode="$(cat "$STATE/accent-mode" 2>/dev/null || echo light)"
+  if ! g="$(accent_group)" || [ -z "$g" ]; then
+    log "couldn't find AeroThemePlasma's accent colour in kwinrc yet."
+    log "open the window colour page once, click Save Changes, and switch theme again."
+    return 0
+  fi
+  if [ "$scheme" = "$DARK_SCHEME" ] && [ "$mode" != dark ]; then
+    snapshot "$g" > "$STATE/accent-light"
+    if grep -qx 'CustomColor=#c8141414' "$STATE/accent-light" && grep -qx 'AccentColorGroup=7' "$STATE/accent-light"; then
+      # the glass was already black (set by hand); remember "no custom colour" so going light
+      # falls back to AeroThemePlasma's default instead of staying black
+      for k in $KEYS; do printf '%s=@unset@\n' "$k"; done > "$STATE/accent-light"
+    fi
+    if [ -s "$STATE/accent-dark" ]; then apply "$g" < "$STATE/accent-dark"; else printf '%s\n' "$DEFAULT_DARK" | apply "$g"; fi
+    echo dark > "$STATE/accent-mode"
+    reload_kwin; log "applied the black Aero Dark accent"
+  elif [ "$scheme" != "$DARK_SCHEME" ] && [ "$mode" = dark ]; then
+    snapshot "$g" > "$STATE/accent-dark"          # remember any tweaks made while dark
+    [ -s "$STATE/accent-light" ] && apply "$g" < "$STATE/accent-light"
+    echo light > "$STATE/accent-mode"
+    reload_kwin; log "restored your light accent"
+  fi
+}
+
+stop_watcher() { # stop a running watcher (it runs in its own session, so kill the whole group)
+  local pid; pid="$(cat "$STATE/watch.pid" 2>/dev/null)" || return 0
+  if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+    # started with setsid it leads its own group; started by autostart it may not, so also
+    # stop its children (the dbus-monitor pipe) directly
+    kill -- "-$pid" 2>/dev/null || { pkill -P "$pid" 2>/dev/null; kill "$pid" 2>/dev/null; }
+  fi
+  rm -f "$STATE/watch.pid"
+}
+
+if [ "${1:-}" = "--stop" ]; then
+  stop_watcher
+elif [ "${1:-}" = "--watch" ]; then
+  stop_watcher
+  echo $$ > "$STATE/watch.pid"
+  sync_once
+  have dbus-monitor || { log "dbus-monitor not found; only syncing at login"; exit 0; }
+  # KDE broadcasts KGlobalSettings.notifyChange whenever the colour scheme (palette) changes
+  dbus-monitor --session "type='signal',interface='org.kde.KGlobalSettings',member='notifyChange'" 2>/dev/null |
+  while IFS= read -r line; do
+    case "$line" in
+      *member=notifyChange*) sleep 1; sync_once ;;
+    esac
+  done
+else
+  sync_once
+fi

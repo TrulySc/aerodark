@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            { "Name": "Aero Dark contributors" },
+            { "Email": "wackyideas@disroot.org", "Name": "wackyideas (AeroThemePlasma)" }
+        ],
+        "Category": "",
+        "Description": "Dark mode for AeroThemePlasma in the style of VistaVG Black: black glass, silver gloss, Vista-blue glow",
+        "Icon": "user-desktop",
+        "Id": "aerodark",
+        "License": "AGPLv3",
+        "Name": "Aero Dark (VistaVG Black)",
+        "Version": "1.0",
+        "Website": "https://github.com/aeroshell-desktop/aerothemeplasma"
+    },
+    "Keywords": "aero;dark;vista;black;windows 7",
+    "X-KDE-ParentApp": "org.kde.plasmashell",
+    "X-Plasma-APIVersion": "2"
+}

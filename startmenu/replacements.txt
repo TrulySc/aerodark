@@ -1,21 +1,30 @@
 # Start menu (SevenStart) colour swaps for Aero Dark (VistaVG Black palette).
+# Each swap keeps the original light value and adds the dark one, chosen at runtime by `adDark`
+# (true whenever the active colour scheme has a dark window colour), so the menu follows the theme.
 # One per line:  file<TAB>old text<TAB>new text   (exact text, applied to contents/ui/<file>)
-MenuRepresentation.qml	property color leftPanelBackgroundColor: "white"	property color leftPanelBackgroundColor: "#141516"
-MenuRepresentation.qml	property color leftPanelSeparatorColor: "#d6e5f5"	property color leftPanelSeparatorColor: "#2b2d30"
-MenuRepresentation.qml	property color searchPanelSeparatorColor: "#cddbea"	property color searchPanelSeparatorColor: "#0a0a0b"
-MenuRepresentation.qml	property color searchPanelBackgroundColor: "#f1f5fb"	property color searchPanelBackgroundColor: "#1e1f22"
-MenuRepresentation.qml	property color searchFieldBackgroundColor: "white"	property color searchFieldBackgroundColor: "#0c0d0e"
-MenuRepresentation.qml	property color searchFieldTextColor: "black"	property color searchFieldTextColor: "#ececec"
-MenuRepresentation.qml	property color searchFieldPlaceholderColor: "#707070"	property color searchFieldPlaceholderColor: "#9a9da2"
-MenuRepresentation.qml	property color shutdownTextColor: "#202020"	property color shutdownTextColor: "#ececec"
-MenuRepresentation.qml	GradientStop { position: 0.0; color: "#ccd9ea" }	GradientStop { position: 0.0; color: "#0a0a0b" }
-MenuRepresentation.qml	GradientStop { position: 1.0; color: "#f0f4fa" }	GradientStop { position: 1.0; color: "#1e1f22" }
-MenuRepresentation.qml	color: "black"	color: "#ececec"
-KickoffItem.qml	color: "#000000"	color: "#ececec"
-KickoffItem.qml	color: "#ffe599"	color: "#4a3410"
-KickoffItemChild.qml	color: "#000000"	color: "#ececec"
-KickoffItemChild.qml	color: "#ffe599"	color: "#4a3410"
-Breadcrumb.qml	color: "#404040"	color: "#c8c9cc"
-FavoritesView.qml	color: "#ababab"	color: "#3c3e42"
-SectionDelegate.qml	color: "#1d3287"	color: "#6cc4ff"
-SectionDelegate.qml	color: "#e5e5e5"	color: "#2b2d30"
+MenuRepresentation.qml	property color leftPanelBackgroundColor: "white"	property color leftPanelBackgroundColor: (adDark ? "#141516" : "white")
+MenuRepresentation.qml	property color leftPanelSeparatorColor: "#d6e5f5"	property color leftPanelSeparatorColor: (adDark ? "#2b2d30" : "#d6e5f5")
+MenuRepresentation.qml	property color searchPanelSeparatorColor: "#cddbea"	property color searchPanelSeparatorColor: (adDark ? "#0a0a0b" : "#cddbea")
+MenuRepresentation.qml	property color searchPanelBackgroundColor: "#f1f5fb"	property color searchPanelBackgroundColor: (adDark ? "#1e1f22" : "#f1f5fb")
+MenuRepresentation.qml	property color searchFieldBackgroundColor: "white"	property color searchFieldBackgroundColor: (adDark ? "#0c0d0e" : "white")
+MenuRepresentation.qml	property color searchFieldTextColor: "black"	property color searchFieldTextColor: (adDark ? "#ececec" : "black")
+MenuRepresentation.qml	property color searchFieldPlaceholderColor: "#707070"	property color searchFieldPlaceholderColor: (adDark ? "#9a9da2" : "#707070")
+MenuRepresentation.qml	property color shutdownTextColor: "#202020"	property color shutdownTextColor: (adDark ? "#ececec" : "#202020")
+MenuRepresentation.qml	GradientStop { position: 0.0; color: "#ccd9ea" }	GradientStop { position: 0.0; color: (adDark ? "#0a0a0b" : "#ccd9ea") }
+MenuRepresentation.qml	GradientStop { position: 1.0; color: "#f0f4fa" }	GradientStop { position: 1.0; color: (adDark ? "#1e1f22" : "#f0f4fa") }
+MenuRepresentation.qml	color: "black"	color: (adDark ? "#ececec" : "black")
+KickoffItem.qml	color: "#000000"	color: (adDark ? "#ececec" : "#000000")
+KickoffItem.qml	color: "#ffe599"	color: (adDark ? "#4a3410" : "#ffe599")
+KickoffItemChild.qml	color: "#000000"	color: (adDark ? "#ececec" : "#000000")
+KickoffItemChild.qml	color: "#ffe599"	color: (adDark ? "#4a3410" : "#ffe599")
+Breadcrumb.qml	color: "#404040"	color: (adDark ? "#c8c9cc" : "#404040")
+FavoritesView.qml	color: "#ababab"	color: (adDark ? "#3c3e42" : "#ababab")
+SectionDelegate.qml	color: "#1d3287"	color: (adDark ? "#6cc4ff" : "#1d3287")
+SectionDelegate.qml	color: "#e5e5e5"	color: (adDark ? "#2b2d30" : "#e5e5e5")
+KickoffHighlight.qml	Qt.resolvedUrl("svgs/menuitem.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/menuitem.svg" : "svgs/menuitem.svg")
+KickoffItem.qml	Qt.resolvedUrl("svgs/menuitem.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/menuitem.svg" : "svgs/menuitem.svg")
+KickoffItemChild.qml	Qt.resolvedUrl("svgs/menuitem.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/menuitem.svg" : "svgs/menuitem.svg")
+MenuRepresentation.qml	Qt.resolvedUrl("svgs/menuitem.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/menuitem.svg" : "svgs/menuitem.svg")
+main.qml	Qt.resolvedUrl("svgs/menuitem.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/menuitem.svg" : "svgs/menuitem.svg")
+MenuRepresentation.qml	Qt.resolvedUrl("svgs/background.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/background.svg" : "svgs/background.svg")
+MenuRepresentation.qml	Qt.resolvedUrl("svgs/lineedit.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/lineedit.svg" : "svgs/lineedit.svg")
