@@ -1,0 +1,21 @@
+# Start menu (SevenStart) colour swaps for Aero Dark (VistaVG Black palette).
+# One per line:  file<TAB>old text<TAB>new text   (exact text, applied to contents/ui/<file>)
+MenuRepresentation.qml	property color leftPanelBackgroundColor: "white"	property color leftPanelBackgroundColor: "#141516"
+MenuRepresentation.qml	property color leftPanelSeparatorColor: "#d6e5f5"	property color leftPanelSeparatorColor: "#2b2d30"
+MenuRepresentation.qml	property color searchPanelSeparatorColor: "#cddbea"	property color searchPanelSeparatorColor: "#0a0a0b"
+MenuRepresentation.qml	property color searchPanelBackgroundColor: "#f1f5fb"	property color searchPanelBackgroundColor: "#1e1f22"
+MenuRepresentation.qml	property color searchFieldBackgroundColor: "white"	property color searchFieldBackgroundColor: "#0c0d0e"
+MenuRepresentation.qml	property color searchFieldTextColor: "black"	property color searchFieldTextColor: "#ececec"
+MenuRepresentation.qml	property color searchFieldPlaceholderColor: "#707070"	property color searchFieldPlaceholderColor: "#9a9da2"
+MenuRepresentation.qml	property color shutdownTextColor: "#202020"	property color shutdownTextColor: "#ececec"
+MenuRepresentation.qml	GradientStop { position: 0.0; color: "#ccd9ea" }	GradientStop { position: 0.0; color: "#0a0a0b" }
+MenuRepresentation.qml	GradientStop { position: 1.0; color: "#f0f4fa" }	GradientStop { position: 1.0; color: "#1e1f22" }
+MenuRepresentation.qml	color: "black"	color: "#ececec"
+KickoffItem.qml	color: "#000000"	color: "#ececec"
+KickoffItem.qml	color: "#ffe599"	color: "#4a3410"
+KickoffItemChild.qml	color: "#000000"	color: "#ececec"
+KickoffItemChild.qml	color: "#ffe599"	color: "#4a3410"
+Breadcrumb.qml	color: "#404040"	color: "#c8c9cc"
+FavoritesView.qml	color: "#ababab"	color: "#3c3e42"
+SectionDelegate.qml	color: "#1d3287"	color: "#6cc4ff"
+SectionDelegate.qml	color: "#e5e5e5"	color: "#2b2d30"
