@@ -43,15 +43,19 @@ rm -rf "$DATA/plasma/look-and-feel/$LNF_ID"
 rm -f  "$DATA/color-schemes/AeroDark.colors"
 rm -rf "$CONF/Kvantum/Windows7AeroDark"
 
-DST="$DATA/plasma/plasmoids/$PLASMOID_ID"
 restart=0
-if [ -f "$DST/.aerodark" ]; then
-  rm -rf "$DST"
-  if [ -d "$STATE/SevenStart.backup" ]; then
-    mv "$STATE/SevenStart.backup" "$DST"
-    say "Put back your earlier custom Start menu copy"
-  fi
+for dst in "$DATA/plasma/plasmoids/"*; do      # Start menu, system tray, … (every copy we made)
+  [ -f "$dst/.aerodark" ] || continue
+  id="$(basename "$dst")"; rm -rf "$dst"
+  if [ -d "$STATE/$id.backup" ]; then mv "$STATE/$id.backup" "$dst"; say "Put back your earlier custom $id copy"; fi
+  [ -d "$STATE/SevenStart.backup" ] && [ "$id" = "$PLASMOID_ID" ] && mv "$STATE/SevenStart.backup" "$dst"
   restart=1
+done
+rm -rf "$DATA/plasma/desktoptheme/Seven-Black-Dark"
+KWRITE=kwriteconfig6; have kwriteconfig6 || KWRITE=kwriteconfig5
+if [ "$($KREAD --file kdeglobals --group KDE --key DefaultDarkLookAndFeel 2>/dev/null)" = "$LNF_ID" ]; then
+  "$KWRITE" --file kdeglobals --group KDE --key DefaultDarkLookAndFeel --delete
+  "$KWRITE" --file kdeglobals --group KDE --key DefaultLightLookAndFeel --delete
 fi
 rm -rf "$STATE"
 

@@ -16,10 +16,12 @@ AeroThemePlasma's own **Windows 7 style**. Pick either one to switch everything 
 |---|---|---|
 | Colors | Aero | Aero Dark (VistaVG Black) |
 | Application Style | kvantum | kvantum-dark |
-| Start menu | light | dark (switches by itself) |
+| Plasma style (popups, tooltips) | Seven Black | Seven Black Dark |
+| Start menu, tray popup footers | light | dark (switch by themselves) |
 | Taskbar, title bars | your glass colour | black glass (switched by the helper) |
 
-Everything else (icons, cursors, window decoration, Plasma style, splash screen) stays AeroThemePlasma's.
+Everything else (icons, cursors, window decoration, splash screen) stays AeroThemePlasma's. The Display
+popup's **Dark Mode** switch also flips between these two themes.
 
 How it works:
 
@@ -38,6 +40,8 @@ How it works:
 | `color-schemes/AeroDark.colors` | `~/.local/share/color-schemes/` |
 | `kvantum/Windows7AeroDark/` — dark recolor of ATP's Windows7Aero Kvantum theme | `~/.config/Kvantum/` |
 | `startmenu/` — dark artwork and light/dark switching for the Start menu | a private copy of the Start menu in `~/.local/share/plasma/plasmoids/` |
+| `plasma-style/` — dark popup bodies, tooltips, fields, buttons and sliders for a copy of ATP's Seven-Black | `~/.local/share/plasma/desktoptheme/Seven-Black-Dark/` |
+| `systemtray/` — light/dark switching for the tray popups' footer | a private copy of the tray in `~/.local/share/plasma/plasmoids/` |
 | `helper/aerodark-sync` — switches the glass colour with the theme | `~/.local/bin/`, started from `~/.config/autostart/` |
 
 ## Install
@@ -68,6 +72,18 @@ brightness 8, intensity 200); when you switch back it restores your colour.
 - AeroThemePlasma only saves a glass colour once you've clicked **Save Changes** on that page. If the
   installer warns about this, do that once with your normal colour.
 - Don't want it? `./install.sh --no-accent`.
+
+## Notifications (optional extra step)
+
+Notification popups are compiled into AeroThemePlasma's notification applet, so they can't be changed
+with a private copy. `extras/dark-notifications.sh` patches that one applet's source and rebuilds it
+with the same tools you used to install AeroThemePlasma (it asks for your password to install).
+After that, notifications switch between light and dark on their own. Re-run it after updating ATP.
+
+```bash
+./extras/dark-notifications.sh                 # downloads the matching ATP source
+./extras/dark-notifications.sh ~/aerothemeplasma   # or uses your own ATP folder
+```
 
 ## Uninstall
 

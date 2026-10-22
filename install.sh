@@ -18,6 +18,9 @@ STATE="$DATA/aerodark"
 LNF_ID="aerodark"
 ATP_LNF="authui7"
 PLASMOID_ID="io.gitgud.wackyideas.SevenStart"
+TRAY_ID="io.gitgud.wackyideas.systemtray"
+ATP_STYLE="Seven-Black"
+DARK_STYLE="Seven-Black-Dark"
 DO_STARTMENU=1
 DO_APPLY=1
 DO_ACCENT=1
@@ -68,7 +71,38 @@ elif [ -n "$cur_kv" ] && [ "$cur_kv" != "Windows7Aero" ]; then
   warn "Kvantum is set to '$cur_kv', not Windows7Aero — the dark style will only work with Windows7Aero."
 fi
 
-# ---- 3. Global Theme -----------------------------------------------------------------
+# ---- 3. dark Plasma style (popups, notifications, tooltips) --------------------------
+say "Installing the '$DARK_STYLE' Plasma style"
+STYLE_DST="$DATA/plasma/desktoptheme/$DARK_STYLE"
+rm -rf "$STYLE_DST"; mkdir -p "$(dirname "$STYLE_DST")"
+if STYLE_SRC="$(find_system "plasma/desktoptheme/$ATP_STYLE")"; then
+  # built from AeroThemePlasma's own Seven-Black, so the taskbar, glass and icons stay identical;
+  # only the popup bodies, tooltips, fields, buttons, sliders and list highlights are darkened
+  cp -a "$STYLE_SRC" "$STYLE_DST"
+  (cd "$HERE/plasma-style/files" && find . -type f) | while read -r f; do
+    mkdir -p "$STYLE_DST/$(dirname "$f")"; cp -f "$HERE/plasma-style/files/$f" "$STYLE_DST/$f"
+  done
+  cp -f "$HERE/plasma-style/colors" "$STYLE_DST/colors"
+  if have python3; then
+    python3 - "$STYLE_DST/metadata.json" <<'PY'
+import json, sys
+p = sys.argv[1]; m = json.load(open(p))
+m["KPlugin"]["Id"] = "Seven-Black-Dark"
+m["KPlugin"]["Name"] = "Seven Black Dark (Aero Dark)"
+m["KPlugin"]["Description"] = "AeroThemePlasma's Seven Black with dark popups, for Aero Dark"
+json.dump(m, open(p, "w"), indent=4)
+PY
+  else
+    sed -i -e 's/"Id": *"Seven-Black"/"Id": "Seven-Black-Dark"/' -e 's/"Name": *"Seven Black"/"Name": "Seven Black Dark (Aero Dark)"/' "$STYLE_DST/metadata.json"
+  fi
+  rm -rf "$HOME/.cache/plasma_theme_${DARK_STYLE}"* "$HOME/.cache/plasma-svgelements-${DARK_STYLE}"* 2>/dev/null
+  STYLE_OK=1
+else
+  warn "AeroThemePlasma's Plasma style ($ATP_STYLE) wasn't found; popups will stay light."
+  STYLE_OK=0
+fi
+
+# ---- 4. Global Theme -----------------------------------------------------------------
 say "Installing the 'Aero Dark' Global Theme"
 LNF_DST="$DATA/plasma/look-and-feel/$LNF_ID"
 rm -rf "$LNF_DST"; mkdir -p "$(dirname "$LNF_DST")"
@@ -89,10 +123,24 @@ if [ -f "$LNF_DST/contents/defaults" ]; then
 else
   cp -f "$HERE/global-theme/contents/defaults" "$LNF_DST/contents/defaults"
 fi
+if [ "$STYLE_OK" = 1 ]; then
+  if grep -q '^\[plasmarc\]\[Theme\]' "$LNF_DST/contents/defaults"; then
+    awk -v st="$DARK_STYLE" '/^\[/ { sec = $0 } sec == "[plasmarc][Theme]" && /^name=/ { print "name=" st; next } { print }' \
+      "$LNF_DST/contents/defaults" > "$LNF_DST/contents/defaults.tmp" && mv "$LNF_DST/contents/defaults.tmp" "$LNF_DST/contents/defaults"
+  else
+    printf '\n[plasmarc][Theme]\nname=%s\n' "$DARK_STYLE" >> "$LNF_DST/contents/defaults"
+  fi
+fi
+# KDE's "Dark Mode" quick toggle (Display popup) and day/night switching use these two themes
+KWRITE=kwriteconfig6; have kwriteconfig6 || KWRITE=kwriteconfig5
+if have "$KWRITE"; then
+  "$KWRITE" --file kdeglobals --group KDE --key DefaultDarkLookAndFeel "$LNF_ID"
+  "$KWRITE" --file kdeglobals --group KDE --key DefaultLightLookAndFeel "$ATP_LNF"
+fi
 mkdir -p "$LNF_DST/contents/previews"
 cp -f "$HERE/global-theme/contents/previews/"* "$LNF_DST/contents/previews/"
 
-# ---- 4. Start menu: follow light/dark automatically ---------------------------------
+# ---- 5. Start menu + tray popups: follow light/dark automatically ---------------------------------
 replace_literal() { # file old new -> prints number of hits
   local f="$1" old="$2" new="$3" n
   n="$(grep -cF -- "$old" "$f" 2>/dev/null || true)"
@@ -123,38 +171,45 @@ add_dark_flag() { # declare `adDark` on the file's root object: true when the co
   grep -q 'property bool adDark' "$f"
 }
 
-STARTMENU_DONE=0
+patch_plasmoid() { # patch_plasmoid <plasmoid id> <label> <replacements file> [dark svg dir]
+  local id="$1" label="$2" repl="$3" svgs="${4:-}" src dst missed=0 file old new hits
+  dst="$DATA/plasma/plasmoids/$id"
+  if ! src="$(find_system "plasma/plasmoids/$id")"; then
+    warn "Couldn't find the installed $label ($id) — skipping it."
+    return 1
+  fi
+  if [ -d "$dst" ] && [ ! -f "$dst/.aerodark" ]; then
+    warn "You already had a custom copy of the $label; backing it up to $STATE/$id.backup"
+    rm -rf "$STATE/$id.backup"; mv "$dst" "$STATE/$id.backup"
+  fi
+  rm -rf "$dst"; mkdir -p "$(dirname "$dst")"
+  cp -a "$src" "$dst"
+  touch "$dst/.aerodark"
+  if [ -n "$svgs" ]; then
+    mkdir -p "$dst/contents/ui/svgs/aerodark"
+    cp -f "$svgs/"*.svg "$dst/contents/ui/svgs/aerodark/"
+  fi
+  for file in $(grep -v '^#' "$repl" | cut -f1 | sort -u); do
+    add_dark_flag "$dst/contents/ui/$file" || { missed=$((missed+1)); warn "  couldn't prepare $file"; }
+  done
+  while IFS=$'\t' read -r file old new; do
+    case "$file" in ''|\#*) continue ;; esac
+    hits="$(replace_literal "$dst/contents/ui/$file" "$old" "$new")"
+    [ "$hits" -gt 0 ] || { missed=$((missed+1)); warn "  not found in $file: $old"; }
+  done < "$repl"
+  [ "$missed" = 0 ] || warn "$missed $label change(s) didn't apply — your AeroThemePlasma version may differ; the rest still applied."
+  return 0
+}
+
+SHELL_RESTART=0
 if [ "$DO_STARTMENU" = 1 ]; then
   say "Teaching the Start menu to follow light/dark (a private copy in your home folder)"
-  DST="$DATA/plasma/plasmoids/$PLASMOID_ID"
-  if ! SRC="$(find_system "plasma/plasmoids/$PLASMOID_ID")"; then
-    warn "Couldn't find the installed Seven Start menu — skipping this step."
-  else
-    if [ -d "$DST" ] && [ ! -f "$DST/.aerodark" ]; then
-      warn "You already had a custom copy of the Start menu; backing it up to $STATE/SevenStart.backup"
-      rm -rf "$STATE/SevenStart.backup"; mv "$DST" "$STATE/SevenStart.backup"
-    fi
-    rm -rf "$DST"; mkdir -p "$(dirname "$DST")"
-    cp -a "$SRC" "$DST"
-    touch "$DST/.aerodark"
-    mkdir -p "$DST/contents/ui/svgs/aerodark"
-    cp -f "$HERE/startmenu/svgs/"*.svg "$DST/contents/ui/svgs/aerodark/"
-
-    missed=0
-    for file in $(grep -v '^#' "$HERE/startmenu/replacements.txt" | cut -f1 | sort -u); do
-      add_dark_flag "$DST/contents/ui/$file" || { missed=$((missed+1)); warn "  couldn't prepare $file"; }
-    done
-    while IFS=$'\t' read -r file old new; do
-      case "$file" in ''|\#*) continue ;; esac
-      hits="$(replace_literal "$DST/contents/ui/$file" "$old" "$new")"
-      [ "$hits" -gt 0 ] || { missed=$((missed+1)); warn "  not found in $file: $old"; }
-    done < "$HERE/startmenu/replacements.txt"
-    [ "$missed" = 0 ] || warn "$missed Start menu change(s) didn't apply — your AeroThemePlasma version may differ; the rest still applied."
-    STARTMENU_DONE=1
-  fi
+  patch_plasmoid "$PLASMOID_ID" "Start menu" "$HERE/startmenu/replacements.txt" "$HERE/startmenu/svgs" && SHELL_RESTART=1
 fi
+say "Teaching the system tray popups' footer to follow light/dark (a private copy in your home folder)"
+patch_plasmoid "$TRAY_ID" "system tray" "$HERE/systemtray/replacements.txt" && SHELL_RESTART=1
 
-# ---- 5. glass accent follows light/dark -------------------------------------------
+# ---- 6. glass accent follows light/dark -------------------------------------------
 if [ "$DO_ACCENT" = 1 ]; then
   say "Installing the helper that switches the taskbar/title-bar glass between your colour and black"
   BIN="$HOME/.local/bin"; mkdir -p "$BIN" "$CONF/autostart"
@@ -176,7 +231,7 @@ EOF
   fi
 fi
 
-# ---- 6. apply ------------------------------------------------------------------------
+# ---- 7. apply ------------------------------------------------------------------------
 if [ "$DO_APPLY" = 1 ]; then
   if have plasma-apply-lookandfeel; then
     say "Switching to Aero Dark"
@@ -188,7 +243,7 @@ if [ "$DO_APPLY" = 1 ]; then
   fi
 fi
 
-if [ "$STARTMENU_DONE" = 1 ]; then
+if [ "$SHELL_RESTART" = 1 ]; then
   say "Restarting the Plasma shell so it loads the new Start menu"
   if have kquitapp6 && have kstart; then
     kquitapp6 plasmashell >/dev/null 2>&1; sleep 2; kstart plasmashell >/dev/null 2>&1 &
