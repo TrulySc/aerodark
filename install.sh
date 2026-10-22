@@ -206,8 +206,11 @@ if [ "$DO_STARTMENU" = 1 ]; then
   say "Teaching the Start menu to follow light/dark (a private copy in your home folder)"
   patch_plasmoid "$PLASMOID_ID" "Start menu" "$HERE/startmenu/replacements.txt" "$HERE/startmenu/svgs" && SHELL_RESTART=1
 fi
-say "Teaching the system tray popups' footer to follow light/dark (a private copy in your home folder)"
-patch_plasmoid "$TRAY_ID" "system tray" "$HERE/systemtray/replacements.txt" && SHELL_RESTART=1
+say "Teaching the tray, network, volume, clock and battery popups to follow light/dark (private copies)"
+for repl in "$HERE/applets/"*.txt; do
+  id="$(basename "$repl" .txt)"
+  patch_plasmoid "$id" "$id" "$repl" && SHELL_RESTART=1
+done
 
 # ---- 6. glass accent follows light/dark -------------------------------------------
 if [ "$DO_ACCENT" = 1 ]; then

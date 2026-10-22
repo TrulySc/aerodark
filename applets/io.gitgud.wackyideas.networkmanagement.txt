@@ -1,0 +1,7 @@
+# Network applet: connection names/status were hard-coded black.
+ExpandableListItem.qml	color: listItem.isDefault ? "black" : "#0061bd"	color: listItem.isDefault ? (adDark ? "#ececec" : "black") : (adDark ? "#5bb4ff" : "#0061bd")
+ExpandableListItem.qml	color: "black"	color: (adDark ? "#b4b7bb" : "black")
+TrafficMonitor.qml	color: "black"	color: (adDark ? "#ececec" : "black")
+ListItem.qml	color: "#b1b1b1"	color: (adDark ? "#2b2d30" : "#b1b1b1")
+ListItem.qml	color: "#40555a"	color: (adDark ? "#9a9da2" : "#40555a")
+DetailsWindow.qml	color: "#f0f0f0"	color: (adDark ? "#1c1d1f" : "#f0f0f0")

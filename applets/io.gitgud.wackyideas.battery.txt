@@ -1,0 +1,2 @@
+# Battery applet: separator line.
+Separator.qml	color: "#dde0e2"	color: (adDark ? "#2b2d30" : "#dde0e2")

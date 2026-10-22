@@ -1,0 +1,9 @@
+# Clock/calendar popup: footer (same as the tray's), heading links, grid line.
+# (gradient lines first: the plain "#f1f5fb" rule would otherwise also match them)
+CalendarView.qml	GradientStop { position: 0.0; color: "#ccd9ea" }	GradientStop { position: 0.0; color: (adDark ? "#0a0a0b" : "#ccd9ea") }
+CalendarView.qml	GradientStop { position: 1.0; color: "#f1f5fb" }	GradientStop { position: 1.0; color: (adDark ? "#1e1f22" : "#f1f5fb") }
+CalendarView.qml	color: "#f1f5fb"	color: (adDark ? "#1e1f22" : "#f1f5fb")
+CalendarView.qml	color: "#0066cc"	color: (adDark ? "#6cc4ff" : "#0066cc")
+DaysCalendar.qml	color: "#f5f5f5"	color: (adDark ? "#2b2d30" : "#f5f5f5")
+DayDelegate.qml	border.color: "#0066cc"	border.color: (adDark ? "#3da2f0" : "#0066cc")
+CustomGroupBox.qml	border.color: "#d5dfe5"	border.color: (adDark ? "#3c3e42" : "#d5dfe5")

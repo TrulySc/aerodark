@@ -71,7 +71,8 @@ if have ninja; then gen="-G Ninja"; cmd="ninja"; fi
 cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/usr $gen >/dev/null
 cmake --build build
 say "Installing it (asks for your password)"
-sudo cmake --install build >/dev/null
+SU=sudo; have sudo || SU=doas
+"$SU" cmake --install build >/dev/null
 
 say "Restarting the Plasma shell"
 if have kquitapp6 && have kstart; then
