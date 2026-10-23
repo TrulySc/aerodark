@@ -83,8 +83,17 @@ reload_kwin() {
   done
 }
 
+# Discord (Vesktop) follows the Plasma icon theme: regenerate its icons when the theme changes
+sync_discord_icons() {
+  if have aerodark-discord-icons; then aerodark-discord-icons --if-changed >/dev/null 2>&1
+  elif [ -x "$HOME/.local/bin/aerodark-discord-icons" ]; then "$HOME/.local/bin/aerodark-discord-icons" --if-changed >/dev/null 2>&1
+  fi
+  return 0
+}
+
 sync_once() {
   local scheme mode g
+  sync_discord_icons
   scheme="$("$KREAD" --file kdeglobals --group General --key ColorScheme 2>/dev/null)"
   mode="$(cat "$STATE/accent-mode" 2>/dev/null || echo light)"
   if ! g="$(accent_group)" || [ -z "$g" ]; then
@@ -128,10 +137,12 @@ elif [ "${1:-}" = "--watch" ]; then
   sync_once
   have dbus-monitor || { log "dbus-monitor not found; only syncing at login"; exit 0; }
   # KDE broadcasts KGlobalSettings.notifyChange whenever the colour scheme (palette) changes
-  dbus-monitor --session "type='signal',interface='org.kde.KGlobalSettings',member='notifyChange'" 2>/dev/null |
+  # (and KIconLoader.iconChanged when the icon theme changes)
+  dbus-monitor --session "type='signal',interface='org.kde.KGlobalSettings',member='notifyChange'" \
+                         "type='signal',interface='org.kde.KIconLoader',member='iconChanged'" 2>/dev/null |
   while IFS= read -r line; do
     case "$line" in
-      *member=notifyChange*) sleep 1; sync_once ;;
+      *member=notifyChange*|*member=iconChanged*) sleep 1; sync_once ;;
     esac
   done
 else

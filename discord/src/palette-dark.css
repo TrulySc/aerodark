@@ -1,0 +1,134 @@
+/* ═══ Aero Dark palette — the same values as the Aero Dark desktop (VistaVG Black) ═══
+   Use with Discord's Appearance set to Dark. */
+body {
+    --aero-font: 'Segoe UI', 'Noto Sans';
+    --aero-ui-size: 9pt;     /* matches the desktop font (Segoe UI 9) */
+    --aero-chat-size: 10pt;  /* message text, like Windows Live Messenger; set 9pt to match exactly */
+    --aero-header-height: 31px;
+}
+:root {
+    --colors: on;
+
+    /* Midnight palette (drives Discord's own colour variables) */
+    --text-0: #ffffff;
+    --text-1: #ffffff;
+    --text-2: #ececec;
+    --text-3: #dcdddf;
+    --text-4: #9a9da2;
+    --text-5: #6b6e73;
+    --bg-1: #2b2d30;
+    --bg-2: #222326;
+    --bg-3: #1c1d1f;
+    --bg-4: #141516;
+    --hover: rgba(61, 162, 240, 0.12);
+    --active: rgba(61, 162, 240, 0.25);
+    --active-2: rgba(61, 162, 240, 0.35);
+    --message-hover: rgba(255, 255, 255, 0.025);
+    --accent-1: #6cc4ff; --accent-2: #3da2f0; --accent-3: #2f8ad8; --accent-4: #3da2f0; --accent-5: #1d6fc0;
+    --blue-1: #8ccbff; --blue-2: #6cc4ff; --blue-3: #3da2f0; --blue-4: #2f8ad8; --blue-5: #1d6fc0;
+    --accent-new: #f0a040;
+    --green-1: #8be36e; --green-2: #46d34a; --green-3: #3cb83f; --green-4: #33a036; --green-5: #2a8a2d;
+    --red-1: #ff8a7a; --red-2: #ff6b5e; --red-3: #e04a35; --red-4: #c7432c; --red-5: #a8250f;
+    --yellow-1: #ffd88a; --yellow-2: #f7c254; --yellow-3: #f0a040; --yellow-4: #d88a2a; --yellow-5: #b06e1c;
+    --purple-1: #c9a8ff; --purple-2: #a98bff; --purple-3: #8f6be6; --purple-4: #7656cc; --purple-5: #5f43a8;
+    --online: #46d34a; --idle: #f7c254; --dnd: #ff5a4a; --streaming: #a98bff; --offline: #6b6e73;
+    --mention: linear-gradient(to right, rgba(240, 160, 64, 0.16) 40%, transparent);
+    --mention-hover: linear-gradient(to right, rgba(240, 160, 64, 0.10) 40%, transparent);
+    --border-light: #222326;
+    --border: #2b2d30;
+    --border-hover: #3c7fb1;
+    --button-border: #060606;
+
+    /* surfaces and text (as Explorer: Surface, FooterSurface, PaneRule) */
+    --aero-frame: #1c1d1f;
+    --aero-surface: #141516;
+    --aero-rule: #2b2d30;
+    --aero-text: #ececec;
+    --aero-text-muted: #9a9da2;
+    --aero-link: #5bb4ff;
+
+    /* Explorer command bar (dark commandbar.png) */
+    --aero-commandbar: linear-gradient(180deg, #4c4f54 0%, #3c3e42 25%, #2e3033 48%, #141517 50%, #1c1d1f 70%, #222326 100%);
+    --aero-commandbar-top: #606368;
+    --aero-commandbar-bottom: #000000;
+
+    /* details pane (dark infostrip) */
+    --aero-infostrip: linear-gradient(180deg, #222326 0%, #1e1f22 30%, #1c1d1f 100%);
+    --aero-infostrip-top: #2b2d30;
+
+    /* selection (Windows 7 highlight, as Kvantum's dark variant draws it) */
+    --aero-hover-bg: linear-gradient(180deg, rgba(61, 162, 240, 0.16), rgba(61, 162, 240, 0.08));
+    --aero-hover-border: rgba(108, 196, 255, 0.35);
+    --aero-select-bg: linear-gradient(180deg, #2a5f92, #1f4f7e);
+    --aero-select-border: #4a86c0;
+    --aero-select-shine: rgba(255, 255, 255, 0.12);
+    --aero-select-text: #ffffff;
+
+    /* text box */
+    --aero-field-bg: #0c0d0e;
+    --aero-field-border: #000000;
+    --aero-field-border-top: #000000;
+    --aero-field-focus: #1d5288;
+    --aero-field-focus-top: #3da2f0;
+    --aero-field-inset: inset 0 1px 2px rgba(0, 0, 0, 0.7), 0 1px rgba(255, 255, 255, 0.06);
+
+    /* menus and tooltips */
+    --aero-menu-bg: #1c1d1f;
+    --aero-menu-border: #000000;
+    --aero-menu-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    --aero-tooltip-bg: linear-gradient(180deg, #44474b, #37393c);
+    --aero-tooltip-border: #000000;
+    --aero-tooltip-text: #ececec;
+
+    /* push buttons (Windows7AeroDark Kvantum) */
+    --aero-button-bg: linear-gradient(180deg, #4a4d52 0%, #3a3d42 49%, #2a2c30 50%, #303236 100%);
+    --aero-button-border: #060606;
+    --aero-button-hot-bg: linear-gradient(180deg, #4f8cc4 0%, #2f6aa3 49%, #1d5288 50%, #2c6eae 100%);
+    --aero-button-hot-border: #0a2a4a;
+    --aero-button-pressed-bg: linear-gradient(180deg, #123a66 0%, #1a4f86 50%, #1d5a96 100%);
+    --aero-button-pressed-border: #061a33;
+    --aero-button-default-bg: var(--aero-button-bg);
+    --aero-button-default-border: #3c7fb1;
+    --aero-button-text: #ececec;
+    --aero-button-danger-bg: linear-gradient(180deg, #e9927e 0%, #c7432c 49%, #a8250f 50%, #d2543b 100%);
+    --aero-button-danger-hot-bg: linear-gradient(180deg, #f5ac98 0%, #dc5a40 49%, #bb3218 50%, #e86a4e 100%);
+    --aero-button-danger-border: #2a0802;
+
+    /* scrollbars */
+    --aero-scroll-thumb: linear-gradient(90deg, #3b3f42, #303236 50%, #27292b);
+    --aero-scroll-thumb-hover: linear-gradient(90deg, #2f6aa3, #285f94 50%, #1d5288);
+    --aero-scroll-border: #060606;
+    --aero-scroll-shine: rgba(255, 255, 255, 0.08);
+    --aero-scroll-flat: #3b3f42;
+
+    /* skeuo layer (src/skeuo.css), after the Windows7AeroDark Kvantum style */
+    --aero-rail: linear-gradient(90deg, #121314, #1a1b1d);
+    --aero-pane: linear-gradient(180deg, #232427 0%, #1c1d20 40%, #18191b 100%);
+    --aero-bevel-dark: #000000;
+    --aero-bevel-light: rgba(255, 255, 255, 0.07);
+    --aero-inner-shadow: rgba(0, 0, 0, 0.75);
+    --aero-etch: rgba(0, 0, 0, 0.8);
+    --aero-drop: rgba(0, 0, 0, 0.6);
+    --aero-select-glow: rgba(61, 162, 240, 0.45);
+    --aero-button-shine: rgba(255, 255, 255, 0.16);
+    --aero-button-text-shadow: rgba(0, 0, 0, 0.6);
+    --aero-badge: linear-gradient(180deg, #ff8a72 0%, #e5432a 50%, #c22a12 51%, #d9381d 100%);
+    --aero-badge-border: #5a0c02;
+    --aero-group-bg: linear-gradient(180deg, #232427, #1c1d20);
+    --aero-group-border: #000000;
+    --aero-dialog-bg: linear-gradient(180deg, #2b2d30 0%, #222326 60px, #1c1d1f 100%);
+    --aero-dialog-rim: rgba(108, 196, 255, 0.18);
+    --aero-scroll-track: linear-gradient(90deg, #0f1011, #18191b);
+
+    /* SkeuoCord-style details */
+    --aero-chat-bg: linear-gradient(180deg, #121315 0%, #17181b 100%);
+    --aero-footer: linear-gradient(180deg, #3a3b3e 0%, #232427 48%, #0c0c0d 52%, #141516 100%);
+    --aero-footer-top: rgba(255, 255, 255, 0.14);
+    --aero-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    --aero-avatar-ring: rgba(230, 230, 230, 0.55);
+    --aero-avatar-shadow: rgba(0, 0, 0, 0.55);
+    --aero-mention-bar: linear-gradient(180deg, rgba(196, 148, 40, 0.42) 0%, rgba(150, 108, 22, 0.32) 100%);
+    --aero-mention-shine: rgba(255, 225, 150, 0.25);
+    --aero-mention-edge: #c9952c;
+    --aero-cell: linear-gradient(180deg, #2a2c31 0%, #1b1c1f 100%);
+}

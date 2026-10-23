@@ -1,4 +1,4 @@
-# Volume applet and mixer window: separators, tick marks and the mixer's group labels.
+# Volume applet and mixer window: separators, tick marks, group labels, the mixer window background, device/app names and the slider wedge.
 main.qml	color: "#d6e1dd"	color: (adDark ? "#2b2d30" : "#d6e1dd")
 StreamListItem.qml	color: "#d6e1dd"	color: (adDark ? "#2b2d30" : "#d6e1dd")
 VolumeSlider.qml	color: "#cfcfcf"	color: (adDark ? "#4a4c50" : "#cfcfcf")
@@ -6,3 +6,7 @@ MixerWindow.qml	color: "#d6e1dd"	color: (adDark ? "#2b2d30" : "#d6e1dd")
 MixerWindow.qml	border.color: "#d5dfe5"	border.color: (adDark ? "#3c3e42" : "#d5dfe5")
 MixerWindow.qml	color: "black"	color: (adDark ? "#ececec" : "black")
 MixerWindow.qml	color: "white"	color: (adDark ? "#1c1d1f" : "white")
+MixerWindow.qml	title: "Volume Mixer"	color: (adDark ? "#1c1d1f" : "white"); title: "Volume Mixer"
+ListItemBase.qml	verticalAlignment: Text.AlignTop	verticalAlignment: Text.AlignTop; color: (adDark ? "#ececec" : "black")
+VolumeSlider.qml	elementId: "bgthing"	elementId: "bgthing"; opacity: (adDark ? 0.25 : 1)
+ListItemBase.qml	Qt.resolvedUrl("svgs/control.svg")	Qt.resolvedUrl(adDark ? "svgs/aerodark/control.svg" : "svgs/control.svg")

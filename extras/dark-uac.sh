@@ -11,7 +11,7 @@
 # Tip: AeroThemePlasma's installer keeps its sources, so the matching one is usually at
 #   <your aerothemeplasma folder>/repos/uac-polkit-agent
 #
-# Without a path it downloads the source from gitgud.io. Needs the build tools you already used
+# Without a path it downloads the source (GitHub, or gitgud.io as a fallback). Needs the build tools you already used
 # to install AeroThemePlasma, and sudo to install. Re-run after updating AeroThemePlasma.
 set -eu
 
@@ -29,7 +29,9 @@ if [ $# -ge 1 ]; then
   say "Using the source in $1"
   cp -a "$1" "$WORK/uac"
 else
-  repo="https://gitgud.io/aeroshell/uac-polkit-agent.git"
+  # the project moved from gitgud.io to GitHub; try GitHub first
+  repo="https://github.com/aeroshell-desktop/uac-polkit-agent.git"
+  git ls-remote --exit-code "$repo" >/dev/null 2>&1 || repo="https://gitgud.io/aeroshell/uac-polkit-agent.git"
   ver="$(plasmashell --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -n1 || true)"
   branch=""
   if [ -n "$ver" ] && git ls-remote --exit-code --heads "$repo" "Plasma/$ver" >/dev/null 2>&1; then branch="Plasma/$ver"; fi

@@ -1,0 +1,134 @@
+/* ═══ Aero Light palette — Windows 7, as AeroThemePlasma's light theme draws it ═══
+   Use with Discord's Appearance set to Light. */
+body {
+    --aero-font: 'Segoe UI', 'Noto Sans';
+    --aero-ui-size: 9pt;     /* matches the desktop font (Segoe UI 9) */
+    --aero-chat-size: 10pt;  /* message text, like Windows Live Messenger; set 9pt to match exactly */
+    --aero-header-height: 31px;
+}
+:root {
+    --colors: on;
+
+    /* Midnight palette (drives Discord's own colour variables) */
+    --text-0: #000000;
+    --text-1: #000000;
+    --text-2: #1f1f1f;
+    --text-3: #000000;
+    --text-4: #5a5a5a;
+    --text-5: #8a8a8a;
+    --bg-1: #dcdcdc;
+    --bg-2: #ebebeb;
+    --bg-3: #f0f0f0;
+    --bg-4: #ffffff;
+    --hover: rgba(184, 214, 251, 0.35);
+    --active: rgba(132, 172, 221, 0.40);
+    --active-2: rgba(132, 172, 221, 0.55);
+    --message-hover: rgba(0, 0, 0, 0.025);
+    --accent-1: #0066cc; --accent-2: #3399ff; --accent-3: #3c7fb1; --accent-4: #2c628b; --accent-5: #1f4e79;
+    --blue-1: #0066cc; --blue-2: #3399ff; --blue-3: #3c7fb1; --blue-4: #2c628b; --blue-5: #1f4e79;
+    --accent-new: #e08a00;
+    --green-1: #2f9e2f; --green-2: #27ae27; --green-3: #229922; --green-4: #1d851d; --green-5: #177017;
+    --red-1: #d23a2a; --red-2: #c7432c; --red-3: #b33a26; --red-4: #a8250f; --red-5: #8f1f0c;
+    --yellow-1: #c98a00; --yellow-2: #e0a000; --yellow-3: #d18f00; --yellow-4: #b97e00; --yellow-5: #9a6900;
+    --purple-1: #7a4fd0; --purple-2: #6a3fc0; --purple-3: #5a33a8; --purple-4: #4a2a8c; --purple-5: #3a2070;
+    --online: #27ae27; --idle: #e0a000; --dnd: #d23a2a; --streaming: #6a3fc0; --offline: #8a8a8a;
+    --mention: linear-gradient(to right, rgba(255, 233, 160, 0.65) 40%, transparent);
+    --mention-hover: linear-gradient(to right, rgba(255, 233, 160, 0.45) 40%, transparent);
+    --border-light: #e5e5e5;
+    --border: #d9d9d9;
+    --border-hover: #b8d6fb;
+    --button-border: #707070;
+
+    /* surfaces and text */
+    --aero-frame: #f0f0f0;
+    --aero-surface: #ffffff;
+    --aero-rule: #d9d9d9;
+    --aero-text: #000000;
+    --aero-text-muted: #5a5a5a;
+    --aero-link: #0066cc;
+
+    /* Explorer command bar (commandbar.png) */
+    --aero-commandbar: linear-gradient(180deg, #fdfeff 0%, #eef6fd 25%, #e6f0fa 48%, #dce6f4 50%, #dce6f5 70%, #e4effb 100%);
+    --aero-commandbar-top: #fafcfd;
+    --aero-commandbar-bottom: #a0afc3;
+
+    /* details pane (libAeroQt infostrip) */
+    --aero-infostrip: linear-gradient(180deg, #d9e3f0 0%, #e8eef7 30%, #f1f5fb 100%);
+    --aero-infostrip-top: #ccd9ea;
+
+    /* Windows 7 Explorer selection */
+    --aero-hover-bg: linear-gradient(180deg, #fafbfd, #ebf3fd);
+    --aero-hover-border: #b8d6fb;
+    --aero-select-bg: linear-gradient(180deg, #dcebfc, #c1dbfc);
+    --aero-select-border: #7da2ce;
+    --aero-select-shine: rgba(255, 255, 255, 0.6);
+    --aero-select-text: #000000;
+
+    /* text box */
+    --aero-field-bg: #ffffff;
+    --aero-field-border: #dbdfe6;
+    --aero-field-border-top: #abadb3;
+    --aero-field-focus: #b5cfe7;
+    --aero-field-focus-top: #3d7bad;
+    --aero-field-inset: none;
+
+    /* menus and tooltips */
+    --aero-menu-bg: #f0f0f0;
+    --aero-menu-border: #979797;
+    --aero-menu-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+    --aero-tooltip-bg: linear-gradient(180deg, #ffffff, #e4e5f0);
+    --aero-tooltip-border: #767676;
+    --aero-tooltip-text: #575757;
+
+    /* push buttons */
+    --aero-button-bg: linear-gradient(180deg, #f2f2f2 0%, #ebebeb 49%, #dddddd 50%, #cfcfcf 100%);
+    --aero-button-border: #707070;
+    --aero-button-hot-bg: linear-gradient(180deg, #eaf6fd 0%, #d9f0fc 49%, #bee6fd 50%, #a7d9f5 100%);
+    --aero-button-hot-border: #3c7fb1;
+    --aero-button-pressed-bg: linear-gradient(180deg, #e5f4fc 0%, #c4e5f6 49%, #98d1ef 50%, #68b3db 100%);
+    --aero-button-pressed-border: #2c628b;
+    --aero-button-default-bg: var(--aero-button-bg);
+    --aero-button-default-border: #3399ff;
+    --aero-button-text: #000000;
+    --aero-button-danger-bg: linear-gradient(180deg, #e9927e 0%, #c7432c 49%, #a8250f 50%, #d2543b 100%);
+    --aero-button-danger-hot-bg: linear-gradient(180deg, #f5ac98 0%, #dc5a40 49%, #bb3218 50%, #e86a4e 100%);
+    --aero-button-danger-border: #6b1305;
+
+    /* scrollbars */
+    --aero-scroll-thumb: linear-gradient(90deg, #f3f3f3, #e2e2e2 50%, #d6d6d6);
+    --aero-scroll-thumb-hover: linear-gradient(90deg, #e3f4fc, #c4e5f6 50%, #a9d9f2);
+    --aero-scroll-border: #9a9a9a;
+    --aero-scroll-shine: rgba(255, 255, 255, 0.7);
+    --aero-scroll-flat: #cdcdcd;
+
+    /* skeuo layer (src/skeuo.css), after the Windows7Aero Kvantum style */
+    --aero-rail: linear-gradient(90deg, #dfe6ef, #eef2f7);
+    --aero-pane: linear-gradient(180deg, #ffffff 0%, #f6f9fc 50%, #eef3f9 100%);
+    --aero-bevel-dark: #b9c3d1;
+    --aero-bevel-light: rgba(255, 255, 255, 0.9);
+    --aero-inner-shadow: rgba(0, 0, 0, 0.18);
+    --aero-etch: rgba(255, 255, 255, 0.9);
+    --aero-drop: rgba(0, 0, 0, 0.28);
+    --aero-select-glow: rgba(51, 153, 255, 0.35);
+    --aero-button-shine: rgba(255, 255, 255, 0.85);
+    --aero-button-text-shadow: rgba(255, 255, 255, 0.7);
+    --aero-badge: linear-gradient(180deg, #ff8a72 0%, #e5432a 50%, #c22a12 51%, #d9381d 100%);
+    --aero-badge-border: #8f1f0c;
+    --aero-group-bg: linear-gradient(180deg, #ffffff, #f3f6fa);
+    --aero-group-border: #c5cfdc;
+    --aero-dialog-bg: linear-gradient(180deg, #ffffff 0%, #f5f8fc 60px, #f0f0f0 100%);
+    --aero-dialog-rim: rgba(51, 153, 255, 0.25);
+    --aero-scroll-track: linear-gradient(90deg, #e3e3e3, #f2f2f2);
+
+    /* SkeuoCord-style details */
+    --aero-chat-bg: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+    --aero-footer: linear-gradient(180deg, #f7f9fc 0%, #e6edf6 48%, #d6e1ef 52%, #e4ecf6 100%);
+    --aero-footer-top: #ffffff;
+    --aero-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+    --aero-avatar-ring: rgba(60, 60, 60, 0.55);
+    --aero-avatar-shadow: rgba(0, 0, 0, 0.25);
+    --aero-mention-bar: linear-gradient(180deg, #fff6cf 0%, #ffe9a0 100%);
+    --aero-mention-shine: #fffbe8;
+    --aero-mention-edge: #e0a000;
+    --aero-cell: linear-gradient(180deg, #ffffff 0%, #eef2f7 100%);
+}

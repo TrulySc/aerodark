@@ -1,0 +1,489 @@
+#!/usr/bin/env python3
+"""
+aerodark-discord-icons — give Discord (Vesktop) your Plasma icon theme.
+
+Looks up each Discord icon in your current icon theme (the same lookup Plasma apps use, with
+inheritance), and writes the matches into a Vencord theme, AeroIcons.theme.css. Icons your
+theme doesn't have come from the AeroDiscord add-on icon set (the redrawn ones) if it's installed,
+and otherwise stay as Discord drew them.
+
+    aerodark-discord-icons                 regenerate for the current icon theme
+    aerodark-discord-icons --if-changed    only if the icon theme changed since last time
+    aerodark-discord-icons --theme NAME --size 24 --out FILE
+
+Turn on "AeroIcons" in Vesktop → Settings → Vencord → Themes alongside Aero Light / Aero Dark.
+aerodark-sync re-runs this automatically when you change icon theme.
+"""
+import argparse, base64, configparser, gzip, json, os, re, subprocess, sys
+
+HOME = os.path.expanduser("~")
+DATA = os.environ.get("XDG_DATA_HOME", os.path.join(HOME, ".local/share"))
+CONF = os.environ.get("XDG_CONFIG_HOME", os.path.join(HOME, ".config"))
+STATE = os.path.join(DATA, "aerodark")
+CUSTOM = os.path.join(DATA, "aerodark", "discord", "custom")   # your hand-picked icons
+HALO = ""
+CUSTOM_EXT = ("png", "svg", "ico", "webp", "jpg", "jpeg", "gif")
+EXTRA_THEME = "AeroDiscord"           # the add-on set with the redrawn Discord-only icons
+
+
+def icon_bases():
+    dirs = [os.path.join(DATA, "icons"), os.path.join(HOME, ".icons")]
+    for d in os.environ.get("XDG_DATA_DIRS", "/usr/local/share:/usr/share").split(":"):
+        if d:
+            dirs.append(os.path.join(d, "icons"))
+    return [d for d in dict.fromkeys(dirs) if os.path.isdir(d)]
+
+
+BASES = icon_bases()
+
+
+def current_theme():
+    try:
+        out = subprocess.run(["kreadconfig6", "--file", "kdeglobals", "--group", "Icons", "--key", "Theme"],
+                             capture_output=True, text=True).stdout.strip()
+        if out:
+            return out
+    except FileNotFoundError:
+        pass
+    try:
+        cp = configparser.ConfigParser(strict=False, interpolation=None)
+        cp.read(os.path.join(CONF, "kdeglobals"))
+        return cp.get("Icons", "Theme", fallback="breeze")
+    except Exception:
+        return "breeze"
+
+
+class Theme:
+    def __init__(self, name):
+        self.name, self.roots, self.dirs, self.inherits = name, [], [], []
+        for b in BASES:
+            r = os.path.join(b, name)
+            if os.path.isdir(r):
+                self.roots.append(r)
+        index = next((os.path.join(r, "index.theme") for r in self.roots
+                      if os.path.isfile(os.path.join(r, "index.theme"))), None)
+        if not index:
+            return
+        cp = configparser.ConfigParser(strict=False, interpolation=None)
+        try:
+            cp.read(index, encoding="utf-8")
+        except Exception:
+            return
+        it = "Icon Theme"
+        self.inherits = [x.strip() for x in cp.get(it, "Inherits", fallback="").split(",") if x.strip()]
+        names = cp.get(it, "Directories", fallback="").split(",") + cp.get(it, "ScaledDirectories", fallback="").split(",")
+        for d in dict.fromkeys(x.strip() for x in names if x.strip()):
+            if not cp.has_section(d):
+                continue
+            g = lambda k, v: cp.get(d, k, fallback=v)
+            size = int(g("Size", "0") or 0)
+            self.dirs.append({
+                "path": d, "size": size, "scale": int(g("Scale", "1") or 1), "type": g("Type", "Threshold"),
+                "min": int(g("MinSize", size) or size), "max": int(g("MaxSize", size) or size),
+                "thr": int(g("Threshold", "2") or 2)})
+
+    def find(self, icon, want):
+        """best file for `icon` near `want` px: exact size, then nearest larger, then scalable, then any"""
+        best, best_score = None, None
+        for d in self.dirs:
+            for r in self.roots:
+                folder = os.path.join(r, d["path"])
+                for ext in ("png", "svg", "svgz"):
+                    f = os.path.join(folder, f"{icon}.{ext}")
+                    if not os.path.isfile(f):
+                        continue
+                    px = d["size"] * d["scale"]
+                    if ext != "png":
+                        score = (1, abs(d["size"] - want), d["scale"])  # vector: prefer the one drawn for this size
+                    elif px == want:
+                        score = (0, 0)
+                    elif px > want:
+                        score = (2, px - want)              # downscale a bigger bitmap
+                    else:
+                        score = (3, want - px)              # upscaling is last resort
+                    if best_score is None or score < best_score:
+                        best, best_score = f, score
+        return best
+
+
+def chain(name):
+    seen, order, todo = set(), [], [name]
+    while todo:
+        n = todo.pop(0)
+        if n in seen:
+            continue
+        seen.add(n)
+        t = Theme(n)
+        if t.roots:
+            order.append(t)
+            todo += t.inherits
+    if "hicolor" not in seen:
+        t = Theme("hicolor")
+        if t.roots:
+            order.append(t)
+    return order
+
+
+def lookup(themes, names, want):
+    for t in themes:                     # whole theme chain for the first name, then the next name
+        for n in names:
+            f = t.find(n, want)
+            if f:
+                return f
+    return None
+
+
+def custom_file(*keys):
+    """a hand-picked icon in the custom folder: 0024.png, 24.png, mic.svg, vc-platform-desktop.ico …"""
+    for k in keys:
+        for ext in CUSTOM_EXT:
+            f = os.path.join(CUSTOM, f"{k}.{ext}")
+            if os.path.isfile(f):
+                return f
+    return None
+
+
+def custom_keys(e):
+    i = e["id"]
+    return [i, i.lstrip("0") or "0", e["slug"]] if i.isdigit() else [i, e["slug"]]
+
+
+def custom_stamp():
+    try:
+        return ",".join(f"{n}:{int(os.path.getmtime(os.path.join(CUSTOM, n)))}" for n in sorted(os.listdir(CUSTOM)))
+    except OSError:
+        return ""
+
+
+# KDE's monochrome SVG icons colour themselves from the colour scheme (class="ColorScheme-Text" with
+# a placeholder colour). Plasma swaps in the real colours at runtime; a picture in Discord can't, so
+# the swap is done here — otherwise those icons stay near-black, invisible on Aero Dark.
+SCHEME_KEYS = {
+    "Text": ("Colors:Window", "ForegroundNormal"), "Background": ("Colors:Window", "BackgroundNormal"),
+    "Highlight": ("Colors:Selection", "BackgroundNormal"), "HighlightedText": ("Colors:Selection", "ForegroundNormal"),
+    "PositiveText": ("Colors:Window", "ForegroundPositive"), "NegativeText": ("Colors:Window", "ForegroundNegative"),
+    "NeutralText": ("Colors:Window", "ForegroundNeutral"), "ButtonText": ("Colors:Button", "ForegroundNormal"),
+    "ButtonBackground": ("Colors:Button", "BackgroundNormal"), "ViewText": ("Colors:View", "ForegroundNormal"),
+    "ViewBackground": ("Colors:View", "BackgroundNormal"), "ActiveText": ("Colors:Window", "ForegroundActive"),
+}
+_scheme = None
+
+
+def scheme_colors():
+    global _scheme
+    if _scheme is None:
+        _scheme = {}
+        cp = configparser.ConfigParser(strict=False, interpolation=None)
+        try:
+            cp.read(os.path.join(CONF, "kdeglobals"), encoding="utf-8")
+        except Exception:
+            pass
+        for name, (grp, key) in SCHEME_KEYS.items():
+            v = cp.get(grp, key, fallback="")
+            parts = [x.strip() for x in v.split(",")]
+            if len(parts) >= 3 and all(x.isdigit() for x in parts[:3]):
+                _scheme[name] = "#%02x%02x%02x" % tuple(int(x) for x in parts[:3])
+    return _scheme
+
+
+def recolor_svg(raw):
+    txt = raw.decode("utf-8", "replace")
+    if "ColorScheme-" not in txt:
+        return raw
+    cols = scheme_colors()
+    txt = re.sub(r"(\.ColorScheme-(\w+)\s*\{[^}]*?color\s*:\s*)(#[0-9a-fA-F]{3,8}|[a-z]+)",
+                 lambda m: m.group(1) + cols.get(m.group(2), m.group(3)), txt)
+    return txt.encode("utf-8")
+
+
+def data_uri(path):
+    raw = open(path, "rb").read()
+    if path.endswith(".svgz"):
+        raw, mime = recolor_svg(gzip.decompress(raw)), "image/svg+xml"
+    elif path.endswith(".svg"):
+        raw, mime = recolor_svg(raw), "image/svg+xml"
+    else:
+        ext = path.rsplit(".", 1)[-1].lower()
+        mime = {"ico": "image/x-icon", "webp": "image/webp", "jpg": "image/jpeg", "jpeg": "image/jpeg",
+                "gif": "image/gif"}.get(ext, "image/png")
+    return f"data:{mime};base64," + base64.b64encode(raw).decode()
+
+
+# Icons Discord animates (Lottie) or draws in ways that don't match a fixed shape: matched by
+# their button's name instead. Discord's English labels; other languages fall back to the shape match.
+LABELS = [   # (custom file name, Discord button labels, aria-checked, icon names)
+    ('mic', ['Mute', 'Unmute'], None, ['audio-input-microphone']),
+    ('mic-muted', ['Mute', 'Unmute'], 'true', ['microphone-sensitivity-muted', 'audio-input-microphone-muted', 'audio-input-microphone']),
+    ('headphones', ['Deafen', 'Undeafen'], None, ['audio-headphones']),
+    ('deafened', ['Deafen', 'Undeafen'], 'true', ['audio-volume-muted', 'audio-headphones']),
+    ('settings', ['User Settings'], None, ['configure', 'preferences-system']),
+    ('hangup', ['Disconnect'], None, ['call-stop', 'call-end']),
+    ('camera', ['Turn On Camera', 'Turn Off Camera'], None, ['camera-video']),
+    ('screenshare', ['Share Your Screen', 'Stop Streaming'], None, ['video-display']),
+    ('voice-call', ['Start Voice Call'], None, ['call-start']),
+    ('video-call', ['Start Video Call'], None, ['camera-video']),
+    ('pins', ['Pinned Messages'], None, ['pin', 'window-pin']),
+    ('notifications', ['Notification Settings'], None, ['notifications', 'preferences-desktop-notification']),
+    ('members', ['Show Member List', 'Hide Member List'], None, ['system-users']),
+    ('profile', ['Show User Profile', 'Hide User Profile'], None, ['user-identity']),
+    ('inbox', ['Inbox'], None, ['mail-folder-inbox']),
+    ('help', ['Help'], None, ['help-contents', 'help-browser']),
+    ('search', ['Search'], None, ['edit-find', 'system-search']),]
+
+
+def label_selector(labels, checked):
+    st = f'[aria-checked="{checked}"]' if checked else ''
+    return ", ".join(f'#app-mount [aria-label="{l}"]{st} svg' for l in labels)
+
+
+GUILD_IDS = {"0482", "0483", "0600", "0601", "0432"}   # folder, add server, explore
+
+
+def selector(entry):
+    s = "svg" + "".join(f':has(path[d^="{m}"])' for m in entry["match"])
+    return s + f':not(:has(path:nth-of-type({entry["count"] + 1})))'
+
+
+def write_emoji(out, font, here):
+    """Discord draws emoji as its own (Twemoji) pictures. This swaps them for your system emoji font:
+    the picker through the emoji text Discord already puts on each button, messages and reactions
+    through a tiny SVG per emoji that the browser draws with the system font."""
+    lst = next((p for p in (os.path.join(here, "emoji-list.json"),
+                            os.path.join(DATA, "aerodark/discord/emoji-list.json")) if os.path.isfile(p)), None)
+    if not lst:
+        return
+    fam = (f"'{font}', " if font else "") + "'Noto Color Emoji', 'Twemoji', 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif"
+    head = ("/**\n * @name AeroEmoji\n * @description Discord's emoji drawn with your system emoji font. "
+            "Generated by aerodark-discord-icons.\n * @author TrulySc\n * @version 1.0.0\n */\n\n")
+    picker = f"""/* emoji picker: Discord puts the emoji itself on each button */
+button[class*="emojiItem_"][data-type="emoji"][data-surrogates] {{ position: relative; }}
+button[class*="emojiItem_"][data-type="emoji"][data-surrogates] > * {{ visibility: hidden !important; }}
+button[class*="emojiItem_"][data-type="emoji"][data-surrogates]::after {{
+    content: attr(data-surrogates); position: absolute; inset: 0; display: flex;
+    align-items: center; justify-content: center; pointer-events: none;
+    font-family: {fam}; font-size: 30px; line-height: 1;
+}}
+button[class*="emojiItemSmall_"][data-surrogates]::after {{ font-size: 20px; }}
+button[class*="emojiItemLarge_"][data-surrogates]::after {{ font-size: 38px; }}
+
+/* messages, reactions, autocomplete: one small picture per emoji */
+"""
+    ff = f" font-family='{font}'" if font else ""      # otherwise the system's emoji fallback
+    rules = []
+    data = json.load(open(lst, encoding="utf-8"))
+    if isinstance(data, list):
+        data = {e: [] for e in data}
+    for e, names in data.items():
+        svg = (f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='32' y='53' "
+               f"font-size='52' text-anchor='middle'{ff}>{e}</text></svg>")
+        svg = svg.replace("%", "%25").replace("#", "%23").replace('"', "%22")
+        # Discord labels emoji either with the emoji itself or with its :name:
+        keys = [f'[alt="{e}"]'] + [f'[alt=":{n}:"],[data-name=":{n}:"],[data-name="{n}"]' for n in names]
+        rules.append(f'img.emoji:is({",".join(keys)}){{content:url("data:image/svg+xml,{svg}")}}')
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(head + picker + "\n".join(rules) + "\n")
+
+
+# the Discord icon each button-matched entry replaces (ids from icon-map.json), for the catalog
+LABEL_GLYPH = {"mic": "0559", "mic-muted": "0560", "headphones": "0510", "deafened": "0511",
+               "settings": "0634", "hangup": "0592", "camera": "0710", "screenshare": "0624",
+               "voice-call": "0593", "video-call": "0710", "pins": "0596", "notifications": "0355",
+               "members": "0503", "profile": "0699", "inbox": "0527", "help": "0217", "search": "0551"}
+
+
+def glyph_svg(e):
+    paths = "".join(
+        (f'<path fill="none" stroke="currentColor" stroke-width="{p["stroke"]}" d="{p["d"]}"/>' if "stroke" in p
+         else f'<path fill="currentColor"{" fill-rule=" + chr(34) + p["rule"] + chr(34) if "rule" in p else ""} d="{p["d"]}"/>')
+        for p in e["paths"])
+    return f'<svg viewBox="{e["viewBox"]}">{paths}</svg>'
+
+
+def write_catalog(entries, origin, theme):
+    """an HTML page listing every icon: Discord's glyph, what replaces it now, and the file name to use"""
+    import html as H
+    path = os.path.join(DATA, "aerodark", "discord", "catalog.html")
+    cards = []
+
+    def card(key, title, glyph, sub, uri, src):
+        now = f'<img src="{uri}" alt="" style="{HALO.strip()}">' if uri else '<span class="none">—</span>'
+        tag = "t-pick" if src == "your pick" else ("t-theme" if src else "t-none")
+        cards.append(f'<div class="c {tag}" data-k="{H.escape(key)} {H.escape(sub)}"><div class="g">{glyph}</div>'
+                     f'<div class="n">{now}</div><b>{H.escape(title)}</b><code>{H.escape(key)}.png</code>'
+                     f'<small>{H.escape(sub)}</small><i>{H.escape(src or "Discord’s own")}</i></div>')
+
+    by_id = {e["id"]: e for e in entries}
+    for key, labels, checked, names in LABELS:
+        src, f = origin.get(key, (None, None))
+        g = by_id.get(LABEL_GLYPH.get(key, ""))
+        glyph = glyph_svg(g) if g else ""
+        card(key, " / ".join(labels) + (" (on)" if checked else ""), glyph, "button: " + ", ".join(names),
+             data_uri(f) if f else None, src if f else None)
+    for e in entries:
+        glyph = glyph_svg(e)
+        src, f = origin.get(e["id"], (None, None))
+        card(e["id"], "#" + e["id"], glyph, " ".join(e["names"]) or "Discord-only", data_uri(f) if f else None, src)
+
+    page = f"""<!doctype html><html><head><meta charset="utf-8"><title>Discord icon catalog</title><style>
+:root{{color-scheme:light dark;--bg:#f0f0f0;--card:#fff;--line:#d9d9d9;--text:#000;--mute:#5a5a5a;--pick:#27ae27;--theme:#3c7fb1}}
+@media (prefers-color-scheme:dark){{:root{{--bg:#1c1d1f;--card:#141516;--line:#2b2d30;--text:#ececec;--mute:#9a9da2}}}}
+body{{margin:0;background:var(--bg);color:var(--text);font:9pt 'Segoe UI','Noto Sans',sans-serif}}
+header{{position:sticky;top:0;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;flex-wrap:wrap;align-items:center}}
+header input{{font:inherit;padding:4px 6px;width:220px}} header p{{margin:0;color:var(--mute)}}
+main{{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:16px}}
+.c{{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:4px;align-items:center}}
+.c.t-pick{{border-color:var(--pick);border-width:2px}} .c.t-theme{{border-color:var(--theme)}}
+.g svg,.n img{{width:32px;height:32px;display:block;margin:auto}} .none{{display:block;text-align:center;color:var(--mute)}}
+.c b,.c code,.c small,.c i{{grid-column:1/3;overflow-wrap:anywhere}} .c small,.c i{{color:var(--mute)}}
+code{{user-select:all;cursor:copy}} .hide{{display:none}}
+</style></head><body><header><b>Discord icons — {H.escape(theme)}</b>
+<input id="q" placeholder="filter: number or name" autofocus>
+<label><input type="checkbox" id="only"> only Discord's own (not replaced yet)</label>
+<p>Left: Discord's icon. Right: what replaces it now. To use your own, save it as the file name shown
+into <code>{H.escape(CUSTOM)}</code> (png, svg, ico, webp), then run <code>aerodark-discord-icons</code>.</p></header>
+<main>{"".join(cards)}</main><script>
+const q=document.getElementById('q'),o=document.getElementById('only');
+function f(){{const t=q.value.toLowerCase().replace('#','');for(const c of document.querySelectorAll('.c'))
+c.classList.toggle('hide',!(c.dataset.k.toLowerCase().includes(t))||(o.checked&&!c.classList.contains('t-none')));}}
+q.oninput=f;o.onchange=f;
+</script></body></html>"""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(page)
+    return path
+
+
+def main():
+    here = os.path.dirname(os.path.realpath(__file__))
+    ap = argparse.ArgumentParser(description="Use your Plasma icon theme in Discord (Vesktop).")
+    ap.add_argument("--theme", help="icon theme (default: the one Plasma is using)")
+    ap.add_argument("--size", type=int, default=24, help="preferred icon size in px (default 24)")
+    ap.add_argument("--out", help="output file (default ~/.config/vesktop/themes/AeroIcons.theme.css)")
+    ap.add_argument("--map", help="icon-map.json")
+    ap.add_argument("--emoji-font", default="", help='emoji font for AeroEmoji (default: your system emoji font)')
+    ap.add_argument("--no-emoji", action="store_true", help="don't write AeroEmoji.theme.css")
+    ap.add_argument("--halo", action="store_true", help="faint light outline around icons on dark schemes")
+    ap.add_argument("--catalog", action="store_true", help="open the icon catalog in your browser afterwards")
+    ap.add_argument("--which", nargs="+", metavar="NAME", help="just show which file each icon name resolves to")
+    ap.add_argument("--if-changed", action="store_true", help="only run if the icon theme changed")
+    a = ap.parse_args()
+
+    theme = a.theme or current_theme()
+    if a.which:
+        th = chain(theme)
+        for n in a.which:
+            print(f"{n}: {lookup(th, [n], a.size) or 'not in ' + theme}")
+        return
+    stamp = os.path.join(STATE, "discord-icon-theme")
+    stamp_text = theme + "|" + scheme_colors().get("Text", "") + "|" + custom_stamp()
+    if a.if_changed and os.path.isfile(stamp) and open(stamp).read().strip() == stamp_text:
+        return
+    mpath = a.map or next((p for p in (os.path.join(here, "icon-map.json"),
+                                       os.path.join(DATA, "aerodark/discord/icon-map.json")) if os.path.isfile(p)), None)
+    if not mpath:
+        sys.exit("icon-map.json not found (keep it next to this script).")
+    entries = json.load(open(mpath))
+    out = a.out or os.path.join(CONF, "vesktop/themes/AeroIcons.theme.css")
+
+    themes, extra = chain(theme), [t for t in [Theme(EXTRA_THEME)] if t.roots]
+    rules, from_theme, from_extra = [], 0, 0
+    big = max(a.size * 2, 48)            # the server list draws icons at about 48 px
+
+    # Performance: every :has() rule is re-checked whenever Discord adds an <svg>, so each icon gets
+    # exactly ONE cheap child-only :has() (to paint the replacement on its <svg>); its paths are
+    # hidden with plain attribute selectors, which cost nothing.
+    # Windows 7's icons are drawn for light backgrounds; many (microphone, headset, cameras) are dark
+    # grey objects that vanish on Aero Dark. On a dark scheme each icon gets a faint light outline —
+    # the same trick Windows used for icons on dark glass.
+    global HALO
+    tc = scheme_colors().get("Text", "#000000")
+    dark = (int(tc[1:3], 16) * 299 + int(tc[3:5], 16) * 587 + int(tc[5:7], 16) * 114) / 1000 > 128
+    HALO = (" filter: drop-shadow(0 0 0.6px rgba(255,255,255,0.75)) drop-shadow(0 0 2px rgba(255,255,255,0.22));"
+            if dark and a.halo else "")
+    owners = {}                          # path d → ids of every icon that uses it
+    for e in entries:
+        for pth in e["paths"]:
+            owners.setdefault(pth["d"], set()).add(e["id"])
+    chosen, from_custom, origin = [], 0, {}
+    for e in entries:
+        cf = custom_file(*custom_keys(e))
+        if cf:
+            from_custom += 1
+            chosen.append((e, None, [cf], cf))
+            origin[e["id"]] = ("your pick", cf)
+            continue
+        names = e["names"]
+        f = lookup(themes, names, a.size) if names else None
+        src = themes
+        if f:
+            from_theme += 1
+        else:
+            f = lookup(extra, [e["slug"]], a.size)
+            if not f:
+                continue
+            src, names = extra, [e["slug"]]
+            from_extra += 1
+        chosen.append((e, src, names, f))
+        origin[e["id"]] = (theme if src is themes else EXTRA_THEME, f)
+    replaced = {e["id"] for e, *_ in chosen}
+
+    hide = []
+    for e, src, names, f in chosen:
+        # key on the path that's most specific to this icon
+        k = min(range(len(e["paths"])), key=lambda i: len(owners[e["paths"][i]["d"]]))
+        sel = f'svg:has(> path[d^="{e["match"][k]}"])'
+        rules.append(f'{sel} {{ background: url("{data_uri(f)}") center / contain no-repeat !important;{HALO} }}')
+        for i, pth in enumerate(e["paths"]):
+            if owners[pth["d"]] <= replaced:
+                hide.append(f'path[d^="{e["match"][i]}"]')
+            else:                         # shared with an icon we're not replacing: hide only here
+                hide.append(f'{sel} > path[d^="{e["match"][i]}"]')
+        if e["id"] in GUILD_IDS:          # drawn large in the server list
+            fb = (lookup(src, names, big) if src else None) or f
+            rules.append(f'#app-mount [class*="guilds_"] {sel} {{ width: 32px !important; height: 32px !important; '
+                         f'background-image: url("{data_uri(fb)}") !important; background-size: 32px 32px !important; }}')
+    if hide:
+        rules.append(",\n".join(dict.fromkeys(hide)) + " { visibility: hidden !important; }")
+    # server list: folder/plus/explore at the size of the tile contents, but small badges (someone
+    # streaming, unread) stay within their own small box
+    rules.append('#app-mount [class*="guilds_"] svg { background-size: min(28px, 100%) min(28px, 100%) !important; }')
+
+    # Button-name matches: the animated icons live in an oversized, clipped box, so instead of
+    # painting on the <svg> the icon is drawn on the button itself (a centred 20 px overlay) and
+    # Discord's own drawing is hidden.
+    for key, labels, checked, names in LABELS:
+        f = custom_file(key) or lookup(themes, names, a.size)
+        origin[key] = ("your pick" if f and f.startswith(CUSTOM) else theme, f)
+        if not f:
+            continue
+        st = f'[aria-checked="{checked}"]' if checked else ''
+        btn = [f'#app-mount [aria-label="{l}"]{st}' for l in labels]
+        rules.append(
+            f'{", ".join(btn)} {{ position: relative; }}\n'
+            f'{", ".join(b + " svg" for b in btn)} {{ visibility: hidden !important; }}\n'
+            f'{", ".join(b + "::after" for b in btn)} {{ content: ""; position: absolute; inset: 0; '
+            f'pointer-events: none; background: url("{data_uri(f)}") center / 20px 20px no-repeat !important;{HALO} }}')
+
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w") as fh:
+        fh.write("/**\n * @name AeroIcons\n * @description Discord's icons from your Plasma icon theme "
+                 f"({theme}). Generated by aerodark-discord-icons; re-run it after changing icon theme.\n"
+                 " * @author TrulySc\n * @version 1.0.0\n */\n\n")
+        fh.write("\n".join(rules) + "\n")
+    os.makedirs(STATE, exist_ok=True)
+    open(stamp, "w").write(stamp_text + "\n")
+    os.makedirs(CUSTOM, exist_ok=True)
+    cat = write_catalog(entries, origin, theme)
+    if not a.no_emoji:
+        write_emoji(os.path.join(os.path.dirname(out), "AeroEmoji.theme.css"), a.emoji_font, here)
+    left = len(entries) - from_theme - from_extra - from_custom
+    print(f"aerodark-discord-icons: {from_custom} your picks, {from_theme} from {theme}, {from_extra} from "
+          f"{EXTRA_THEME}, {left} left as Discord's → {out}")
+    print(f"  catalog of every icon and its file name: {cat}")
+    print(f"  your own icons go in: {CUSTOM}")
+    if a.catalog:
+        subprocess.run(["xdg-open", cat], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+if __name__ == "__main__":
+    main()

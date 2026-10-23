@@ -211,6 +211,20 @@ for repl in "$HERE/applets/"*.txt; do
   id="$(basename "$repl" .txt)"
   patch_plasmoid "$id" "$id" "$repl" && SHELL_RESTART=1
 done
+# volume applet: a light copy of its dropdown arrows for dark mode (made from the installed artwork)
+VOLUI="$DATA/plasma/plasmoids/io.gitgud.wackyideas.volume/contents/ui"
+if [ -f "$VOLUI/svgs/control.svg" ]; then
+  mkdir -p "$VOLUI/svgs/aerodark"
+  python3 - "$VOLUI/svgs/control.svg" "$VOLUI/svgs/aerodark/control.svg" <<'PY' || warn "Couldn't make the light volume arrows."
+import re, sys
+s = open(sys.argv[1], encoding="utf-8").read()
+# the dropdown arrow is a plain black path with id="dropdown"
+s, n = re.subn(r'(<path\b[^>]*?style="fill:)#000000([^"]*"[^>]*?id="dropdown")', r'\1#d8dade\2', s, flags=re.S)
+if not n:
+    s, n = re.subn(r'(<path\b(?:(?!/>).)*?id="dropdown"(?:(?!/>).)*?)fill:#000000', r'\1fill:#d8dade', s, flags=re.S)
+open(sys.argv[2], "w", encoding="utf-8").write(s)
+PY
+fi
 
 # ---- 6. glass accent follows light/dark -------------------------------------------
 if [ "$DO_ACCENT" = 1 ]; then
@@ -231,6 +245,20 @@ EOF
   if ! grep -qE '^(AccentColorGroup|AeroIntensity|CustomColor)=' "$CONF/kwinrc" 2>/dev/null; then
     warn "AeroThemePlasma hasn't saved a glass colour yet. Open its window colour page once and click"
     warn "Save Changes with your normal colour; after that the glass switches automatically."
+  fi
+fi
+
+# ---- 6b. Discord (Vesktop) uses your Plasma icon theme -----------------------------
+if have python3; then
+  say "Installing aerodark-discord-icons (Discord uses your Plasma icon theme)"
+  BIN="$HOME/.local/bin"; mkdir -p "$BIN" "$DATA/aerodark/discord"
+  cp -f "$HERE/discord/icons/aerodark-discord-icons" "$BIN/aerodark-discord-icons"
+  chmod +x "$BIN/aerodark-discord-icons"
+  cp -f "$HERE/discord/icons/icon-map.json" "$HERE/discord/icons/redraw/redraw-pages.json" \
+        "$HERE/discord/icons/import-redrawn-icons.py" "$HERE/discord/icons/emoji-list.json" \
+        "$DATA/aerodark/discord/"
+  if [ -d "$CONF/vesktop" ]; then
+    "$BIN/aerodark-discord-icons" || warn "Couldn't generate the Discord icon theme."
   fi
 fi
 

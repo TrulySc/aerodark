@@ -1,0 +1,237 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Aero skeuo layer — depth and gloss on top of the flat Explorer base, modelled on the
+   Windows7Aero / Windows7AeroDark Kvantum styles: bevelled panes, sunken views, glossy
+   controls with a highlight line along the top, soft drop shadows, glass badges.
+   Colours come from the palette (--aero-*), so it works for light and dark alike.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Panes: raised side panels, sunken content view ───────────────────────── */
+.guilds__5e434 {
+    background: var(--aero-rail) !important;
+    box-shadow: inset -1px 0 var(--aero-bevel-dark), inset -2px 0 var(--aero-bevel-light) !important;
+}
+.sidebarList__5e434,
+.container_c8ffbb,
+.content_f75fb0 > .membersWrap_c8ffbb {
+    background: var(--aero-pane) !important;
+}
+.sidebarList__5e434 { box-shadow: inset -1px 0 var(--aero-bevel-dark), inset 1px 0 var(--aero-bevel-light) !important; }
+.container_c8ffbb,
+.content_f75fb0 > .membersWrap_c8ffbb { box-shadow: inset 1px 0 var(--aero-bevel-dark), inset 2px 0 var(--aero-bevel-light) !important; }
+/* the message view sits a little below the frame, like a list view in a window */
+.chatContent_f75fb0 {
+    box-shadow: inset 0 2px 3px -1px var(--aero-inner-shadow) !important;
+}
+
+/* channel category labels: small etched headers */
+[class*="containerDefault_"] [class*="name_"][class*="overflow"],
+h2[class*="privateChannelsHeaderContainer"] {
+    text-shadow: 0 1px var(--aero-etch);
+    letter-spacing: 0.02em;
+}
+
+/* ── Server list: icons sit on the rail with a soft shadow, selected gets a glass well ─ */
+.wrapper__6e9f8 {
+    filter: drop-shadow(0 1px 2px var(--aero-drop)) drop-shadow(0 0 1px var(--aero-drop));
+}
+.listItem__650eb:has(.selected__6e9f8) {
+    box-shadow: inset 0 0 0 1px var(--aero-select-border), inset 0 1px var(--aero-select-shine),
+                0 0 6px var(--aero-select-glow) !important;
+}
+
+/* avatars: a thin glass rim and a soft shadow, like Windows 7 user tiles */
+img[class*="avatar"] {
+    filter: drop-shadow(0 1px 1.5px var(--aero-drop));
+}
+
+/* ── Buttons: highlight line along the top edge and a soft shadow below ───── */
+button[class*="button_"][class*="lookFilled"],
+button[class*="button__"][class*="lookFilled"] {
+    box-shadow: inset 0 1px var(--aero-button-shine), 0 1px 2px var(--aero-drop) !important;
+    text-shadow: 0 1px var(--aero-button-text-shadow);
+}
+button[class*="button_"][class*="lookFilled"]:active,
+button[class*="button__"][class*="lookFilled"]:active {
+    box-shadow: inset 0 1px 3px var(--aero-inner-shadow) !important;
+}
+
+/* toolbar buttons (header, chat bar, user panel): hot-track like Explorer's command bar */
+.panels__5e434 .button__67645:hover,
+.subtitleContainer_f75fb0 [role="button"]:hover,
+.channelTextArea_f75fb0 [class*="buttons_"] [role="button"]:hover {
+    background: var(--aero-button-hot-bg) !important;
+    box-shadow: inset 0 0 0 1px var(--aero-button-hot-border), inset 0 1px var(--aero-button-shine) !important;
+    border-radius: 3px;
+}
+
+/* ── Text box: deeper sunken field ────────────────────────────────────────── */
+.channelTextArea_f75fb0,
+.form_f75fb0 .themedBackground__74017 {
+    box-shadow: inset 0 1px 2px var(--aero-inner-shadow), 0 1px var(--aero-bevel-light) !important;
+}
+
+/* ── Badges: glossy red pills (unread counts, mentions) ───────────────────── */
+[class*="numberBadge_"],
+[class*="textBadge_"] {
+    background: var(--aero-badge) !important;
+    border: 1px solid var(--aero-badge-border);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.45), 0 1px 2px var(--aero-drop);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.35);
+    color: #fff !important;
+}
+
+/* ── Reactions: little push buttons ───────────────────────────────────────── */
+[class^="reaction_"] {
+    background: var(--aero-button-bg) !important;
+    border: 1px solid var(--aero-button-border) !important;
+    border-radius: 3px !important;
+    box-shadow: inset 0 1px var(--aero-button-shine);
+}
+[class^="reaction_"]:hover {
+    background: var(--aero-button-hot-bg) !important;
+    border-color: var(--aero-button-hot-border) !important;
+}
+[class^="reaction_"][class*="reactionMe"] {
+    background: var(--aero-select-bg) !important;
+    border-color: var(--aero-select-border) !important;
+}
+
+/* ── Embeds and code blocks: group boxes ──────────────────────────────────── */
+.embedFull__623de {
+    background: var(--aero-group-bg) !important;
+    border: 1px solid var(--aero-group-border) !important;
+    box-shadow: inset 0 1px var(--aero-bevel-light), 0 1px 2px var(--aero-drop);
+}
+.markup__75297 code.inline,
+.markup__75297 pre > code {
+    background: var(--aero-field-bg) !important;
+    border: 1px solid var(--aero-field-border) !important;
+    box-shadow: inset 0 1px 2px var(--aero-inner-shadow);
+}
+
+/* ── Menus, popouts and dialogs: Windows 7 window chrome ──────────────────── */
+.menu_c1e9c4,
+.popout__76f04,
+.contentWrapper__08434,
+.autocomplete__6b0e0,
+.container__8a031 {
+    box-shadow: var(--aero-menu-shadow), inset 0 0 0 1px var(--aero-bevel-light) !important;
+}
+.root__49fc1 {
+    background: var(--aero-dialog-bg) !important;
+    border: 1px solid var(--aero-menu-border) !important;
+    box-shadow: 0 0 0 1px var(--aero-bevel-light) inset, 0 8px 24px var(--aero-drop), 0 0 0 1px var(--aero-dialog-rim) !important;
+}
+
+/* ── Scrollbars: real Windows 7 bars (track + glossy thumb) ───────────────── */
+/* Discord sets scrollbar-color, which turns the custom bars off in Chromium; undo that */
+#app-mount * {
+    scrollbar-color: auto !important;
+}
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+::-webkit-scrollbar-track {
+    background: var(--aero-scroll-track);
+    box-shadow: inset 1px 0 var(--aero-bevel-dark);
+}
+::-webkit-scrollbar-thumb {
+    min-height: 24px;
+    border-radius: 3px;
+    background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+    background: var(--aero-scroll-track);
+}
+/* thin scrollers (server list, channel list) stay slim */
+[class*="thin_"]::-webkit-scrollbar {
+    width: 8px;
+}
+[class*="none_"]::-webkit-scrollbar {
+    width: 0;
+}
+
+/* ═══ SkeuoCord-style details ═══════════════════════════════════════════════ */
+
+/* every surface is a gentle vertical gradient, never a flat fill */
+.chatContent_f75fb0 {
+    background: var(--aero-chat-bg) !important;
+}
+
+/* glossy footer bar under the channel list (user panel, voice panel) */
+.panels__5e434 {
+    background: var(--aero-footer) !important;
+    box-shadow: inset 0 1px var(--aero-footer-top), inset 0 -1px var(--aero-bevel-dark), inset -1px 0 var(--aero-bevel-dark) !important;
+}
+.panels__5e434 * {
+    text-shadow: var(--aero-text-shadow);
+}
+
+/* header text: embossed */
+.subtitleContainer_f75fb0 .title_f75fb0,
+.headerGlass_f37cb1,
+.container__9293f h1,
+.container__9293f [class*="title_"] {
+    text-shadow: var(--aero-text-shadow);
+}
+
+/* chat avatars: Windows 7 user tiles — rounded square, light frame, soft shadow */
+img.avatar_c19a55,
+.avatar_c19a55 {
+    border-radius: 4px !important;
+    box-shadow: 0 0 0 2px var(--aero-avatar-ring), 0 1px 4px 2px var(--aero-avatar-shadow) !important;
+}
+
+/* date dividers: a small raised pill on a hairline */
+[role="separator"][class*="hasContent_"] > span {
+    background: var(--aero-button-bg) !important;
+    border: 1px solid var(--aero-button-border);
+    border-radius: 3px;
+    box-shadow: inset 0 1px var(--aero-button-shine), 0 1px 2px var(--aero-drop);
+    color: var(--aero-button-text) !important;
+    font-weight: 600;
+    padding: 1px 8px !important;
+    text-shadow: 0 1px var(--aero-button-text-shadow);
+}
+
+/* mentions: a gold bar with a bright edge, like SkeuoCord */
+[class*="mentioned_"] {
+    background: var(--aero-mention-bar) !important;
+    box-shadow: inset 0 1px var(--aero-mention-shine), inset 0 -1px var(--aero-mention-edge);
+}
+[class*="mentioned_"]::before {
+    background: var(--aero-mention-edge) !important;
+}
+
+/* role/user mention chips: little glossy tags */
+.markup__75297 [class*="mention_"],
+.markup__75297 .mention {
+    background: var(--aero-select-bg) !important;
+    box-shadow: inset 0 0 0 1px var(--aero-select-border), inset 0 1px var(--aero-select-shine);
+    border-radius: 2px;
+    color: var(--aero-select-text) !important;
+}
+
+/* popouts (profiles, pins, inbox) and embeds: gradient cells with a framed edge */
+.contentWrapper__08434,
+.popout__76f04,
+[class*="userPopoutOuter_"],
+[class*="userPopoutInner_"] {
+    background: var(--aero-cell) !important;
+}
+.embedFull__623de {
+    background: var(--aero-cell) !important;
+}
+
+/* channel list items: a raised bar while hovered or selected (SkeuoCord's channel pills) */
+.wrapper__2ea32:hover .link__2ea32,
+.wrapper__2ea32.modeSelected__2ea32 .link__2ea32 {
+    text-shadow: 0 1px var(--aero-etch);
+}
+
+/* unread pill next to the server list */
+.pill_e5445c [class*="item_"] {
+    background: var(--aero-text) !important;
+    box-shadow: 0 0 4px var(--aero-select-glow);
+}

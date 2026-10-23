@@ -34,6 +34,10 @@ if [ -x "$HOME/.local/bin/aerodark-sync" ]; then
   rm -f "$HOME/.local/bin/aerodark-sync" "$CONF/autostart/aerodark-sync.desktop"
 fi
 
+# Discord icon theme generator and its output
+rm -f "$HOME/.local/bin/aerodark-discord-icons" "$CONF/vesktop/themes/AeroIcons.theme.css" "$CONF/vesktop/themes/AeroEmoji.theme.css"
+rm -rf "$DATA/aerodark/discord"
+
 # an older version of the installer switched Kvantum itself to the dark theme
 KVCONF="$CONF/Kvantum/kvantum.kvconfig"
 [ -f "$KVCONF" ] && sed -i 's/^theme=Windows7AeroDark$/theme=Windows7Aero/' "$KVCONF"

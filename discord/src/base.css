@@ -1,0 +1,382 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Aero (shared) — the structure both Aero Light and Aero Dark use.
+   Colours come from the palette file; nothing in here is light- or dark-specific.
+   Modelled on Windows 7 Explorer (and linux-explorer on AeroThemePlasma): flat panes split by
+   hairline rules, the command-bar gloss for headers, the nav-pane selection, Windows 7 text
+   boxes and push buttons, and the details pane for the user panel.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Midnight options: flat Explorer layout instead of floating cards ─────── */
+body {
+    --font: var(--aero-font);
+    --code-font: '';
+    --gap: 0px;
+    --border-thickness: 0px;
+    --background-image: off;
+    --panel-blur: off;
+    --transparency-tweaks: off;
+    --custom-window-controls: off;
+    --top-bar-button-position: off;
+    --top-bar-title-position: left;
+    --subtle-top-bar-title: on;
+    --custom-dms-icon: off;
+    --custom-dms-background: off;
+    --custom-chatbar: off;
+    --small-user-panel: off;
+    --animations: off;
+    --bg-floating: var(--aero-surface);
+}
+
+/* ── Proportions: Windows 7 bar heights and corners ───────────────────────── */
+/* Explorer's command bar is 31 px tall; Discord's headers are 48. Windows 7 rounded only small
+   controls (2–3 px) and left panes, menus and dialogs square. */
+#app-mount {
+    --custom-channel-header-height: var(--aero-header-height);
+}
+body,
+.theme-dark,
+.theme-light {
+    --radius-xs: 2px;
+    --radius-sm: 2px;
+    --radius-md: 3px;
+    --radius-lg: 3px;
+    --radius-xl: 3px;
+}
+.subtitleContainer_f75fb0,
+#app-mount .container__9293f,
+.headerGlass_f37cb1 {
+    min-height: var(--aero-header-height);
+    height: var(--aero-header-height);
+    margin-bottom: 0;
+}
+.embedFull__623de,
+.container__9271d,
+.root__49fc1 {
+    border-radius: 3px;
+}
+
+/* ── Type: Segoe UI, 9 pt, like the rest of the desktop ───────────────────── */
+body,
+.theme-dark,
+.theme-light {
+    --font-primary: var(--aero-font);
+    --font-display: var(--aero-font);
+    --font-headline: var(--aero-font);
+}
+#app-mount {
+    font-family: var(--aero-font);
+    font-size: var(--aero-ui-size);
+}
+/* Discord sets gg sans directly on many elements (headers, names, buttons, the voice panel),
+   so force Segoe UI everywhere except code. */
+#app-mount *:not(code):not(pre):not(pre *):not(kbd):not([class*="codeBlock"]),
+[class*="layerContainer"] *:not(code):not(pre):not(pre *),
+[class*="tooltip"] * {
+    font-family: var(--aero-font) !important;
+}
+/* list names that Discord sizes at 16 px */
+.channel__972a0 [class*="name__"],
+.channel__972a0 [class*="name_"],
+.container__91a9d [class*="name__"],
+.container__91a9d [class*="name_"],
+[class*="privateChannelsHeaderContainer"],
+[class*="searchBarComponent"] {
+    font-size: var(--aero-ui-size) !important;
+}
+.messageContent_c19a55,
+.markup__75297 {
+    font-size: var(--aero-chat-size);
+    line-height: 1.45;
+}
+.wrapper__2ea32 .link__2ea32,
+.container__91a9d,
+.channel__972a0,
+.side_aa8da2 .item_aa8da2 {
+    font-size: var(--aero-ui-size);
+}
+
+/* ── Panes: flat, separated by hairlines ──────────────────────────────────── */
+.guilds__5e434,
+.sidebarList__5e434,
+.chatContent_f75fb0,
+.container_c8ffbb,
+.content_f75fb0 > .membersWrap_c8ffbb,
+.peopleColumn__133bf,
+.nowPlayingColumn__133bf,
+.searchResultsWrap_a98f3b,
+.container_f369db,
+.content_f75fb0 > aside > .outer_c0bea0 {
+    background-color: var(--aero-surface);
+    background-image: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+.guilds__5e434 { box-shadow: inset -1px 0 var(--aero-rule); }
+.sidebarList__5e434 { box-shadow: inset -1px 0 var(--aero-rule); }
+.container_c8ffbb,
+.content_f75fb0 > .membersWrap_c8ffbb { box-shadow: inset 1px 0 var(--aero-rule); }
+.bg__960e4 { background: var(--aero-frame); }
+
+/* ── Headers: Explorer's command bar ──────────────────────────────────────── */
+.chat_f75fb0 > .subtitleContainer_f75fb0,
+.container__133bf > .container__9293f,
+.container_f391e3 > .container__9293f,
+.container__01ae2 > .container__9293f,
+.homeWrapper__0920e > .container__9293f,
+.headerGlass_f37cb1 {
+    background: var(--aero-commandbar);
+    border: none;
+    border-radius: 0;
+    box-shadow: inset 0 1px var(--aero-commandbar-top), inset 0 -1px var(--aero-commandbar-bottom);
+    color: var(--aero-text);
+}
+.title_f75fb0,
+.headerGlass_f37cb1 * {
+    color: var(--aero-text);
+}
+
+/* the app's own top bar → plain window frame */
+.bar_c38106 {
+    background: var(--aero-frame);
+    box-shadow: inset 0 -1px var(--aero-rule);
+}
+.title_c38106 {
+    color: var(--aero-text);
+    font-size: var(--aero-ui-size);
+}
+
+/* ── User panel: Explorer's details pane ──────────────────────────────────── */
+.panels__5e434 {
+    background: var(--aero-infostrip);
+    border: none;
+    border-radius: 0;
+    box-shadow: inset 0 1px var(--aero-infostrip-top), inset -1px 0 var(--aero-rule);
+}
+.panels__5e434 .button__67645:hover {
+    background: var(--aero-hover-bg);
+    box-shadow: inset 0 0 0 1px var(--aero-hover-border);
+    border-radius: 3px;
+}
+
+/* ── Selection: the Windows 7 nav-pane highlight ──────────────────────────── */
+.wrapper__2ea32:hover .link__2ea32,
+.channel__972a0:hover > div,
+.container__91a9d:hover,
+.side_aa8da2 .item_aa8da2:hover,
+.item_c1e9c4.focused_c1e9c4 {
+    background: var(--aero-hover-bg);
+    box-shadow: inset 0 0 0 1px var(--aero-hover-border);
+    border-radius: 3px;
+}
+.wrapper__2ea32.modeSelected__2ea32 .link__2ea32,
+.channel__972a0 .interactiveSelected__972a0,
+.container__91a9d.selected__91a9d,
+.side_aa8da2 .item_aa8da2.selected_aa8da2 {
+    background: var(--aero-select-bg);
+    box-shadow: inset 0 0 0 1px var(--aero-select-border), inset 0 1px var(--aero-select-shine);
+    border-radius: 3px;
+}
+.wrapper__2ea32.modeSelected__2ea32 .link__2ea32 *,
+.channel__972a0 .interactiveSelected__972a0 *,
+.side_aa8da2 .item_aa8da2.selected_aa8da2,
+.item_c1e9c4.focused_c1e9c4 * {
+    color: var(--aero-select-text);
+}
+
+/* server list: the same highlight behind the selected server, no glow */
+.listItem__650eb {
+    border-radius: 3px;
+}
+.listItem__650eb:hover {
+    background: var(--aero-hover-bg);
+    box-shadow: inset 0 0 0 1px var(--aero-hover-border);
+}
+.listItem__650eb:has(.selected__6e9f8) {
+    background: var(--aero-select-bg);
+    box-shadow: inset 0 0 0 1px var(--aero-select-border), inset 0 1px var(--aero-select-shine);
+}
+.pill_e5445c { display: none; }
+
+/* ── Text box: Windows 7 edit control ─────────────────────────────────────── */
+.form_f75fb0 .themedBackground__74017,
+.channelTextArea_f75fb0 {
+    background: var(--aero-field-bg);
+    border: 1px solid var(--aero-field-border);
+    border-top-color: var(--aero-field-border-top);
+    border-radius: 2px;
+    box-shadow: var(--aero-field-inset);
+}
+.channelTextArea_f75fb0:focus-within {
+    border-color: var(--aero-field-focus);
+    border-top-color: var(--aero-field-focus-top);
+}
+.slateTextArea_ec4baf {
+    font-size: var(--aero-chat-size);
+}
+
+/* ── Floating things: menus, tooltips, popouts → Windows 7 menu/tooltip ───── */
+.menu_c1e9c4,
+.popout__76f04,
+.contentWrapper__08434,
+.autocomplete__6b0e0,
+.container__8a031 {
+    background: var(--aero-menu-bg);
+    border: 1px solid var(--aero-menu-border);
+    border-radius: 0;
+    box-shadow: var(--aero-menu-shadow);
+}
+.tooltip_c36707 {
+    background: var(--aero-tooltip-bg);
+    border: 1px solid var(--aero-tooltip-border);
+    border-radius: 2px;
+    color: var(--aero-tooltip-text);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+    font-size: var(--aero-ui-size);
+}
+
+/* ── Scrollbars: Windows 7 thumbs ─────────────────────────────────────────── */
+::-webkit-scrollbar-thumb {
+    background: var(--aero-scroll-thumb);
+    border: 1px solid var(--aero-scroll-border);
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px var(--aero-scroll-shine);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--aero-scroll-thumb-hover);
+    border-color: var(--aero-hover-border);
+}
+
+/* ── Buttons: Windows 7 push buttons, through Discord's own variables ─────── */
+body,
+.theme-dark:not(.custom-user-profile-theme),
+.theme-light:not(.custom-user-profile-theme) {
+    --text-link: var(--aero-link);
+
+    --control-primary-background-default: var(--aero-button-default-bg);
+    --control-primary-background-hover: var(--aero-button-hot-bg);
+    --control-primary-background-active: var(--aero-button-pressed-bg);
+    --control-primary-border-default: var(--aero-button-default-border);
+    --control-primary-border-hover: var(--aero-button-hot-border);
+    --control-primary-border-active: var(--aero-button-pressed-border);
+    --control-primary-text-default: var(--aero-button-text);
+    --control-primary-text-hover: var(--aero-button-text);
+    --control-primary-text-active: var(--aero-button-text);
+    --control-primary-icon-default: var(--aero-button-text);
+    --control-primary-icon-hover: var(--aero-button-text);
+    --control-primary-icon-active: var(--aero-button-text);
+
+    --control-secondary-background-default: var(--aero-button-bg);
+    --control-secondary-background-hover: var(--aero-button-hot-bg);
+    --control-secondary-background-active: var(--aero-button-pressed-bg);
+    --control-secondary-border-default: var(--aero-button-border);
+    --control-secondary-border-hover: var(--aero-button-hot-border);
+    --control-secondary-border-active: var(--aero-button-pressed-border);
+    --control-secondary-text-default: var(--aero-button-text);
+    --control-secondary-text-hover: var(--aero-button-text);
+    --control-secondary-text-active: var(--aero-button-text);
+    --control-secondary-icon-default: var(--aero-button-text);
+    --control-secondary-icon-hover: var(--aero-button-text);
+    --control-secondary-icon-active: var(--aero-button-text);
+
+    /* the bright white "Get Nitro"-style buttons → ordinary push buttons */
+    --control-expressive-background-default: var(--aero-button-bg);
+    --control-expressive-background-hover: var(--aero-button-hot-bg);
+    --control-expressive-background-active: var(--aero-button-pressed-bg);
+    --control-expressive-border-default: var(--aero-button-border);
+    --control-expressive-border-hover: var(--aero-button-hot-border);
+    --control-expressive-border-active: var(--aero-button-pressed-border);
+    --control-expressive-text-default: var(--aero-button-text);
+    --control-expressive-text-hover: var(--aero-button-text);
+    --control-expressive-text-active: var(--aero-button-text);
+    --control-expressive-icon-default: var(--aero-button-text);
+    --control-expressive-icon-hover: var(--aero-button-text);
+    --control-expressive-icon-active: var(--aero-button-text);
+
+    --control-critical-primary-background-default: var(--aero-button-danger-bg);
+    --control-critical-primary-background-hover: var(--aero-button-danger-hot-bg);
+    --control-critical-primary-background-active: var(--aero-button-danger-hot-bg);
+    --control-critical-primary-border-default: var(--aero-button-danger-border);
+    --control-critical-primary-border-hover: var(--aero-button-danger-border);
+    --control-critical-primary-text-default: #ffffff;
+    --control-critical-primary-text-hover: #ffffff;
+
+    /* text fields and dropdowns */
+    --input-background-default: var(--aero-field-bg);
+    --input-border-default: var(--aero-field-border);
+    --input-border-hover: var(--aero-hover-border);
+    --input-border-active: var(--aero-field-focus);
+    --input-text-default: var(--aero-text);
+    --input-placeholder-text-default: var(--aero-text-muted);
+
+    --scrollbar-thin-thumb: var(--aero-scroll-flat);
+    --scrollbar-auto-thumb: var(--aero-scroll-flat);
+    --scrollbar-auto-track: transparent;
+}
+
+/* ── Controls Discord draws itself (matched by name fragment, so hash changes don't break them) ── */
+/* sliders: Windows 7 trackbar — thin sunken groove, glossy grabber */
+[class*="slider_"] [class*="bar_"] {
+    background: var(--aero-field-bg);
+    border: 1px solid var(--aero-field-border-top);
+    border-radius: 2px;
+    height: 4px;
+}
+[class*="slider_"] [class*="barFill_"] {
+    background: var(--aero-select-bg);
+    border-radius: 2px;
+}
+[class*="slider_"] [class*="grabber_"] {
+    background: var(--aero-button-bg);
+    border: 1px solid var(--aero-button-border);
+    border-radius: 2px;
+    width: 10px;
+    height: 18px;
+    margin-top: -7px;
+    box-shadow: inset 0 1px var(--aero-select-shine);
+}
+[class*="slider_"] [class*="grabber_"]:hover {
+    background: var(--aero-button-hot-bg);
+    border-color: var(--aero-button-hot-border);
+}
+/* dropdowns: Windows 7 combo box */
+[class*="select_"][role="button"],
+[class*="select_"][role="combobox"] {
+    background: var(--aero-button-bg);
+    border: 1px solid var(--aero-button-border);
+    border-radius: 3px;
+    color: var(--aero-button-text);
+}
+[class*="select_"][role="button"]:hover,
+[class*="select_"][role="combobox"]:hover {
+    background: var(--aero-button-hot-bg);
+    border-color: var(--aero-button-hot-border);
+}
+[class*="popout_"][role="listbox"] {
+    background: var(--aero-menu-bg);
+    border: 1px solid var(--aero-menu-border);
+    border-radius: 0;
+    box-shadow: var(--aero-menu-shadow);
+}
+/* mic test: solid green level meter instead of stripes */
+[class*="micTest"] [class*="notches_"] {
+    background: var(--aero-field-bg);
+    border: 1px solid var(--aero-field-border-top);
+    border-radius: 2px;
+}
+[class*="micTest"] [class*="notch_"] {
+    background: transparent;
+}
+[class*="micTest"] [class*="notchActive_"] {
+    background: linear-gradient(180deg, #8be36e, #46d34a 50%, #2a8a2d);
+}
+/* soundboard and other floating pickers: opaque, like a Windows 7 menu */
+[class*="soundboard"][class*="picker"],
+[class*="soundboard"][class*="container_"],
+[class*="pickerWrapper"] {
+    background: var(--aero-menu-bg);
+    border: 1px solid var(--aero-menu-border);
+    border-radius: 0;
+    box-shadow: var(--aero-menu-shadow);
+    backdrop-filter: none;
+}

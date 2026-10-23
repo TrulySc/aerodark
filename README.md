@@ -7,6 +7,19 @@ to be white or light grey turn black/graphite; the green progress bar and yellow
 
 No artwork from VistaVG is included — the look was matched by hand.
 
+
+## Updating
+
+Download the new `AeroDark.tar.gz`, then run:
+
+```sh
+~/Downloads/aerodark-repo/update.sh
+```
+
+It unpacks the newest `AeroDark*.tar.gz` from Downloads into the repo, runs `install.sh`, updates
+the Discord themes and icons, re-runs any `extras/` rebuild script that changed (these ask for your
+password), and commits and pushes to GitHub. Options: `--no-extras`, `--no-push`, `--no-git`.
+
 ## Switching between light and dark
 
 After installing, **System Settings → Global Theme** lists **Aero Dark (VistaVG Black)** next to
