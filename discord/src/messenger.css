@@ -259,13 +259,7 @@ body {
 }
 
 /* voice connection: an info bar above you */
-#app-mount .panels__5e434 > div:has([class*="connection_"], [class*="rtcConnection"]) {
-    background: linear-gradient(180deg, #fffbe0, #fff2b8) !important;
-    border-bottom: 1px solid #e3cf7a !important;
-    border-radius: 0 !important;
-    padding: 4px 8px !important;
-    color: var(--wlm-text) !important;
-}
+#app-mount .panels__5e434 > div:has([class*="connection_"], [class*="rtcConnection"]) { }
 #app-mount .panels__5e434 > div:has([class*="connection_"], [class*="rtcConnection"]) * {
     color: var(--wlm-text-2) !important;
 }
@@ -1713,3 +1707,33 @@ body {
 #app-mount .cozyMessage__5126c .header_c19a55 { padding-left: 24px !important; }
 #app-mount .cozyMessage__5126c .repliedMessage_c19a55 + .avatar_c19a55,
 #app-mount .cozyMessage__5126c:has(.repliedMessage_c19a55) .contents_c19a55 > .avatar_c19a55 { top: 2px !important; }
+
+/* — fix pass 4: bigger picture; the voice call folded into your header — */
+#app-mount .panels__5e434 { display: flex !important; flex-direction: column !important; }
+#app-mount .panels__5e434 .container__37e49 { order: 1; grid-template-columns: 100px 1fr !important; min-height: 100px; }
+#app-mount .panels__5e434 .accountPopoutButton__37e49 { width: 100px; height: 100px; }
+#app-mount .panels__5e434 .avatar__37e49 { width: 80px !important; height: 80px !important; margin: 8px 0 0 10px !important; }
+#app-mount .panels__5e434 .avatar__37e49 > svg,
+#app-mount .panels__5e434 .avatar__37e49 foreignObject,
+#app-mount .panels__5e434 .avatar__37e49 .avatarStack__44b0c,
+#app-mount .panels__5e434 .avatar__37e49 img { width: 80px !important; height: 80px !important; }
+#app-mount .panels__5e434 .avatar__37e49::after { inset: -11px !important; }
+/* the call: one grey line under your icons, "📞 girl voice / foid friends 01:58" and a small hang-up */
+#app-mount .panels__5e434 > .wrapper_e131a9 {
+    order: 2; background: none !important; border: none !important; box-shadow: none !important;
+    padding: 0 8px 6px 104px !important; margin-top: -8px !important;
+}
+#app-mount .panels__5e434 > .wrapper_e131a9 * { background: none !important; box-shadow: none !important; }
+#app-mount .panels__5e434 .connection_e131a9 { padding: 0 !important; margin: 0 !important; min-height: 0 !important; }
+#app-mount .panels__5e434 .connection_e131a9 [class*="labelWrapper"] > :first-child,
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"],
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="voiceButtonsContainer"],
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="ping_"],
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="rtcConnectionStatus"] > :first-child svg { display: none !important; }
+#app-mount .panels__5e434 .wrapper_e131a9 button:not([aria-label="Disconnect"]) { display: none !important; }
+#app-mount .panels__5e434 .wrapper_e131a9 button[aria-label="Disconnect"] { width: 20px !important; height: 18px !important; min-width: 0 !important; padding: 0 !important; }
+#app-mount .panels__5e434 .wrapper_e131a9 button[aria-label="Disconnect"] svg { width: 14px !important; height: 14px !important; }
+#app-mount .panels__5e434 .wrapper_e131a9,
+#app-mount .panels__5e434 .wrapper_e131a9 * { font-size: 8pt !important; line-height: 1.3 !important; color: var(--wlm-grey) !important; }
+#app-mount .panels__5e434 .connection_e131a9 [class*="inner"] { display: flex !important; align-items: center; gap: 4px; }
+#app-mount .panels__5e434 .connection_e131a9 [class*="inner"]::before { content: "📞"; font-size: 9pt; }
