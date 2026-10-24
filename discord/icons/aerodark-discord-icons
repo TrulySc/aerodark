@@ -710,6 +710,7 @@ def main():
     me = custom_file("me") or (own_discord_avatar() if not a.no_fetch_avatar else None)
     if me:
         wlm_vars.append(f'--wlm-me: url("{data_uri(me)}")')
+        wlm_vars.append('--wlm-me-on: 0')
     if wlm_vars:
         with open(out, "a", encoding="utf-8") as fh:
             fh.write("\n/* ── Messenger assets ── */\n:root {\n    " + ";\n    ".join(wlm_vars) + ";\n}\n")

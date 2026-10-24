@@ -612,7 +612,7 @@ body,
     --wlm-row-selected: #2b4a6a;
     --wlm-row-inactive: #30343a;
     --wlm-header: radial-gradient(ellipse 60% 140% at 85% -20%, rgba(120, 160, 220, 0.22), rgba(31, 34, 40, 0) 70%),
-                  linear-gradient(180deg, #c9def4 0%, #d9e8f8 45%, #e9f2fb 100%);
+                  linear-gradient(180deg, #22324a 0%, #1d2a3c 45%, #192330 100%);
     --wlm-strip: linear-gradient(180deg, #2e3a4a 0%, #273240 50%, #1f2834 51%, #232d3a 100%);
     --wlm-strip-edge: #334255;
     --wlm-tab: linear-gradient(90deg, #273240 0%, #253142 100%);
@@ -686,7 +686,7 @@ body {
 }
 #app-mount .title_c38106 * {
     font: 9pt 'Segoe UI', 'Noto Sans', sans-serif !important;
-    color: #1f2228 !important;
+    color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 40, 80, 0.7);
     background: none !important;
 }
@@ -702,12 +702,12 @@ body {
 #app-mount .title_c38106::after {
     content: "- Windows Live Messenger";
     font: 9pt 'Segoe UI', 'Noto Sans', sans-serif;
-    color: #1f2228;
+    color: #ffffff;
     text-shadow: 0 1px 2px rgba(0, 40, 80, 0.7);
 }
 /* the Discord buttons at the right of the title band: white glyphs */
 #app-mount .trailing_c38106 {
-    color: #1f2228 !important;
+    color: #ffffff !important;
 }
 
 /* ═══ Contact list window: header with you ═════════════════════════════════ */
@@ -1285,7 +1285,7 @@ body {
     border: 1px solid var(--aero-badge-border) !important;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25) !important;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.35);
-    color: #1f2228 !important;
+    color: #ffffff !important;
     font-weight: 700 !important;
 }
 
@@ -1608,7 +1608,7 @@ body {
     background: linear-gradient(180deg, #4a4f57 0%, #3f444b 48%, #33373d 50%, #2c3035 100%);
     border: 1px solid #121315;
     border-radius: 3px;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 1px 1px rgba(0, 0, 0, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 1px 1px rgba(0, 0, 0, 0.12);
     color: #cfe3ff;
     font: 10pt 'Segoe UI', 'Noto Sans', sans-serif;
     pointer-events: none;
@@ -2315,3 +2315,93 @@ body {
 #app-mount .panels__5e434 .wrapper_e131a9 * { font-size: 8pt !important; line-height: 1.3 !important; color: var(--wlm-grey) !important; }
 #app-mount .panels__5e434 .connection_e131a9 [class*="inner"] { display: flex !important; align-items: center; gap: 4px; }
 #app-mount .panels__5e434 .connection_e131a9 [class*="inner"]::before { content: "📞"; font-size: 9pt; }
+
+/* — fix pass 5 — */
+/* your picture: the sharp 128 px copy of your avatar (Discord only loads a 32 px one here) */
+#app-mount .panels__5e434 .avatar__37e49 .avatarStack__44b0c { background: var(--wlm-me, none) center / cover no-repeat !important; }
+#app-mount .panels__5e434 .avatar__37e49 img { opacity: var(--wlm-me-on, 1); }
+#app-mount .panels__5e434 .avatar__37e49::after { inset: -14px !important; }
+#app-mount .panels__5e434 .container__37e49 { min-height: 108px; }
+/* speaking: a square green glow around the frame instead of Discord's ring */
+#app-mount .panels__5e434 .avatar__37e49 [class*="peaking"],
+#app-mount :is(.privateChannels_e6b769, .member_c8ffbb, #channels) [class*="peaking"] :is(svg > rect, foreignObject > rect) { outline: none !important; box-shadow: none !important; }
+#app-mount .panels__5e434 .avatar__37e49:has([class*="peaking"])::before,
+#app-mount .panels__5e434:has([class*="avatarSpeaking"]) .avatar__37e49::before {
+    content: ""; position: absolute; inset: -12px; z-index: 0; pointer-events: none;
+    box-shadow: 0 0 6px 3px rgba(70, 200, 90, 0.85), inset 0 0 4px 1px rgba(70, 200, 90, 0.6);
+    border-radius: 3px;
+}
+#app-mount #channels [class*="avatarSpeaking"],
+#app-mount #channels [class*="voiceUser"] [class*="peaking"] {
+    border-radius: 2px !important; box-shadow: 0 0 4px 2px rgba(70, 200, 90, 0.9) !important; border: none !important;
+}
+/* the call: your header's little icon row again (mute/deafen line, then the call's buttons) */
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] {
+    display: flex !important; gap: 2px !important; margin: 3px 0 0 !important; padding: 0 !important;
+}
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] button,
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] [role="button"] {
+    display: inline-flex !important; width: 26px !important; min-width: 0 !important; height: 22px !important;
+    padding: 0 !important; flex: none !important; border: none !important; border-radius: 2px !important;
+}
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] :is(button, [role="button"]):hover {
+    background: linear-gradient(180deg, #33455c, #2a3a4f) !important; box-shadow: inset 0 0 0 1px #4d6f99 !important;
+}
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] svg { width: 16px !important; height: 16px !important; }
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] [class*="label"],
+#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] [class*="buttonText"] { display: none !important; }
+/* typing box: one frame; the button strip spans its whole width */
+#app-mount .channelTextArea_f75fb0 .scrollableContainer__74017 {
+    background: linear-gradient(180deg, #2e3a4a 0%, #273240 50%, #1f2834 51%, #232d3a 100%) 0 0 / 100% 27px no-repeat, #1f2228 !important;
+    border: 1px solid var(--wlm-box-border) !important; border-radius: 3px !important; margin: 0 !important;
+}
+#app-mount .channelTextArea_f75fb0 { border: none !important; background: transparent !important; }
+#app-mount .channelTextArea_f75fb0 :is(.attachWrapper__0923f, .buttons__74017) {
+    background: none !important; border-bottom: none !important; height: 27px !important;
+}
+#app-mount .channelTextArea_f75fb0 .inner__74017 { padding: 0 !important; margin: 0 !important; }
+#app-mount .channelTextArea_f75fb0 .textArea__74017 { padding: 6px 8px !important; margin: 0 !important; }
+/* member list: pictures with a buddy, tidy group headers */
+#app-mount .membersGroup_c8ffbb {
+    display: flex !important; align-items: center !important; gap: 0; height: 24px !important;
+    padding: 4px 6px 0 6px !important; margin: 0 !important;
+}
+#app-mount .membersGroup_c8ffbb * { font-size: 9pt !important; font-weight: 700 !important; text-transform: none !important; margin: 0 !important; padding: 0 !important; position: static !important; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] {
+    width: 18px !important; height: 18px !important; position: relative; background: none !important;
+}
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] > * { display: block !important; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] svg { width: 18px !important; height: 18px !important; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; width: 18px; height: 18px; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] img { width: 18px !important; height: 18px !important; border-radius: 0 !important; outline: 1px solid #555a61; outline-offset: -1px; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] :is(svg > rect, foreignObject > rect, foreignObject > svg, rect[class*="pointerEvents"]) { display: none !important; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"]::after {
+    content: ""; position: absolute; right: -4px; bottom: -3px; width: 11px; height: 11px;
+    background: var(--wlm-img-buddy-offline, var(--wlm-draw-buddy-offline)) center / contain no-repeat;
+}
+#app-mount .member_c8ffbb div[role="img"]:is([aria-label$="Online"], [aria-label*="Mobile"], [aria-label$="Streaming"])::after { background-image: var(--wlm-img-buddy-online, var(--wlm-draw-buddy-online)); }
+#app-mount .member_c8ffbb div[role="img"][aria-label$="Idle"]::after { background-image: var(--wlm-img-buddy-away, var(--wlm-draw-buddy-away)); }
+#app-mount .member_c8ffbb div[role="img"][aria-label$="Do Not Disturb"]::after { background-image: var(--wlm-img-buddy-busy, var(--wlm-draw-buddy-busy)); }
+/* voice channel people and "Set a channel status": readable inside the half-scale tree */
+#app-mount #channels [class*="voiceUser"] [class*="username"],
+#app-mount #channels [class*="voiceUser"] [class*="username"] * { font-size: 20px !important; }
+#app-mount #channels [class*="voiceUser"] [class*="avatar"] { width: 32px !important; height: 32px !important; border-radius: 2px !important; background-size: cover !important; }
+#app-mount #channels [class*="voiceUser"] { min-height: 40px !important; }
+#app-mount #channels .wrapper__2ea32 [class*="subtitle"],
+#app-mount #channels .wrapper__2ea32 [class*="subtitle"] *,
+#app-mount #channels .wrapper__2ea32 [class*="channelInfo"] * { font-size: 17px !important; }
+/* the channel's unread nub: a glossy gradient */
+#app-mount #channels .unread__2ea32 {
+    width: 8px !important; height: 16px !important; border-radius: 0 4px 4px 0 !important;
+    background: linear-gradient(180deg, #8fd0ff 0%, #5aa6ea 50%, #1f68bf 51%, #4fa3e8 100%) !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.6) !important;
+}
+/* "To:" stays over the conversation, not over the member list */
+#app-mount .chat_f75fb0:has(.membersWrap_c8ffbb) .subtitleContainer_f75fb0 .children__9293f { margin-right: 262px !important; }
+
+/* dark: the swirl is a light picture, so it's left out; Discord's own icons in a light grey */
+#app-mount .panels__5e434 { background: var(--wlm-header) !important; }
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f .iconWrapper__9293f,
+#app-mount .channelTextArea_f75fb0 .buttons__74017,
+#app-mount .panels__5e434 .buttons__37e49 { color: #c9d6e8 !important; }
+#app-mount [class*="numberBadge_"], #app-mount [class*="textBadge_"] { color: #ffffff !important; }
