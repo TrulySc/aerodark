@@ -8,6 +8,15 @@ to be white or light grey turn black/graphite; the green progress bar and yellow
 No artwork from VistaVG is included — the look was matched by hand.
 
 
+## Taskbar order (SevenTasks)
+
+`install.sh` also patches a private copy of SevenTasks so it behaves like the Windows 7 taskbar:
+pinned programs stay in their place when they start (with or without labels), pinned items are kept
+as their own block, keyboard moves (Ctrl+Shift+←/→) are saved, and the order is never written back
+during the first 15 seconds after login, while restored apps are still opening. The patch is applied
+to whatever SevenTasks you have installed, so re-run `install.sh` (or `update.sh`) after updating
+AeroThemePlasma.
+
 ## Updating
 
 Download the new `AeroDark.tar.gz`, then run:

@@ -641,6 +641,23 @@ def main():
     open(stamp, "w").write(stamp_text + "\n")
     os.makedirs(CUSTOM, exist_ok=True)
     cat = write_catalog(entries, origin, theme)
+    # Messenger assets (the Messenger theme reads these variables; see README → Messenger)
+    wlm_dir = os.path.join(DATA, "aerodark", "discord", "wlm")
+    wlm_vars = []
+    if os.path.isdir(wlm_dir):
+        for n in sorted(os.listdir(wlm_dir)):
+            stem, ext = os.path.splitext(n)
+            if ext.lower() not in (".png", ".gif", ".jpg", ".webp") or not re.fullmatch(r"[\w-]+", stem):
+                continue
+            if stem.startswith("dp-") and stem != "dp-default":
+                continue                                  # spare pictures: copy one to custom/me.png to use it
+            wlm_vars.append(f'--wlm-img-{stem}: url("{data_uri(os.path.join(wlm_dir, n))}")')
+    me = custom_file("me")
+    if me:
+        wlm_vars.append(f'--wlm-me: url("{data_uri(me)}")')
+    if wlm_vars:
+        with open(out, "a", encoding="utf-8") as fh:
+            fh.write("\n/* ── Messenger assets ── */\n:root {\n    " + ";\n    ".join(wlm_vars) + ";\n}\n")
     old_emoji = os.path.join(os.path.dirname(out), "AeroEmoji.theme.css")
     if os.path.exists(old_emoji):            # emoji now live in AeroIcons itself (one theme to enable)
         os.remove(old_emoji)

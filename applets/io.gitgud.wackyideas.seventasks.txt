@@ -1,0 +1,7 @@
+# SevenTasks: keep pinned programs in place (Windows 7 behaviour) and never save a scrambled order at login.
+main.qml	launchInPlace: tasks.iconsOnly && Plasmoid.configuration.sortingStrategy === 1	launchInPlace: Plasmoid.configuration.sortingStrategy === 1 // Aero Dark: a pinned program stays in its place when it starts
+main.qml	separateLaunchers: false	separateLaunchers: Plasmoid.configuration.sortingStrategy === 1 || Plasmoid.configuration.separateLaunchers // Aero Dark: pinned items are their own block, like Windows 7
+main.qml	property bool iconsOnly: !Plasmoid.configuration.showLabels	property bool aeStartupSettled: false; Timer { interval: 15000; running: true; onTriggered: tasks.aeStartupSettled = true } property bool iconsOnly: !Plasmoid.configuration.showLabels
+main.qml	Plasmoid.configuration.launchers = launcherList;	if (tasks.aeStartupSettled) { Plasmoid.configuration.launchers = launcherList; } // Aero Dark: no saving while apps are still starting at login
+Task.qml	tasksModel.move(task.index, task.index - 1);	tasksModel.move(task.index, task.index - 1); tasksModel.syncLaunchers();
+Task.qml	tasksModel.move(task.index, task.index + 1);	tasksModel.move(task.index, task.index + 1); tasksModel.syncLaunchers();

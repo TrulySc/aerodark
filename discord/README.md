@@ -33,6 +33,26 @@ Edit the `body { … }` block at the top of the palette:
 The source is in `src/`: `base.css` holds the shared layout, and `palette-light.css` and
 `palette-dark.css` hold the colours. Run `./build.sh` to regenerate both themes.
 
+## Messenger (Windows Live Messenger look)
+
+`Messenger.theme.css` turns Discord into Windows Live Messenger 2009 / 8.5 (light; dark comes later).
+Use it with Discord's **Light** appearance, together with **AeroIcons**, instead of Aero Light/Dark.
+
+- Contact-list window: your display picture, name, `(Online) ▾` / `(Connected) ▾` while in a call,
+  personal message and icon row at the top (click it for the status menu); "Search contacts or the
+  web…"; servers as tabs attached to the list; contacts as one-line rows with MSN buddy icons.
+- Conversation window: labelled toolbar (Call, Video, Pins, Invite, Profile), the "To:" bar,
+  "Name says:" with bulleted lines, the formatting bar above the typing box, a big Send button
+  (looks only — Enter sends), and the display-picture column: their picture at the top, yours at the
+  bottom.
+- Colours and selection states come from Messenger 8.5's own stylesheets (msgsres.dll).
+
+Messenger's own pictures (frames, buddy icons, header swirl, title band, default pictures) are
+Microsoft's, so they're not in this repo. Put the PNGs in `~/.local/share/aerodark/discord/wlm/` and
+run `aerodark-discord-icons`; without them the theme uses drawn stand-ins. Your own picture for the
+bottom of the conversation column: save it as `~/.local/share/aerodark/discord/custom/me.png` (any
+of the `dp-*.png` pictures works too).
+
 ## Icons: your Plasma icon theme in Discord
 
 `aerodark-discord-icons` (installed by `install.sh` into `~/.local/bin`) looks up Discord's icons in
