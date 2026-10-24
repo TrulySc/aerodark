@@ -680,9 +680,15 @@ body {
     padding-left: 8px !important;
     opacity: 1 !important;
 }
-#app-mount .title_c38106 > *,
-#app-mount .title_c38106 * {
+/* Discord's own title (the person or server you have open) becomes "Name - Conversation" */
+#app-mount .title_c38106 :is(svg, img, [class*="icon"], [class*="avatar"], [class*="guildIcon"]) {
     display: none !important;
+}
+#app-mount .title_c38106 * {
+    font: 9pt 'Segoe UI', 'Noto Sans', sans-serif !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 40, 80, 0.7);
+    background: none !important;
 }
 #app-mount .title_c38106::before {
     content: "";
@@ -690,8 +696,11 @@ body {
     height: 24px;
     background: var(--wlm-img-buddies, var(--wlm-draw-logo)) center / contain no-repeat;
 }
+#app-mount:has(.privateChannels_e6b769 .interactiveSelected__972a0) .title_c38106::after {
+    content: "- Conversation";
+}
 #app-mount .title_c38106::after {
-    content: "Windows Live Messenger";
+    content: "- Windows Live Messenger";
     font: 9pt 'Segoe UI', 'Noto Sans', sans-serif;
     color: #ffffff;
     text-shadow: 0 1px 2px rgba(0, 40, 80, 0.7);
@@ -1155,10 +1164,13 @@ body {
 }
 
 /* ═══ The tab strip (servers): stacked tabs that come out of the list ═══════ */
+/* WLM 2011's side tabs: 40 px tall, 32 px icons, touching top to bottom; each one stops a few
+   pixels short of the strip's left edge and fades out there. The open tab turns white and
+   runs into the list. */
 #app-mount .guilds__5e434 {
-    width: 38px !important;
-    min-width: 38px !important;
-    background: linear-gradient(90deg, #e3ecf7 0%, #eef3fa 100%) !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    background: linear-gradient(90deg, #dfe9f6 0%, #eaf1fa 100%) !important;
     border: none !important;
     border-right: 1px solid var(--wlm-box-border) !important;
     border-radius: 0 !important;
@@ -1167,7 +1179,6 @@ body {
     overflow: visible !important;
     z-index: 1;
 }
-/* no gaps, no padding, no scrollbar between the tabs and the list */
 #app-mount .guilds__5e434 *:not(svg):not(svg *) {
     gap: 0 !important;
     row-gap: 0 !important;
@@ -1187,51 +1198,101 @@ body {
     display: none !important;
 }
 #app-mount .guilds__5e434 [class*="guildSeparator"],
-#app-mount .guilds__5e434 [class*="separator"],
-#app-mount .guilds__5e434 .pill_e5445c,
-#app-mount .guilds__5e434 [class*="pill_"] {
+#app-mount .guilds__5e434 [class*="separator_"] {
     display: none !important;
 }
-/* each server: a tab, stacked right on top of the next */
 #app-mount .guilds__5e434 .listItem__650eb {
-    width: 38px !important;
-    height: 32px !important;
-    margin: 0 !important;
+    width: 42px !important;
+    height: 40px !important;
+    margin: 0 0 0 4px !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(90deg, #fbfdff 0%, #e8eff8 100%) !important;
     border: none !important;
-    border-bottom: 1px solid #c3d2e5 !important;
     border-radius: 0 !important;
-    box-shadow: inset 0 1px #ffffff !important;
     position: relative;
+    /* top highlight, bottom rule and the face, all fading out to the left */
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0) 0, #ffffff 10px) top / 100% 1px no-repeat,
+        linear-gradient(90deg, rgba(160, 184, 214, 0) 0, #a9bfdc 10px) bottom / 100% 1px no-repeat,
+        linear-gradient(90deg, rgba(246, 250, 255, 0) 0, rgba(246, 250, 255, 0.95) 9px, #e6eef8 100%) !important;
+    box-shadow: none !important;
 }
 #app-mount .guilds__5e434 .listItem__650eb:hover {
-    background: linear-gradient(90deg, #ffffff 0%, #f1f7fd 100%) !important;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0) 0, #ffffff 10px) top / 100% 1px no-repeat,
+        linear-gradient(90deg, rgba(160, 184, 214, 0) 0, #8fb0d8 10px) bottom / 100% 1px no-repeat,
+        linear-gradient(90deg, rgba(255, 255, 255, 0) 0, #ffffff 9px, #eaf4fd 100%) !important;
 }
-/* the open tab is part of the list: white, and it covers the strip's edge */
-#app-mount .guilds__5e434 .listItem__650eb:has(.selected__6e9f8, [class*="selected"]) {
-    background: #ffffff !important;
-    box-shadow: inset 0 1px #ffffff, inset 3px 0 #3d8fd6 !important;
-    width: 39px !important;
+#app-mount .guilds__5e434 .listItem__650eb:has(.selected__6e9f8, [class*="selected_"]) {
+    width: 43px !important;
     margin-right: -1px !important;
     z-index: 2;
+    background:
+        linear-gradient(90deg, rgba(160, 184, 214, 0) 0, #a9bfdc 10px) top / 100% 1px no-repeat,
+        linear-gradient(90deg, rgba(160, 184, 214, 0) 0, #a9bfdc 10px) bottom / 100% 1px no-repeat,
+        linear-gradient(90deg, rgba(255, 255, 255, 0) 0, #ffffff 8px) !important;
 }
+/* Discord's 48 px icons at 32 px */
 #app-mount .guilds__5e434 .listItem__650eb > * {
-    zoom: 0.5;
+    zoom: 0.6667;
     margin: 0 !important;
 }
 #app-mount .guilds__5e434 .wrapper__6e9f8 {
-    border-radius: 5px !important;
+    border-radius: 6px !important;
 }
-/* folders open as a block of tabs */
-#app-mount .guilds__5e434 [class*="folder"] {
+/* unread / mention dots: Discord's, in glossy red, on the tab's left */
+#app-mount .guilds__5e434 [class*="pill_"] {
+    display: flex !important;
+    position: absolute !important;
+    left: -6px !important;
+    top: 0;
+    height: 100%;
+    align-items: center;
+    zoom: 1 !important;
+}
+#app-mount .guilds__5e434 [class*="pill_"] [class*="item_"] {
+    width: 5px !important;
+    max-height: 22px !important;
+    background: var(--aero-badge) !important;
+    border: 1px solid var(--aero-badge-border) !important;
+    border-left: none !important;
+    border-radius: 0 3px 3px 0 !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.45) !important;
+}
+#app-mount .guilds__5e434 .listItem__650eb:has(.selected__6e9f8) [class*="pill_"] {
+    display: none !important;
+}
+/* folders (BetterFolders shows them in their own strip): each server in an open folder gets
+   a thin stripe of the folder's colour down its left */
+#app-mount .guilds__5e434 [class*="folder"]:not([class*="folderIcon"]) {
     border-radius: 0 !important;
-    background: none !important;
     margin: 0 !important;
     padding: 0 !important;
+}
+#app-mount .guilds__5e434 [class*="expandedFolderBackground"] {
+    left: 4px !important;
+    right: auto !important;
+    width: 3px !important;
+    border-radius: 0 !important;
+    opacity: 1 !important;
+    z-index: 3;
+}
+#app-mount .guilds__5e434 + div:not(.sidebarList__5e434) {
+    background: linear-gradient(90deg, #dfe9f6 0%, #eaf1fa 100%) !important;
+    border-right: 1px solid var(--wlm-box-border) !important;
+}
+
+/* mention / unread counts everywhere: the glossy red pills */
+#app-mount [class*="numberBadge_"],
+#app-mount [class*="textBadge_"] {
+    background: var(--aero-badge) !important;
+    border: 1px solid var(--aero-badge-border) !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.35);
+    color: #ffffff !important;
+    font-weight: 700 !important;
 }
 
 /* ═══ Conversation window ══════════════════════════════════════════════════ */
@@ -1396,10 +1457,37 @@ body {
     overflow: hidden;
 }
 
-/* messages: no pictures; "Name says:" then indented, bulleted lines */
-#app-mount .message__5126c .avatar_c19a55,
+/* messages: "[pic] Name (8:42 PM):" then indented, bulleted lines (MSN 7's layout, with a
+   16 px picture to tell people apart) */
 #app-mount .message__5126c [class*="avatarDecoration"] {
     display: none !important;
+}
+#app-mount .cozyMessage__5126c .avatar_c19a55 {
+    position: absolute !important;
+    left: 10px !important;
+    top: calc(6px + 0.2em) !important;
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border: 1px solid #a5a5a5 !important;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+#app-mount .cozyMessage__5126c:not(.groupStart__5126c) .avatar_c19a55 {
+    display: none !important;
+}
+#app-mount .cozyMessage__5126c .header_c19a55 {
+    padding-left: 21px !important;
+    margin: 0 !important;
+    display: block !important;
+    line-height: 20px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#app-mount .cozyMessage__5126c .header_c19a55 > * {
+    display: inline !important;
 }
 #app-mount .cozyMessage__5126c {
     padding-left: 10px !important;
@@ -1441,11 +1529,31 @@ body {
     font-weight: 400 !important;
     color: var(--wlm-grey) !important;
 }
-#app-mount .username_c19a55::after {
-    content: " says:";
+#app-mount .header_c19a55 .timestamp_c19a55,
+#app-mount .header_c19a55 [class*="timestamp_"] {
+    visibility: visible !important;
+    margin-left: 4px !important;
+    font-size: 9pt !important;
+    color: var(--wlm-grey) !important;
 }
-#app-mount .repliedMessage_c19a55 .username_c19a55::after {
-    content: none;
+#app-mount .header_c19a55 [class*="timestamp_"] time::before { content: "("; }
+#app-mount .header_c19a55 [class*="timestamp_"] time::after  { content: "):"; }
+/* the server tag after the name stays small and inline */
+#app-mount .header_c19a55 [class*="clanTag"],
+#app-mount .header_c19a55 [class*="chipletContainer"] {
+    display: inline-flex !important;
+    vertical-align: middle;
+    height: 14px !important;
+    margin: 0 0 0 3px !important;
+    padding: 0 3px !important;
+    font-size: 7pt !important;
+    line-height: 14px !important;
+    transform: none !important;
+}
+#app-mount .header_c19a55 [class*="clanTag"] img,
+#app-mount .header_c19a55 [class*="chipletContainer"] img {
+    width: 10px !important;
+    height: 10px !important;
 }
 /* time stamps only when you point at a message */
 #app-mount .message__5126c .timestamp_c19a55,
@@ -1453,7 +1561,7 @@ body {
     font-size: 8pt !important;
     color: #a8a8a8 !important;
 }
-#app-mount .message__5126c:not(:hover) [class*="timestamp_"] {
+#app-mount .message__5126c:not(:hover) :not(.header_c19a55) > [class*="timestamp_"] {
     visibility: hidden;
 }
 #app-mount .message__5126c:hover,
@@ -1502,14 +1610,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--wlm-send);
-    border: 1px solid var(--wlm-send-edge);
-    border-radius: 4px;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 1px 2px rgba(0, 40, 90, 0.35);
-    color: #ffffff;
-    font: 700 10pt 'Segoe UI', 'Noto Sans', sans-serif;
-    text-shadow: 0 -1px 0 rgba(0, 30, 80, 0.5);
+    /* WLM 2009's Send: a tall Windows 7 push button, grey glass with a dark-blue label */
+    background: linear-gradient(180deg, #f6f6f6 0%, #ececec 48%, #dcdcdc 50%, #cfcfcf 100%);
+    border: 1px solid #707070;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 1px 1px rgba(0, 0, 0, 0.12);
+    color: #001563;
+    font: 10pt 'Segoe UI', 'Noto Sans', sans-serif;
     pointer-events: none;
+}
+/* the gift and app-launcher buttons are hidden */
+#app-mount .channelTextArea_f75fb0 .buttons__74017 > :has(button[aria-label="Send a gift"], [aria-label="Send a gift"]),
+#app-mount .channelTextArea_f75fb0 .buttons__74017 > :has([aria-label="Apps"], [aria-label*="App Launcher" i], [aria-label*="app launcher" i]),
+#app-mount .channelTextArea_f75fb0 .buttons__74017 :is(button[aria-label="Send a gift"], [aria-label="Apps"], [class*="appLauncher"]) {
+    display: none !important;
 }
 #app-mount .channelTextArea_f75fb0,
 #app-mount .form_f75fb0 .themedBackground__74017 {
@@ -1843,3 +1957,295 @@ body {
 #app-mount [class*="userPopout"] div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; }
 #app-mount [class*="userPopout"] div[role="img"][class*="wrapper_"] img { border-radius: 2px !important; }
 #app-mount [class*="userPopout"] div[role="img"][class*="wrapper_"] > svg > rect { display: none !important; }
+
+/* ═══ Real-layout pass (matched to Discord's actual markup, Oct 2026) ═══════════ */
+/* — top left: [picture] Name (Online) ▾ / message (2 lines) ▾ / small icon row — */
+#app-mount .panels__5e434 .container__37e49 {
+    display: grid !important;
+    grid-template-columns: 80px 1fr !important;
+    grid-template-rows: auto auto !important;
+    height: auto !important;
+    min-height: 84px;
+    padding: 8px 8px 6px 6px !important;
+    background: transparent !important;
+}
+#app-mount .panels__5e434 .accountPopoutButtonWrapper__37e49 {
+    display: contents !important;
+}
+#app-mount .panels__5e434 .accountPopoutButton__37e49 {
+    position: absolute !important;
+    inset: 0 auto auto 0;
+    width: 80px; height: 80px;
+    background: none !important;
+}
+#app-mount .panels__5e434 .avatar__37e49 {
+    grid-column: 1; grid-row: 1 / 3;
+    width: 64px !important; height: 64px !important;
+    margin: 6px 0 0 8px !important;
+    position: relative;
+}
+#app-mount .panels__5e434 .avatar__37e49 > svg { width: 100% !important; height: 100% !important; }
+#app-mount .panels__5e434 .avatar__37e49 foreignObject { mask: none !important; width: 100%; height: 100%; }
+#app-mount .panels__5e434 .avatar__37e49 img { border-radius: 0 !important; width: 100% !important; height: 100% !important; }
+#app-mount .panels__5e434 .avatar__37e49 rect,
+#app-mount .panels__5e434 .avatar__37e49 svg svg { display: none !important; }
+#app-mount .panels__5e434 .avatar__37e49::after {
+    content: ""; position: absolute; inset: -9px;
+    background: var(--wlm-img-frame-mid, var(--wlm-win7-frame)) center / 100% 100% no-repeat;
+    pointer-events: none;
+}
+#app-mount .panels__5e434 .nameTag__37e49 {
+    grid-column: 2; grid-row: 1;
+    min-width: 0; padding: 2px 0 0 4px !important;
+    cursor: pointer;
+}
+#app-mount .panels__5e434 .panelTitleContainer__37e49 { display: flex !important; align-items: baseline; gap: 5px; }
+#app-mount .panels__5e434 .panelTitleContainer__37e49 > * {
+    font: 12pt 'Segoe UI', 'Noto Sans', sans-serif !important;
+    color: var(--wlm-text) !important;
+}
+#app-mount .panels__5e434 .panelTitleContainer__37e49::after {
+    content: "(Online)  ▾"; white-space: pre; font-size: 9pt; color: var(--wlm-grey);
+}
+#app-mount .panels__5e434 .container__37e49:has(rect[mask*="status-idle"]) .panelTitleContainer__37e49::after { content: "(Away)  ▾"; }
+#app-mount .panels__5e434 .container__37e49:has(rect[mask*="status-dnd"]) .panelTitleContainer__37e49::after { content: "(Busy)  ▾"; }
+#app-mount .panels__5e434 .container__37e49:has(rect[mask*="status-offline"], rect[mask*="status-invisible"]) .panelTitleContainer__37e49::after { content: "(Appear offline)  ▾"; }
+#app-mount .panels__5e434:has(.connection_e131a9) .panelTitleContainer__37e49::after { content: "(Connected)  ▾"; }
+/* personal message: always the status text (not the username on hover), up to two lines */
+#app-mount .panels__5e434 .hoverRoll__0263c .hovered__0263c { display: none !important; }
+#app-mount .panels__5e434 .hoverRoll__0263c,
+#app-mount .panels__5e434 .hoverRoll__0263c .default__0263c {
+    position: static !important; transform: none !important; opacity: 1 !important;
+    visibility: visible !important; overflow: visible !important; height: auto !important;
+}
+#app-mount .panels__5e434 .panelSubtextContainer__37e49 * {
+    font-size: 9pt !important; color: var(--wlm-grey) !important;
+    white-space: normal !important; text-overflow: clip !important; overflow: visible !important;
+    -webkit-line-clamp: 2; line-clamp: 2;
+}
+#app-mount .panels__5e434 .activityStatusText__37e49 {
+    display: -webkit-box !important; -webkit-box-orient: vertical; overflow: hidden !important;
+}
+#app-mount .panels__5e434 .activityStatusText__37e49::after { content: " ▾"; }
+/* the icon row under it */
+#app-mount .panels__5e434 .buttons__37e49 {
+    grid-column: 2; grid-row: 2;
+    display: flex !important; justify-content: flex-start !important; align-items: center;
+    gap: 2px !important; margin: 4px 0 0 2px !important;
+}
+#app-mount .panels__5e434 .buttons__37e49 button { width: 26px !important; min-width: 26px !important; height: 22px !important; padding: 0 !important; background: none !important; border-radius: 2px !important; }
+#app-mount .panels__5e434 .buttons__37e49 .buttonChevron__5e764 { width: 12px !important; min-width: 12px !important; }
+#app-mount .panels__5e434 .buttons__37e49 button:hover { background: linear-gradient(180deg, #fdfeff, #e3effb) !important; box-shadow: inset 0 0 0 1px #9fc3e8 !important; }
+#app-mount .panels__5e434 .audioButtonParent__5e764 { display: flex !important; background: none !important; }
+
+/* — "Find a contact…" — */
+#app-mount .privateChannels_e6b769 .searchBar_e6b769 button .overflow_b0dfc2 { font-size: 0 !important; }
+#app-mount .privateChannels_e6b769 .searchBar_e6b769 button .overflow_b0dfc2::after { content: "Find a contact…"; font-size: 9pt; color: #8d8d8d; font-style: italic; }
+#app-mount .sidebarList__5e434 :is(.searchBarComponent_e6b769, [class*="searchBar"] > button, button[class*="searchBar"])::after { content: none !important; }
+#app-mount .privateChannels_e6b769 .searchBar_e6b769 button,
+#app-mount .privateChannels_e6b769 .searchBar_e6b769 button * { font-size: 9pt !important; }
+
+/* — the DM list at half scale, so Discord fills it with rows (sizes inside are doubled) — */
+#app-mount .privateChannels_e6b769 > .scroller__99e7c { zoom: 0.5; }
+#app-mount .privateChannels_e6b769 .channel__972a0 {
+    height: auto !important; min-height: 0 !important; margin: 0 !important;
+}
+#app-mount .privateChannels_e6b769 .channel__972a0 .interactive__972a0 {
+    height: 42px !important; margin: 0 !important; padding: 0 !important; border-radius: 0 !important;
+}
+#app-mount .privateChannels_e6b769 .layout__20a53 {
+    height: 42px !important; padding: 0 12px 0 20px !important; gap: 10px !important; border-radius: 0 !important;
+    display: flex !important; align-items: center !important;
+}
+/* Nitro / Shop / Quests hidden, Friends stays */
+#app-mount .privateChannels_e6b769 li:has(> .interactive__972a0 a[href="/store"]),
+#app-mount .privateChannels_e6b769 li:has(a[href="/shop"]),
+#app-mount .privateChannels_e6b769 li:has(a[href="/quest-home"]),
+#app-mount .privateChannels_e6b769 li:has(a[href="/store"]),
+#app-mount .privateChannels_e6b769 .sectionDivider_e6b769 { display: none !important; }
+#app-mount .privateChannels_e6b769 .linkButtonIcon__972a0 { width: 32px !important; height: 32px !important; }
+/* picture (square) with the buddy at its bottom right */
+#app-mount .privateChannels_e6b769 .avatar__20a53 { width: 32px !important; height: 32px !important; flex: none; position: relative; }
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"][class*="wrapper_"] {
+    width: 32px !important; height: 32px !important; position: relative;
+    background: none !important; zoom: 1 !important;
+}
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"][class*="wrapper_"] > * { display: block !important; }
+#app-mount .privateChannels_e6b769 .avatar__20a53 foreignObject { mask: none !important; }
+#app-mount .privateChannels_e6b769 .avatar__20a53 img { border-radius: 0 !important; box-shadow: inset 0 0 0 2px #a5a5a5; outline: 2px solid #a5a5a5; outline-offset: -2px; }
+#app-mount .privateChannels_e6b769 .avatar__20a53 svg > rect,
+#app-mount .privateChannels_e6b769 .avatar__20a53 foreignObject > svg,
+#app-mount .privateChannels_e6b769 .avatar__20a53 foreignObject > rect,
+#app-mount .privateChannels_e6b769 .avatar__20a53 rect.pointerEvents__44b0c { display: none !important; }
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"][class*="wrapper_"]::after {
+    content: ""; position: absolute; right: -8px; bottom: -6px; width: 22px; height: 22px;
+    background: var(--wlm-img-buddy-offline, var(--wlm-draw-buddy-offline)) center / contain no-repeat;
+}
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"]:is([aria-label$="Online"], [aria-label*="Mobile"], [aria-label$="Streaming"])::after { background-image: var(--wlm-img-buddy-online, var(--wlm-draw-buddy-online)); }
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"][aria-label$="Idle"]::after { background-image: var(--wlm-img-buddy-away, var(--wlm-draw-buddy-away)); }
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"][aria-label$="Do Not Disturb"]::after { background-image: var(--wlm-img-buddy-busy, var(--wlm-draw-buddy-busy)); }
+/* group DMs: no status, so no buddy */
+#app-mount .privateChannels_e6b769 .avatar__20a53 div[role="img"]:not([aria-label*=","])::after { content: none; }
+/* "Name - message": the name never shortens, the message does, icons go to the row's end */
+#app-mount .privateChannels_e6b769 .content__20a53 {
+    display: flex !important; flex-direction: row !important; align-items: center !important;
+    flex: 1 1 auto !important; min-width: 0 !important; gap: 8px !important; overflow: hidden !important;
+}
+#app-mount .privateChannels_e6b769 .nameAndDecorators__20a53 {
+    display: contents !important;
+}
+#app-mount .privateChannels_e6b769 .name__20a53 {
+    flex: none !important; max-width: none !important; overflow: visible !important;
+}
+#app-mount .privateChannels_e6b769 .name__20a53,
+#app-mount .privateChannels_e6b769 .name__20a53 * {
+    font: 24px 'Segoe UI', 'Noto Sans', sans-serif !important; color: var(--wlm-text) !important;
+    white-space: nowrap !important; text-overflow: clip !important; overflow: visible !important;
+}
+#app-mount .privateChannels_e6b769 .nameAndDecorators__20a53 > :not(.name__20a53),
+#app-mount .privateChannels_e6b769 .vc-platform-indicator { order: 9; flex: none; margin-left: auto; zoom: 2; }
+#app-mount .privateChannels_e6b769 .subText__20a53 {
+    display: flex !important; align-items: center; flex: 1 1 0 !important; min-width: 0 !important;
+    height: auto !important; line-height: 42px !important; overflow: hidden !important;
+}
+#app-mount .privateChannels_e6b769 .subText__20a53::before { content: "- "; white-space: pre; font-size: 24px; color: var(--wlm-grey); flex: none; }
+#app-mount .privateChannels_e6b769 .subText__20a53 .container_c9d15c { display: contents !important; }
+#app-mount .privateChannels_e6b769 .subText__20a53 .dot_c9d15c { display: none !important; }
+#app-mount .privateChannels_e6b769 .subText__20a53 .textWithIconContainer_c9d15c { order: 9; flex: none; }
+#app-mount .privateChannels_e6b769 .subText__20a53 .icon_c9d15c { width: 24px !important; height: 24px !important; }
+#app-mount .privateChannels_e6b769 .subText__20a53,
+#app-mount .privateChannels_e6b769 .subText__20a53 * {
+    font-size: 24px !important; color: var(--wlm-grey) !important; white-space: nowrap !important;
+}
+#app-mount .privateChannels_e6b769 .subText__20a53 .activityStatusText__972a0:not(.dot_c9d15c) {
+    flex: 1 1 0; min-width: 0; overflow: hidden !important; text-overflow: ellipsis !important;
+}
+#app-mount .privateChannels_e6b769 .iconsContainer__972a0 { zoom: 1.6; margin-right: 6px; }
+/* group header */
+#app-mount .privateChannels_e6b769 .privateChannelsHeaderContainer__99e7c { padding: 14px 12px 4px 8px !important; }
+#app-mount .privateChannels_e6b769 .headerText__99e7c::before { font-size: 24px !important; }
+#app-mount .privateChannels_e6b769 .headerActions__99e7c { zoom: 1.6; }
+/* group DMs get a "▾ Groups" header (on the first one shown) */
+#app-mount .privateChannels_e6b769 li.dm__972a0:has(.avatar__20a53 div[role="img"]:not([aria-label*=","])):not(li.dm__972a0:has(.avatar__20a53 div[role="img"]:not([aria-label*=","])) ~ li) {
+    margin-top: 40px !important; position: relative;
+}
+#app-mount .privateChannels_e6b769 li.dm__972a0:has(.avatar__20a53 div[role="img"]:not([aria-label*=","])):not(li.dm__972a0:has(.avatar__20a53 div[role="img"]:not([aria-label*=","])) ~ li)::before {
+    content: "▾  Groups"; white-space: pre; position: absolute; top: -34px; left: 8px;
+    font: 700 24px 'Segoe UI', 'Noto Sans', sans-serif; color: var(--wlm-text);
+}
+
+/* — tabs: real 40 px icons → 32 px — */
+#app-mount .guilds__5e434 .listItem__650eb > * { zoom: 0.8 !important; }
+#app-mount .guilds__5e434 .wrapper__58105 { zoom: 1 !important; position: absolute !important; left: -4px !important; top: 0; height: 100%; display: flex !important; align-items: center; }
+#app-mount .guilds__5e434 .item__58105 {
+    width: 5px !important; max-height: 22px !important; margin-left: 0 !important;
+    background: var(--aero-badge) !important; border: 1px solid var(--aero-badge-border) !important; border-left: none !important;
+    border-radius: 0 3px 3px 0 !important;
+}
+#app-mount .guilds__5e434 .item__58105.selected__58105 { display: none !important; }
+#app-mount .guilds__5e434 .stack_dbd263 { gap: 0 !important; }
+#app-mount .guilds__5e434 .stack_dbd263 > div[style*="height: 40px"] { height: 40px !important; }
+#app-mount .guilds__5e434 .listItem__650eb:has(.selected__6e9f8) {
+    width: 43px !important; margin-right: -1px !important;
+}
+#app-mount .guilds__5e434 .folderGroup__48112 .listItem__650eb {
+    box-shadow: inset 3px 0 var(--custom-folder-color, #5d7fb5) !important;
+}
+#app-mount .guilds__5e434 .numberBadge__463b7 { background: var(--aero-badge) !important; }
+
+/* — conversation header: toolbar row, then "To: Name - status" — */
+#app-mount .subtitleContainer_f75fb0 .upperContainer__9293f {
+    display: flex !important; flex-wrap: wrap !important; width: 100% !important; height: auto !important;
+    padding: 0 !important; background: transparent !important;
+}
+#app-mount .subtitleContainer_f75fb0 .upperContainer__9293f > .toolbar__9293f { order: -1; flex: 1 0 100% !important; }
+#app-mount .subtitleContainer_f75fb0 .upperContainer__9293f > .children__9293f {
+    order: 1; flex: 1 1 100% !important; display: flex !important; align-items: center !important; gap: 6px;
+    min-width: 0; overflow: hidden;
+}
+#app-mount .subtitleContainer_f75fb0 .avatar_f75fb0 { display: none !important; }
+#app-mount .subtitleContainer_f75fb0 .titleWrapper__9293f { flex: none !important; }
+#app-mount .subtitleContainer_f75fb0 .dmHeaderActivityStatus_f75fb0 { flex: 1 1 0; min-width: 0; overflow: hidden; display: flex; align-items: center; gap: 4px; }
+#app-mount .subtitleContainer_f75fb0 .dmHeaderActivityStatus_f75fb0 * { font-size: 9pt !important; color: var(--wlm-grey) !important; white-space: nowrap; }
+#app-mount .iconWrapper__9293f[aria-label="Add to DM"]::before { content: "Invite"; }
+#app-mount .iconWrapper__9293f[aria-label="Add to DM"]::before,
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f .iconWrapper__9293f[aria-label]::before { display: block; }
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f .search__49676 { margin-left: auto !important; align-self: center; }
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f .searchBar_c322aa {
+    width: 180px !important; height: 22px !important; background: #fff !important;
+    border: 1px solid #abadb3 !important; border-top-color: #8e8f8f !important; border-radius: 2px !important;
+}
+
+/* — messages: "[pic] Name (8:33 PM):" — */
+#app-mount .header_c19a55 time .separator_c19a55 { display: none !important; }
+#app-mount .header_c19a55 .copyOnlyText__10651 { display: none !important; }
+#app-mount .cozyMessage__5126c .contents_c19a55 { padding-left: 0 !important; margin-left: 0 !important; position: relative; }
+#app-mount .cozyMessage__5126c .messageContent_c19a55 { text-indent: 0 !important; overflow-wrap: anywhere; }
+
+/* — right column: 160 px, their profile colour, picture / details / your picture — */
+#app-mount .content_f75fb0 > aside.aside_f58343,
+#app-mount .aside_f58343 .outer_c0bea0 { width: 160px !important; min-width: 160px !important; max-width: 160px !important; }
+#app-mount .aside_f58343 .outer_c0bea0 {
+    background: linear-gradient(180deg, var(--profile-gradient-primary-color, #dfe9f6), transparent 70%) !important;
+    border: none !important; box-shadow: none !important; border-radius: 0 !important;
+}
+#app-mount .aside_f58343 .inner_c0bea0 { background: transparent !important; position: relative; }
+#app-mount .aside_f58343 .scrollerFade__7f9c0 { padding: 8px 6px 176px 8px !important; }
+#app-mount .aside_f58343 .wrapper_da5890,
+#app-mount .aside_f58343 .banner_f7e69e,
+#app-mount .aside_f58343 .referenceContainer_ab8609,
+#app-mount .aside_f58343 .container_ab8609,
+#app-mount .aside_f58343 .cards_b32ca4 { display: none !important; }
+#app-mount .aside_f58343 .header__7f9c0 { position: static !important; height: auto !important; padding: 10px 0 18px !important; display: flex; justify-content: center; }
+#app-mount .aside_f58343 .avatar__75742 {
+    position: relative !important; inset: auto !important; top: auto !important; left: auto !important;
+    margin: 0 auto !important; width: 96px !important; height: 96px !important; transform: none !important;
+}
+#app-mount .aside_f58343 .avatar__75742 div[role="img"][class*="wrapper_"] { width: 96px !important; height: 96px !important; }
+#app-mount .aside_f58343 .avatar__75742 svg { width: 96px !important; height: 96px !important; }
+#app-mount .aside_f58343 .avatar__75742 foreignObject { mask: none !important; width: 96px; height: 96px; }
+#app-mount .aside_f58343 .avatar__75742 img { width: 96px !important; height: 96px !important; border-radius: 0 !important; }
+#app-mount .aside_f58343 .avatar__75742 rect { display: none !important; }
+#app-mount .aside_f58343 .avatar__75742::after {
+    content: ""; position: absolute; pointer-events: none;
+    left: calc(-15px * 96 / 98); top: calc(-14px * 96 / 98);
+    width: calc(128px * 96 / 98); height: calc(147px * 96 / 98);
+    background: var(--wlm-img-frame-dp-base, var(--wlm-win7-frame)) 0 0 / 100% 100% no-repeat;
+}
+#app-mount .aside_f58343 .body_b32ca4 { padding: 0 !important; background: none !important; }
+#app-mount .aside_f58343 .body_b32ca4 * {
+    font-size: 8pt !important; white-space: normal !important; overflow-wrap: anywhere;
+    text-overflow: clip !important; -webkit-line-clamp: unset !important; max-height: none !important;
+}
+#app-mount .aside_f58343 .displayName__26b1f { font-size: 11pt !important; font-weight: 700 !important; }
+#app-mount .aside_f58343 .usernameAndPronounsRow__26b1f { display: flex !important; flex-wrap: wrap !important; gap: 2px 4px; }
+#app-mount .aside_f58343 .container__8061a { flex: 1 0 100%; flex-wrap: wrap; }
+#app-mount .aside_f58343 .mutuals__6aa84 { flex-wrap: wrap !important; height: auto !important; }
+#app-mount .aside_f58343 .section_bf424d { padding: 0 !important; margin-top: 6px !important; }
+#app-mount .aside_f58343 .redesignFooter__272c7 {
+    position: absolute; bottom: 150px; left: 8px; right: 8px; padding: 0 !important; background: none !important;
+}
+#app-mount .aside_f58343 .redesignFooter__272c7 button { height: 23px !important; min-height: 0 !important; font-size: 9pt !important; }
+#app-mount .aside_f58343::before,
+#app-mount .aside_f58343::after { left: calc(50% - 48px) !important; }
+
+/* — server channels: Windows 7 Explorer tree — */
+#app-mount #channels { zoom: 0.6; }
+#app-mount #channels .containerDefault__29444 .mainContent__29444 { padding-left: 28px !important; position: relative; }
+#app-mount #channels .containerDefault__29444 .icon__29444 { display: none !important; }
+#app-mount #channels .containerDefault__29444 .mainContent__29444::before {
+    content: "◢"; position: absolute; left: 6px; font-size: 18px; color: #595959;
+}
+#app-mount #channels .containerDefault__29444 .collapsed__29444 .mainContent__29444::before { content: "▷"; color: #a7a7a7; }
+#app-mount #channels .containerDefault__29444 .name__29444,
+#app-mount #channels .containerDefault__29444 .name__29444 * { font: 700 20px 'Segoe UI', 'Noto Sans', sans-serif !important; color: var(--wlm-text) !important; text-transform: none !important; }
+#app-mount #channels .wrapper__2ea32 { margin-left: 26px !important; }
+#app-mount #channels .link__2ea32 { border: 1px solid transparent !important; border-radius: 3px !important; padding: 2px 8px !important; }
+#app-mount #channels .link__2ea32 .name__2ea32,
+#app-mount #channels .link__2ea32 .name__2ea32 * { font: 20px 'Segoe UI', 'Noto Sans', sans-serif !important; color: var(--wlm-text) !important; }
+#app-mount #channels .wrapper__2ea32:hover .link__2ea32 { background: linear-gradient(180deg, #f2f8fd, #e5f1fb) !important; border-color: #b8d6fb !important; }
+#app-mount #channels .modeSelected__2ea32 .link__2ea32 { background: linear-gradient(180deg, #dcebfc, #c1dbfc) !important; border-color: #7da2ce !important; }
+#app-mount #channels .modeUnreadImportant__2ea32 .name__2ea32 * { font-weight: 700 !important; }
+#app-mount .sidebarList__5e434 .animatedContainer_f37cb1,
+#app-mount .sidebarList__5e434 .headerEllipseBackdrop_f37cb1,
+#app-mount .sidebarList__5e434 .headerEllipseForeground_f37cb1 { display: none !important; }
