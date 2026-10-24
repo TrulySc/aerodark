@@ -143,7 +143,7 @@ body {
 }
 
 /* your account row: picture on the left; name (status) ▾, personal message, icon row on the right */
-#app-mount .container__37e49 {
+#app-mount .panels__5e434 [class*="container_"]:has(> [class*="avatarWrapper_"]) {
     display: grid !important;
     grid-template-columns: 74px 1fr;
     grid-template-rows: auto auto;
@@ -153,7 +153,7 @@ body {
     padding: 8px 8px 6px 8px !important;
     background: transparent !important;
 }
-#app-mount .avatarWrapper__37e49 {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] {
     grid-column: 1 / 3;
     grid-row: 1;
     display: flex !important;
@@ -164,26 +164,26 @@ body {
     background: none !important;
     min-width: 0;
 }
-#app-mount .avatarWrapper__37e49:hover {
+#app-mount .panels__5e434 [class*="avatarWrapper_"]:hover {
     background: none !important;
 }
 /* the display picture: 50 px in Messenger's mid-size frame */
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"] {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"] {
     width: 50px !important;
     height: 50px !important;
     position: relative;
     flex: none;
     margin: 4px 4px 4px 6px;
 }
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"] > svg {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"] > svg {
     width: 100% !important;
     height: 100% !important;
 }
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; }
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"] img { border-radius: 0 !important; }
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"] > svg > rect,
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"] > svg > svg { display: none !important; }
-#app-mount .avatarWrapper__37e49 div[role="img"][class*="wrapper_"]::after {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; }
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"] img { border-radius: 0 !important; }
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"] > svg > rect,
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"] > svg > svg { display: none !important; }
+#app-mount .panels__5e434 [class*="avatarWrapper_"] div[role="img"][class*="wrapper_"]::after {
     /* frame-mid.png: a 62 px frame around a 46 px picture, 6 px rim */
     content: "";
     position: absolute;
@@ -192,11 +192,11 @@ body {
     pointer-events: none;
 }
 /* name, "(Online) ▾", personal message */
-#app-mount .avatarWrapper__37e49 > :last-child {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] [class*="nameTag_"] {
     min-width: 0;
     padding-top: 4px;
 }
-#app-mount .avatarWrapper__37e49 > :last-child > :first-child {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child {
     font-size: 12pt !important;
     font-weight: 400 !important;
     color: var(--wlm-text) !important;
@@ -205,37 +205,37 @@ body {
     align-items: baseline;
     gap: 5px;
 }
-#app-mount .avatarWrapper__37e49 > :last-child > :first-child::after {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child::after {
     content: "(Online)  ▾";
     font-size: 9pt;
     color: var(--wlm-grey);
     white-space: pre;
 }
-#app-mount .container__37e49:has(div[role="img"][aria-label$="Idle"]) .avatarWrapper__37e49 > :last-child > :first-child::after { content: "(Away)  ▾"; }
-#app-mount .container__37e49:has(div[role="img"][aria-label$="Do Not Disturb"]) .avatarWrapper__37e49 > :last-child > :first-child::after { content: "(Busy)  ▾"; }
-#app-mount .container__37e49:has(div[role="img"][aria-label$="Offline"]) .avatarWrapper__37e49 > :last-child > :first-child::after,
-#app-mount .container__37e49:has(div[role="img"][aria-label$="Invisible"]) .avatarWrapper__37e49 > :last-child > :first-child::after { content: "(Appear offline)  ▾"; }
+#app-mount .panels__5e434 [class*="container_"]:has(div[role="img"][aria-label$="Idle"]) [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child::after { content: "(Away)  ▾"; }
+#app-mount .panels__5e434 [class*="container_"]:has(div[role="img"][aria-label$="Do Not Disturb"]) [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child::after { content: "(Busy)  ▾"; }
+#app-mount .panels__5e434 [class*="container_"]:has(div[role="img"][aria-label$="Offline"]) [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child::after,
+#app-mount .panels__5e434 [class*="container_"]:has(div[role="img"][aria-label$="Invisible"]) [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child::after { content: "(Appear offline)  ▾"; }
 /* in a voice call: "(Connected)" */
-#app-mount .panels__5e434:has(.connection_e131a9) .avatarWrapper__37e49 > :last-child > :first-child::after { content: "(Connected)  ▾"; }
-#app-mount .avatarWrapper__37e49 > :last-child > :not(:first-child) {
+#app-mount .panels__5e434:has([class*="connection_"], [class*="rtcConnection"]) [class*="avatarWrapper_"] [class*="nameTag_"] > :first-child::after { content: "(Connected)  ▾"; }
+#app-mount .panels__5e434 [class*="avatarWrapper_"] [class*="nameTag_"] > :not(:first-child) {
     font-size: 9pt !important;
     color: var(--wlm-grey) !important;
     margin-top: 1px;
 }
-#app-mount .avatarWrapper__37e49 > :last-child > :not(:first-child)::after {
+#app-mount .panels__5e434 [class*="avatarWrapper_"] [class*="nameTag_"] > :not(:first-child)::after {
     content: "  ▾";
     white-space: pre;
 }
 /* mic / headphones / settings: Messenger's small icon row under the name */
-#app-mount .buttons__37e49 {
+#app-mount .panels__5e434 [class*="buttons_"] {
     grid-column: 2;
     grid-row: 2;
     justify-content: flex-start !important;
     gap: 2px !important;
     margin-top: -18px;
 }
-#app-mount .buttons__37e49 .button__67645,
-#app-mount .buttons__37e49 button {
+#app-mount .panels__5e434 [class*="buttons_"] .button__67645,
+#app-mount .panels__5e434 [class*="buttons_"] button {
     width: 24px !important;
     height: 22px !important;
     border-radius: 2px !important;
@@ -243,21 +243,21 @@ body {
     box-shadow: none !important;
     color: #3a5a85 !important;
 }
-#app-mount .buttons__37e49 .button__67645:hover,
-#app-mount .buttons__37e49 button:hover {
+#app-mount .panels__5e434 [class*="buttons_"] .button__67645:hover,
+#app-mount .panels__5e434 [class*="buttons_"] button:hover {
     background: linear-gradient(180deg, #fdfeff, #e3effb) !important;
     box-shadow: inset 0 0 0 1px #9fc3e8 !important;
 }
 
 /* voice connection: an info bar above you */
-#app-mount .container_e131a9 {
+#app-mount .panels__5e434 > div:has([class*="connection_"], [class*="rtcConnection"]) {
     background: linear-gradient(180deg, #fffbe0, #fff2b8) !important;
     border-bottom: 1px solid #e3cf7a !important;
     border-radius: 0 !important;
     padding: 4px 8px !important;
     color: var(--wlm-text) !important;
 }
-#app-mount .container_e131a9 * {
+#app-mount .panels__5e434 > div:has([class*="connection_"], [class*="rtcConnection"]) * {
     color: var(--wlm-text-2) !important;
 }
 
@@ -273,7 +273,7 @@ body {
     overflow: hidden;
 }
 /* the search row sits on the header, like "Search contacts or the web…" */
-#app-mount .searchBar_e6b769 {
+#app-mount .sidebarList__5e434 > [class*="searchBar"] {
     background: var(--wlm-header) !important;
     background-position: 0 100% !important;
     border-bottom: 1px solid var(--wlm-strip-edge) !important;
@@ -282,7 +282,7 @@ body {
     height: auto !important;
     position: relative;
 }
-#app-mount .searchBar_e6b769::before {
+#app-mount .sidebarList__5e434 > [class*="searchBar"]::before {
     content: "";
     position: absolute;
     left: 6px;
@@ -292,7 +292,7 @@ body {
     margin-top: -10px;
     background: var(--wlm-img-buddies, var(--wlm-draw-logo)) center / contain no-repeat;
 }
-#app-mount .searchBarComponent_e6b769 {
+#app-mount .sidebarList__5e434 :is(.searchBarComponent_e6b769, [class*="searchBar"] > button, button[class*="searchBar"]) {
     height: 22px !important;
     background: #ffffff !important;
     background-image: none !important;
@@ -304,7 +304,7 @@ body {
     padding: 0 6px !important;
     font-size: 0 !important;
 }
-#app-mount .searchBarComponent_e6b769::after {
+#app-mount .sidebarList__5e434 :is(.searchBarComponent_e6b769, [class*="searchBar"] > button, button[class*="searchBar"])::after {
     content: "Search contacts or the web…";
     font-size: 9pt;
     color: #8d8d8d;
@@ -378,7 +378,64 @@ body {
     width: 16px !important;
     height: 16px !important;
 }
-/* "Name - personal message" on one line */
+/* "Name - personal message" on one line (matched by structure, whatever Discord's class hashes are) */
+#app-mount .channel__972a0 [class*="content_"],
+#app-mount .member_c8ffbb [class*="content_"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: baseline !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    height: auto !important;
+}
+#app-mount .channel__972a0 [class*="content_"] > *,
+#app-mount .member_c8ffbb [class*="content_"] > * {
+    margin: 0 !important;
+    line-height: 21px !important;
+    height: 21px !important;
+}
+#app-mount .channel__972a0 [class*="nameAndDecorators_"],
+#app-mount .member_c8ffbb [class*="nameAndDecorators_"] {
+    flex: none !important;
+    max-width: 62%;
+    overflow: hidden;
+}
+#app-mount .channel__972a0 [class*="nameAndDecorators_"] *,
+#app-mount .member_c8ffbb [class*="nameAndDecorators_"] * {
+    font-size: 9pt !important;
+    font-weight: 400 !important;
+    color: var(--wlm-text) !important;
+    white-space: nowrap !important;
+}
+#app-mount .channel__972a0 :is([class*="subText_"], [class*="subtext_"]),
+#app-mount .member_c8ffbb :is([class*="subText_"], [class*="subtext_"]) {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 9pt !important;
+    color: var(--wlm-grey) !important;
+}
+#app-mount .channel__972a0 :is([class*="subText_"], [class*="subtext_"]) *,
+#app-mount .member_c8ffbb :is([class*="subText_"], [class*="subtext_"]) * {
+    display: inline !important;
+    font-size: 9pt !important;
+    color: inherit !important;
+    white-space: nowrap !important;
+    vertical-align: baseline !important;
+}
+#app-mount .channel__972a0 :is([class*="subText_"], [class*="subtext_"]) :is(svg, img) {
+    width: 12px !important;
+    height: 12px !important;
+}
+#app-mount .channel__972a0 :is([class*="subText_"], [class*="subtext_"])::before,
+#app-mount .member_c8ffbb :is([class*="subText_"], [class*="subtext_"])::before {
+    content: "- ";
+}
+/* (older per-module selectors, kept for when the hashes match) */
 #app-mount .content__91a9d {
     display: flex !important;
     flex-direction: row !important;
@@ -519,52 +576,84 @@ body {
     color: var(--wlm-text) !important;
 }
 
-/* ═══ The tab strip (servers), flush against the list ══════════════════════ */
+/* ═══ The tab strip (servers): stacked tabs that come out of the list ═══════ */
 #app-mount .guilds__5e434 {
-    width: 40px !important;
-    min-width: 40px !important;
-    background: linear-gradient(90deg, #dbe7f5 0%, #e9f0f9 100%) !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    background: linear-gradient(90deg, #e3ecf7 0%, #eef3fa 100%) !important;
     border: none !important;
+    border-right: 1px solid var(--wlm-box-border) !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     margin-right: 0 !important;
+    overflow: visible !important;
+    z-index: 1;
 }
-#app-mount .guilds__5e434 [class*="scroller_"] {
-    padding: 6px 0 6px 4px !important;
+/* no gaps, no padding, no scrollbar between the tabs and the list */
+#app-mount .guilds__5e434 *:not(svg):not(svg *) {
+    gap: 0 !important;
+    row-gap: 0 !important;
 }
+#app-mount .guilds__5e434 [class*="scroller"],
+#app-mount .guilds__5e434 [class*="tree"],
+#app-mount .guilds__5e434 [class*="itemsContainer"],
+#app-mount .guilds__5e434 [class*="stack"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-x: visible !important;
+    scrollbar-width: none !important;
+}
+#app-mount .guilds__5e434 ::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+}
+#app-mount .guilds__5e434 [class*="guildSeparator"],
+#app-mount .guilds__5e434 [class*="separator"],
+#app-mount .guilds__5e434 .pill_e5445c,
+#app-mount .guilds__5e434 [class*="pill_"] {
+    display: none !important;
+}
+/* each server: a tab, stacked right on top of the next */
 #app-mount .guilds__5e434 .listItem__650eb {
-    width: 36px !important;
-    height: 34px !important;
-    margin: 0 0 2px 0 !important;
+    width: 38px !important;
+    height: 32px !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
-    background: var(--wlm-tab) !important;
-    border: 1px solid var(--wlm-box-border) !important;
-    border-right: none !important;
-    border-radius: 3px 0 0 3px !important;
-    box-shadow: inset 1px 1px #ffffff !important;
+    background: linear-gradient(90deg, #fbfdff 0%, #e8eff8 100%) !important;
+    border: none !important;
+    border-bottom: 1px solid #c3d2e5 !important;
+    border-radius: 0 !important;
+    box-shadow: inset 0 1px #ffffff !important;
     position: relative;
 }
 #app-mount .guilds__5e434 .listItem__650eb:hover {
-    background: var(--wlm-tab-hot) !important;
+    background: linear-gradient(90deg, #ffffff 0%, #f1f7fd 100%) !important;
 }
-/* the open tab joins the list: white, and over the list's border */
-#app-mount .guilds__5e434 .listItem__650eb:has(.selected__6e9f8) {
+/* the open tab is part of the list: white, and it covers the strip's edge */
+#app-mount .guilds__5e434 .listItem__650eb:has(.selected__6e9f8, [class*="selected"]) {
     background: #ffffff !important;
+    box-shadow: inset 0 1px #ffffff, inset 3px 0 #3d8fd6 !important;
+    width: 39px !important;
     margin-right: -1px !important;
-    width: 37px !important;
-    z-index: 1;
+    z-index: 2;
 }
 #app-mount .guilds__5e434 .listItem__650eb > * {
     zoom: 0.5;
+    margin: 0 !important;
 }
 #app-mount .guilds__5e434 .wrapper__6e9f8 {
-    border-radius: 6px !important;
+    border-radius: 5px !important;
 }
-#app-mount .guilds__5e434 .pill_e5445c,
-#app-mount .guilds__5e434 [class*="guildSeparator"] {
-    display: none !important;
+/* folders open as a block of tabs */
+#app-mount .guilds__5e434 [class*="folder"] {
+    border-radius: 0 !important;
+    background: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* ═══ Conversation window ══════════════════════════════════════════════════ */
@@ -663,10 +752,14 @@ body {
     margin-left: auto !important;
     align-self: center;
 }
-#app-mount .subtitleContainer_f75fb0 .toolbar__9293f [class*="search_"],
-#app-mount .subtitleContainer_f75fb0 .toolbar__9293f [class*="search_"] [class*="searchBar"] {
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f [class*="search_"] {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f [class*="search_"] [class*="searchBar_"] {
     height: 22px !important;
-    width: 170px !important;
+    width: 180px !important;
     background: #ffffff !important;
     border: 1px solid #abadb3 !important;
     border-top-color: #8e8f8f !important;
@@ -910,82 +1003,135 @@ body {
     color: var(--wlm-text) !important;
 }
 
-/* ═══ Display pictures: the narrow column on the right ═════════════════════ */
-/* their picture at the top (Discord's DM profile panel, trimmed to the picture),
-   yours at the bottom (from ~/.local/share/aerodark/discord/custom/me.png) */
+/* ═══ Display pictures: the column on the right ═══════════════════════════ */
+/* Their picture at the top in Messenger's frame, Discord's profile details under it,
+   and your own picture at the bottom (aerodark-discord-icons fetches it from your account). */
 #app-mount .content_f75fb0 > aside {
-    width: 138px !important;
-    min-width: 138px !important;
-    max-width: 138px !important;
+    width: 196px !important;
+    min-width: 196px !important;
+    max-width: 196px !important;
     flex: none !important;
-    position: relative;
+    position: relative !important;
     background: transparent !important;
+    overflow: hidden;
 }
 #app-mount .content_f75fb0 > aside .outer_c0bea0 {
-    width: 138px !important;
+    width: 196px !important;
+    height: 100% !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    border-radius: 0 !important;
 }
-#app-mount .content_f75fb0 > aside .outer_c0bea0 * {
-    visibility: hidden;
+/* the profile's scrolling part: room on top for the picture and at the bottom for yours */
+#app-mount .content_f75fb0 > aside .outer_c0bea0 [class*="scroller"],
+#app-mount .content_f75fb0 > aside .inner_c0bea0 {
+    padding: 136px 10px 176px 12px !important;
+    box-sizing: border-box;
+    background: transparent !important;
 }
-#app-mount .content_f75fb0 > aside [class*="banner"] {
+#app-mount .content_f75fb0 > aside [class*="banner"],
+#app-mount .content_f75fb0 > aside [class*="avatarDecoration"],
+#app-mount .content_f75fb0 > aside [class*="statusBubble"],
+#app-mount .content_f75fb0 > aside [class*="customStatus"] [class*="bubble"] {
     display: none !important;
 }
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"],
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] * {
-    visibility: visible;
+/* nothing between the column and their picture is positioned, so it sits at the column's top */
+#app-mount .content_f75fb0 > aside .outer_c0bea0 *:has(div[role="img"][class*="wrapper_"][style*="80px"]),
+#app-mount .content_f75fb0 > aside .outer_c0bea0 *:has(div[role="img"][class*="wrapper_"][style*="120px"]) {
+    position: static !important;
+    transform: none !important;
 }
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] {
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]:is([style*="80px"], [style*="120px"]) {
     position: absolute !important;
-    top: 22px !important;
-    left: 21px !important;
+    top: 20px !important;
+    left: 50px !important;
     width: 96px !important;
     height: 96px !important;
     margin: 0 !important;
-    z-index: 2;
+    z-index: 3;
 }
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] > svg {
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]:is([style*="80px"], [style*="120px"]) > svg {
     width: 100% !important;
     height: 100% !important;
 }
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; }
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] img { border-radius: 0 !important; }
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] > svg > rect,
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] > svg > svg { display: none !important; }
-/* frame-dp-base.png: 128 × 147, picture 98 px at (15, 14), with the ▾ base underneath */
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]::after,
-#app-mount .content_f75fb0 > aside::after {
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]:is([style*="80px"], [style*="120px"]) foreignObject {
+    mask: none !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]:is([style*="80px"], [style*="120px"]) img {
+    border-radius: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+}
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]:is([style*="80px"], [style*="120px"]) > svg > :not(foreignObject) {
+    display: none !important;
+}
+/* frame-dp-base.png: 128 × 147, picture 98 px at (15, 14), the ▾ base underneath */
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]:is([style*="80px"], [style*="120px"])::after {
     content: "";
     position: absolute;
-    pointer-events: none;
-}
-#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]::after {
     top: calc(-14px * 96 / 98);
     left: calc(-15px * 96 / 98);
     width: calc(128px * 96 / 98);
     height: calc(147px * 96 / 98);
     background: var(--wlm-img-frame-dp-base, var(--wlm-win7-frame)) 0 0 / 100% 100% no-repeat;
+    pointer-events: none;
+}
+/* their details under the picture, in Messenger's small type */
+#app-mount .content_f75fb0 > aside .outer_c0bea0 * {
+    font-size: 8pt !important;
+    line-height: 1.35 !important;
+    color: var(--wlm-text-2) !important;
+}
+#app-mount .content_f75fb0 > aside .outer_c0bea0 :is(h1, h2, [class*="nickname"], [class*="displayName"]) {
+    font-size: 11pt !important;
+    font-weight: 400 !important;
+    color: var(--wlm-text) !important;
+}
+#app-mount .content_f75fb0 > aside .outer_c0bea0 :is(h3, [class*="title"], [class*="heading"]) {
+    font-weight: 700 !important;
+    color: var(--wlm-text) !important;
+    text-transform: none !important;
+}
+#app-mount .content_f75fb0 > aside .outer_c0bea0 :is(section, [class*="section"], [class*="card"]) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+#app-mount .content_f75fb0 > aside .outer_c0bea0 :is(svg, img):not(div[role="img"] *) {
+    max-width: 16px;
+    max-height: 16px;
+}
+/* "View Full Profile": a normal Windows 7 button above your picture */
+#app-mount .content_f75fb0 > aside .outer_c0bea0 button {
+    font-size: 8pt !important;
 }
 /* your picture, bottom of the column */
 #app-mount .content_f75fb0 > aside::before {
     content: "";
     position: absolute;
-    left: 21px;
-    bottom: 50px;
+    left: 50px;
+    bottom: 46px;
     width: 96px;
     height: 96px;
     background: var(--wlm-me, var(--wlm-img-dp-default, linear-gradient(160deg, #9cc9f2, #3d7fc9))) center / cover no-repeat;
-    z-index: 1;
+    z-index: 3;
 }
 #app-mount .content_f75fb0 > aside::after {
-    left: calc(21px - 15px * 96 / 98);
-    bottom: calc(50px - (147px - 14px - 98px) * 96 / 98);
+    content: "";
+    position: absolute;
+    left: calc(50px - 15px * 96 / 98);
+    bottom: calc(46px - (147px - 14px - 98px) * 96 / 98);
     width: calc(128px * 96 / 98);
     height: calc(147px * 96 / 98);
     background: var(--wlm-img-frame-dp-base, var(--wlm-win7-frame)) 0 0 / 100% 100% no-repeat;
-    z-index: 2;
+    pointer-events: none;
+    z-index: 4;
 }
 
 /* ═══ Friends page, Active Now ═════════════════════════════════════════════ */
