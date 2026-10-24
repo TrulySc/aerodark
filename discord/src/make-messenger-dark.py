@@ -1,4 +1,4 @@
-import re
+import re,colorsys
 s=open('src/messenger.css').read()
 m={'#ffffff':'#1f2228','#fff':'#1f2228','#000000':'#e6e9ee','#000':'#e6e9ee','#333333':'#cfd3da','#777777':'#9aa0a8',
 '#d4e3f5':'#1c2a3d','#e3ecf8':'#18212d','#eef3fa':'#15191f','#cfddf4':'#1c2a3d','#fbfdff':'#2e3a4a','#eef4fb':'#273240',
@@ -13,20 +13,27 @@ m={'#ffffff':'#1f2228','#fff':'#1f2228','#000000':'#e6e9ee','#000':'#e6e9ee','#3
 '#eef5fc':'#2c3c52','#595959':'#b8bec6','#a7a7a7':'#6c727a','#3d8fd6':'#5aa6ea','#0066cc':'#6cb4ff','#0088e4':'#7cc4ff',
 '#c9def4':'#22324a','#d9e8f8':'#1d2a3c','#e9f2fb':'#192330'}
 hexre=r'#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b'
+def neutral(h, keep=0.12):
+    r,g,b=(int(h[i:i+2],16)/255 for i in (1,3,5))
+    H,L,S=colorsys.rgb_to_hls(r,g,b)
+    r,g,b=colorsys.hls_to_rgb(H,L,S*keep)
+    return '#%02x%02x%02x'%(round(r*255),round(g*255),round(b*255))
+KEEP={'#2b4a6a':0.45,'#24405e':0.45,'#5a85bb':0.5,'#4d6f99':0.4,'#6cb4ff':1,'#7cc4ff':1,'#5aa6ea':1,'#cfe3ff':0.2,'#a9c4e8':0.25,'#3a3420':1,'#332d18':1,'#6b5a20':1}
+m={k:neutral(v,KEEP.get(v,0.12)) for k,v in m.items()}
 def decl(mo):
     prop,val=mo.group(1),mo.group(2)
     if prop.strip()=='color' and re.fullmatch(r'\s*#fff(fff)?\s*(!important)?\s*',val,re.I):
         return mo.group(0)          # white text stays white (badges, title band, Send label…)
     return prop+':'+re.sub(hexre,lambda x:m.get(x.group(0).lower(),x.group(0)),val)
 s=re.sub(r'([\w-]+\s*):([^;{}]*)',decl,s)
-s=s.replace('rgba(255, 255, 255, 0.9)','rgba(120, 160, 220, 0.22)').replace('rgba(246, 250, 255,','rgba(43, 54, 70,').replace('rgba(255, 255, 255, 0)','rgba(31, 34, 40, 0)')
+s=s.replace('rgba(255, 255, 255, 0.9)','rgba(255, 255, 255, 0.06)').replace('rgba(246, 250, 255,','rgba(48, 50, 54,').replace('rgba(255, 255, 255, 0)','rgba(31, 34, 40, 0)')
 s=s.replace('rgba(255, 255, 255, 0.8)','rgba(255, 255, 255, 0.12)')
 s+='''
 /* dark: the swirl is a light picture, so it's left out; Discord's own icons in a light grey */
 #app-mount .panels__5e434 { background: var(--wlm-header) !important; }
 #app-mount .subtitleContainer_f75fb0 .toolbar__9293f .iconWrapper__9293f,
 #app-mount .channelTextArea_f75fb0 .buttons__74017,
-#app-mount .panels__5e434 .buttons__37e49 { color: #c9d6e8 !important; }
+#app-mount .panels__5e434 .buttons__37e49 { color: #d6d8dc !important; }
 #app-mount [class*="numberBadge_"], #app-mount [class*="textBadge_"] { color: #ffffff !important; }
-'''
+#app-mount .subtitleContainer_f75fb0 .toolbar__9293f .iconWrapper__9293f::after,\n#app-mount .trailing_c38106 [class*="clickable"]::after { filter: brightness(1.15) drop-shadow(0 0 1px rgba(0,0,0,.6)); }\n'''
 open('src/messenger-dark.css','w').write(s)

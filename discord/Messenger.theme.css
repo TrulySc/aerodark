@@ -2398,3 +2398,66 @@ body {
 }
 /* "To:" stays over the conversation, not over the member list */
 #app-mount .chat_f75fb0:has(.membersWrap_c8ffbb) .subtitleContainer_f75fb0 .children__9293f { margin-right: 262px !important; }
+
+/* — fix pass 6 — */
+/* your picture: 72 px, square even while you talk (the 128 px copy appears once aerodark-discord-icons has run) */
+#app-mount .panels__5e434 .container__37e49 { grid-template-columns: 92px 1fr !important; min-height: 92px !important; padding-bottom: 2px !important; }
+#app-mount .panels__5e434 .accountPopoutButton__37e49 { width: 92px; height: 92px; }
+#app-mount .panels__5e434 .avatar__37e49 { width: 72px !important; height: 72px !important; margin: 8px 0 0 10px !important; }
+#app-mount .panels__5e434 .avatar__37e49 > svg,
+#app-mount .panels__5e434 .avatar__37e49 foreignObject,
+#app-mount .panels__5e434 .avatar__37e49 .avatarStack__44b0c,
+#app-mount .panels__5e434 .avatar__37e49 img { width: 72px !important; height: 72px !important; }
+#app-mount .panels__5e434 .avatar__37e49::after { inset: -12px !important; }
+#app-mount .panels__5e434 .avatar__37e49 *,
+#app-mount [class*="avatarSpeaking"],
+#app-mount [class*="avatarSpeaking"] * { border-radius: 0 !important; }
+#app-mount .panels__5e434 .avatar__37e49 [class*="peaking"],
+#app-mount .panels__5e434 .avatar__37e49 [class*="peaking"]::after,
+#app-mount .panels__5e434 .avatar__37e49 [class*="peaking"]::before { box-shadow: none !important; border: none !important; outline: none !important; }
+#app-mount .panels__5e434 .avatar__37e49:has([class*="peaking"])::before {
+    content: ""; position: absolute; inset: -11px; z-index: 0; pointer-events: none; border-radius: 4px;
+    box-shadow: 0 0 7px 3px rgba(70, 200, 90, 0.85);
+}
+/* the call: two lines, then the call's buttons as plain Messenger-style icons (no button faces) */
+#app-mount .panels__5e434 > .wrapper_e131a9 { padding: 0 8px 4px 100px !important; margin-top: -4px !important; }
+#app-mount#app-mount .panels__5e434 .wrapper_e131a9 button,
+#app-mount#app-mount .panels__5e434 .wrapper_e131a9 [role="button"] {
+    background: none !important; background-image: none !important; border: none !important;
+    box-shadow: none !important; width: 24px !important; height: 22px !important; min-width: 0 !important;
+    padding: 0 !important; border-radius: 2px !important;
+}
+#app-mount#app-mount .panels__5e434 .wrapper_e131a9 :is(button, [role="button"]):hover {
+    background: linear-gradient(180deg, #fdfeff, #e3effb) !important; box-shadow: inset 0 0 0 1px #9fc3e8 !important;
+}
+#app-mount#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] { display: flex !important; gap: 0 !important; margin: 2px 0 0 -4px !important; height: 22px; }
+#app-mount#app-mount .panels__5e434 .wrapper_e131a9 [class*="actionButtons"] > * { flex: none !important; width: 24px !important; height: 22px !important; margin: 0 !important; padding: 0 !important; background: none !important; }
+#app-mount#app-mount .panels__5e434 .wrapper_e131a9 svg { width: 16px !important; height: 16px !important; }
+/* server tabs: the unread nub as a glossy red bead */
+#app-mount .guilds__5e434 .item__58105 {
+    width: 6px !important; min-height: 8px; border-radius: 0 4px 4px 0 !important;
+    background: linear-gradient(90deg, #c22a12 0%, #ff8a72 45%, #e5432a 70%, #b0230e 100%) !important;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 3px rgba(229, 67, 42, 0.6) !important;
+}
+/* title-band icons: full strength */
+#app-mount .trailing_c38106 *,
+#app-mount .trailing_c38106 [class*="clickable"] { opacity: 1 !important; color: #ffffff !important; }
+/* member list: 24 px pictures, names never cut */
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"],
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] svg,
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] foreignObject,
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"] img { width: 24px !important; height: 24px !important; min-width: 24px !important; }
+#app-mount .member_c8ffbb div[role="img"][class*="wrapper_"]::after { width: 13px; height: 13px; right: -5px; bottom: -4px; }
+#app-mount .member_c8ffbb, #app-mount .container__91a9d { height: 30px !important; min-height: 30px !important; }
+#app-mount .member_c8ffbb [class*="layout_"] { height: 30px !important; gap: 8px !important; }
+#app-mount .member_c8ffbb [class*="nameAndDecorators_"],
+#app-mount .nameAndDecorators__91a9d { flex: none !important; max-width: none !important; overflow: visible !important; }
+#app-mount .member_c8ffbb [class*="nameAndDecorators_"] *,
+#app-mount .member_c8ffbb [class*="name_"] { overflow: visible !important; text-overflow: clip !important; max-width: none !important; }
+#app-mount .member_c8ffbb :is([class*="subText_"], [class*="subtext_"]) { flex: 1 1 0 !important; min-width: 0 !important; }
+/* voice-channel people: square pictures with an outline, a little apart */
+#app-mount #channels [class*="voiceUser"] { min-height: 46px !important; padding: 4px 0 !important; }
+#app-mount #channels [class*="voiceUser"] [class*="avatar"] {
+    width: 30px !important; height: 30px !important; border-radius: 0 !important;
+    outline: 2px solid #a5a5a5; outline-offset: -2px; margin-right: 8px !important;
+}
