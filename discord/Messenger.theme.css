@@ -2103,7 +2103,7 @@ body {
     white-space: nowrap !important; text-overflow: clip !important; overflow: visible !important;
 }
 #app-mount .privateChannels_e6b769 .nameAndDecorators__20a53 > :not(.name__20a53),
-#app-mount .privateChannels_e6b769 .vc-platform-indicator { order: 9; flex: none; margin-left: auto; zoom: 2; }
+#app-mount .privateChannels_e6b769 .vc-platform-indicator { order: 9; flex: none; margin-left: auto; }
 #app-mount .privateChannels_e6b769 .subText__20a53 {
     display: flex !important; align-items: center; flex: 1 1 0 !important; min-width: 0 !important;
     height: auto !important; line-height: 42px !important; overflow: hidden !important;
@@ -2226,8 +2226,7 @@ body {
     position: absolute; bottom: 150px; left: 8px; right: 8px; padding: 0 !important; background: none !important;
 }
 #app-mount .aside_f58343 .redesignFooter__272c7 button { height: 23px !important; min-height: 0 !important; font-size: 9pt !important; }
-#app-mount .aside_f58343::before,
-#app-mount .aside_f58343::after { left: calc(50% - 48px) !important; }
+
 
 /* — server channels: Windows 7 Explorer tree — */
 #app-mount #channels { zoom: 0.6; }
@@ -2249,3 +2248,26 @@ body {
 #app-mount .sidebarList__5e434 .animatedContainer_f37cb1,
 #app-mount .sidebarList__5e434 .headerEllipseBackdrop_f37cb1,
 #app-mount .sidebarList__5e434 .headerEllipseForeground_f37cb1 { display: none !important; }
+
+/* — fix pass 2 — */
+#app-mount .privateChannels_e6b769 .vc-platform-indicator,
+#app-mount .privateChannels_e6b769 .vc-platform-indicator svg { width: auto !important; height: 24px !important; max-width: 60px; }
+#app-mount .privateChannels_e6b769 .vc-platform-indicator svg { width: 24px !important; }
+#app-mount .privateChannels_e6b769 [class*="chiplet"], #app-mount .privateChannels_e6b769 [class*="clanTag"] {
+    order: 8; flex: none !important; height: 28px !important; font-size: 18px !important; max-width: 140px; overflow: hidden !important;
+}
+#app-mount .privateChannels_e6b769 [class*="chiplet"] img { width: 18px !important; height: 18px !important; }
+#app-mount .header_c19a55 .vc-platform-indicator, #app-mount .header_c19a55 .vc-platform-indicator svg { height: 14px !important; width: auto !important; vertical-align: middle; }
+#app-mount .cozyMessage__5126c .contents_c19a55 > .avatar_c19a55 { top: 2px !important; left: 10px !important; }
+#app-mount .cozyMessage__5126c:has(.repliedMessage_c19a55) .contents_c19a55 > .avatar_c19a55 { top: 24px !important; }
+#app-mount .cozyMessage__5126c .repliedMessage_c19a55 .avatar_c19a55 { position: static !important; display: inline-block !important; width: 14px !important; height: 14px !important; }
+#app-mount .subtitleContainer_f75fb0 .titleWrapper__9293f { display: flex !important; flex-direction: row !important; align-items: baseline; }
+#app-mount .subtitleContainer_f75fb0 .children__9293f { flex-wrap: nowrap !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .outer_c0bea0 .scrollerFade__7f9c0 { padding: 8px 6px 176px 8px !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 div[role="img"][class*="wrapper_"] {
+    position: relative !important; inset: auto !important; top: 0 !important; left: 0 !important; margin: 0 !important;
+}
+#app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 div[role="img"][class*="wrapper_"]::after { content: none !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 div[role="img"] > * { display: block !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 { z-index: 1; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .header__7f9c0 { min-height: 130px; }
