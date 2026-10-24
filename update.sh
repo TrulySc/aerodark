@@ -86,7 +86,7 @@ if [ -d "$CONF/vesktop" ] || [ -d "$CONF/Vencord" ]; then
   mkdir -p "$HOME/.local/bin" "$DATA/aerodark/discord"
   cp -f "$REPO/discord/icons/aerodark-discord-icons" "$HOME/.local/bin/"
   chmod +x "$HOME/.local/bin/aerodark-discord-icons"
-  for f in icon-map.json emoji-list.json import-redrawn-icons.py redraw/redraw-pages.json; do
+  for f in icon-map.json emoji-list.json import-redrawn-icons.py import-emoticons.py redraw/redraw-pages.json; do
     [ -f "$REPO/discord/icons/$f" ] && cp -f "$REPO/discord/icons/$f" "$DATA/aerodark/discord/"
   done
   "$HOME/.local/bin/aerodark-discord-icons" || warn "Couldn't regenerate the Discord icons."

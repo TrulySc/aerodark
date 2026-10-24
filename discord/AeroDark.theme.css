@@ -2,7 +2,7 @@
  * @name Aero Dark
  * @description Windows 7 for Discord in the Aero Dark (VistaVG Black) colours, matching the Aero Dark desktop theme. Use with Discord's Dark appearance.
  * @author TrulySc
- * @version 2.1.0
+ * @version 2.2.0
  * @source https://github.com/TrulySc/aerodark
 */
 
@@ -160,6 +160,37 @@ body {
     --aero-gloss-pressed: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 50%, rgba(255,255,255,0.06) 100%);
     --aero-orb: radial-gradient(circle at 50% 22%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.08) 45%, rgba(0,0,0,0.2) 100%);
     --aero-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    /* Messenger layer (src/msn.css) — Windows Live Messenger 2009, after dark */
+    --msn-banner: radial-gradient(ellipse 40% 140% at 78% 0%, rgba(110, 190, 255, 0.28), transparent 70%),
+                  radial-gradient(ellipse 25% 120% at 92% 10%, rgba(140, 230, 210, 0.18), transparent 70%),
+                  linear-gradient(180deg, #24384f 0%, #18273a 45%, #101a27 100%);
+    --msn-banner-edge: #05090e;
+    --msn-banner-text: #e6f1fc;
+    --msn-banner-glow: 0 0 6px rgba(110, 190, 255, 0.45), 0 1px 1px rgba(0, 0, 0, 0.8);
+    --msn-body: linear-gradient(180deg, #172230 0%, #111820 100%);
+    --msn-rail: linear-gradient(90deg, #0d131a, #131b25);
+    --msn-strip: linear-gradient(180deg, #2a3543 0%, #222b36 50%, #1a212a 100%);
+    --msn-strip-top: rgba(255, 255, 255, 0.08);
+    --msn-strip-edge: #05090e;
+    --msn-frame-in: rgba(255, 255, 255, 0.35);
+    --msn-frame-mid: #3b5674;
+    --msn-frame-out: #0a1018;
+    --msn-online: #4fbf2f;
+    --msn-away: #e8a22b;
+    --msn-busy: #d8402e;
+    --msn-offline: #59636e;
+    --msn-streaming: #8f6be6;
+    --msn-group: #9cc3ea;
+    --msn-says: #8b97a5;
+    --msn-input-bg: #0c1117;
+    --msn-input-border: #2c4058;
+    --msn-input-halo: rgba(61, 162, 240, 0.08);
+    --msn-panel-border: #2c3e52;
+    /* Windows 7 user-tile frame */
+    --tile-rim: linear-gradient(160deg, #f1f5f9 0%, #c3cfdb 30%, #7f90a3 52%, #94a6ba 75%, #c9d6e3 100%);
+    --tile-edge: #0b1016;
+    --tile-shine: rgba(255, 255, 255, 0.5);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -923,4 +954,215 @@ img.avatar_c19a55,
 div[class*="control_"]:has(input[type="checkbox"]) > div[class*="container_"] {
     background-image: var(--aero-gloss) !important;
     box-shadow: inset 0 1px 2px var(--aero-inner-shadow), 0 1px var(--aero-bevel-light);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Messenger layer — Windows Live Messenger 2009 on top of the Aero base:
+   a soft sky banner across the top, display-picture frames that show your
+   status, contact-list group headers, "Name says:" with bulleted lines, and the
+   rounded white message box. Colours from the palette (--msn-*), light and dark.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Top bar: the Messenger banner, taller, with room to breathe ──────────── */
+body {
+    --top-bar-height: 38px;
+}
+#app-mount .bar_c38106 {
+    height: var(--top-bar-height) !important;
+    min-height: var(--top-bar-height) !important;
+    background: var(--msn-banner) !important;
+    box-shadow: inset 0 -1px var(--msn-banner-edge), 0 1px var(--aero-bevel-light), 0 2px 4px var(--aero-drop) !important;
+    position: relative;
+    z-index: 2;
+}
+#app-mount .title_c38106 {
+    display: flex !important;
+    align-items: center;
+    height: 100%;
+    overflow: visible !important;
+    line-height: normal !important;
+    padding: 0 12px !important;
+    font-size: 10pt !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.01em;
+    color: var(--msn-banner-text) !important;
+    text-shadow: var(--msn-banner-glow);
+    opacity: 1 !important;
+}
+
+/* ── Window body: the pale Messenger frame around white panes ─────────────── */
+.bg__960e4,
+.base__5e434 {
+    background: var(--msn-body) !important;
+}
+.guilds__5e434 {
+    background: var(--msn-rail) !important;
+}
+
+/* channel header and other page headers: Messenger's toolbar strip */
+.chat_f75fb0 > .subtitleContainer_f75fb0,
+.container__133bf > .container__9293f,
+.container_f391e3 > .container__9293f,
+.container__01ae2 > .container__9293f,
+.homeWrapper__0920e > .container__9293f,
+.headerGlass_f37cb1 {
+    background: var(--msn-strip) !important;
+    box-shadow: inset 0 1px var(--msn-strip-top), inset 0 -1px var(--msn-strip-edge) !important;
+}
+
+/* ── Display pictures: the Windows 7 user-tile frame ─────────────────────── */
+/* A glassy silver-blue bezel with a dark outline, like the account picture on the Start menu and
+   the logon screen. Chat avatars are <img>s, so the bezel is their padding; everything else gets
+   a ring drawn by ::after (gradient ring via a mask). */
+img.avatar_c19a55,
+.avatar_c19a55 {
+    width: 32px !important;
+    height: 32px !important;
+    margin-top: 1px;
+    padding: 3px;
+    border-radius: 6px !important;
+    background: var(--tile-rim) !important;
+    box-shadow: 0 0 0 1px var(--tile-edge), inset 0 0 0 1px var(--tile-shine), 0 2px 4px 1px var(--aero-drop) !important;
+}
+
+/* small avatars (DM list, member list, user panel) and server icons */
+.channel__972a0 div[role="img"][class*="wrapper_"],
+.container__91a9d div[role="img"][class*="wrapper_"],
+.panels__5e434 div[role="img"][class*="wrapper_"] {
+    --msn-status: var(--msn-offline);
+    position: relative;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1.5px var(--msn-status);
+    zoom: 0.85;
+}
+.channel__972a0 div[role="img"][class*="wrapper_"]::after,
+.container__91a9d div[role="img"][class*="wrapper_"]::after,
+.panels__5e434 div[role="img"][class*="wrapper_"]::after,
+.wrapper__6e9f8::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    padding: 3px;
+    border-radius: 6px;
+    background: var(--tile-rim);
+    box-shadow: 0 0 0 1px var(--tile-edge), 0 2px 4px var(--aero-drop);
+    -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+.wrapper__6e9f8 {
+    position: relative;
+    filter: none !important;
+}
+.wrapper__6e9f8::after {
+    inset: -3px;
+    border-radius: 14px;
+}
+div[role="img"][class*="wrapper_"][aria-label$="Online"]          { --msn-status: var(--msn-online); }
+div[role="img"][class*="wrapper_"][aria-label$="Idle"]            { --msn-status: var(--msn-away); }
+div[role="img"][class*="wrapper_"][aria-label$="Do Not Disturb"]  { --msn-status: var(--msn-busy); }
+div[role="img"][class*="wrapper_"][aria-label$="Streaming"]       { --msn-status: var(--msn-streaming); }
+div[role="img"][class*="wrapper_"][aria-label*="Mobile"]          { --msn-status: var(--msn-online); }
+/* square pictures (no circular cut-out) and no separate status dot — the frame shows it */
+.channel__972a0 div[role="img"][class*="wrapper_"] foreignObject,
+.container__91a9d div[role="img"][class*="wrapper_"] foreignObject,
+.panels__5e434 div[role="img"][class*="wrapper_"] foreignObject {
+    mask: none !important;
+}
+.channel__972a0 div[role="img"][class*="wrapper_"] img,
+.container__91a9d div[role="img"][class*="wrapper_"] img,
+.panels__5e434 div[role="img"][class*="wrapper_"] img {
+    border-radius: 3px !important;
+}
+.channel__972a0 div[role="img"][class*="wrapper_"] > svg > rect,
+.container__91a9d div[role="img"][class*="wrapper_"] > svg > rect,
+.panels__5e434 div[role="img"][class*="wrapper_"] > svg > rect {
+    display: none;
+}
+
+/* the server list, a little smaller so it sits with 9 pt text */
+.guilds__5e434 {
+    zoom: 0.86;
+    width: calc(var(--custom-guild-list-width) / 0.86) !important;
+    height: calc(100% / 0.86) !important;
+}
+
+/* ── Contact-list headers: "Online (12)", "Other Contacts" ────────────────── */
+.containerDefault__29444 [class*="name_"],
+[class*="membersGroup_"],
+h2[class*="privateChannelsHeaderContainer"],
+[class*="privateChannelsHeaderContainer_"] {
+    text-transform: none !important;
+    font-weight: 700 !important;
+    font-size: var(--aero-ui-size) !important;
+    letter-spacing: 0 !important;
+    color: var(--msn-group) !important;
+}
+
+/* ── Messages: "Name says:" and a bullet before each line ─────────────────── */
+.username_c19a55::after {
+    content: " says:";
+    color: var(--msn-says);
+    font-weight: 400;
+}
+.repliedMessage_c19a55 .username_c19a55::after {
+    content: none;
+}
+.messageContent_c19a55:not(.repliedMessage_c19a55 *)::before {
+    content: "•";
+    display: inline-block;
+    width: 1em;
+    margin-left: 2px;
+    color: var(--msn-says);
+}
+.username_c19a55 {
+    font-weight: 400 !important;
+}
+
+/* ── Message box: Messenger's rounded white input ─────────────────────────── */
+.channelTextArea_f75fb0,
+.form_f75fb0 .themedBackground__74017 {
+    background: var(--msn-input-bg) !important;
+    border: 1px solid var(--msn-input-border) !important;
+    border-radius: 5px !important;
+    box-shadow: inset 0 1px 3px var(--aero-inner-shadow), 0 0 0 3px var(--msn-input-halo), 0 1px var(--aero-bevel-light) !important;
+}
+.channelTextArea_f75fb0:focus-within {
+    border-color: var(--aero-field-focus-top) !important;
+}
+.form_f75fb0 {
+    background: var(--msn-strip) !important;
+    box-shadow: inset 0 1px var(--msn-strip-edge);
+}
+
+/* ── Messenger's inset panels: the conversation, the contact list and the members sit as
+   rounded white boxes inside the pale window body ─────────────────────────────────────── */
+.chatContent_f75fb0 {
+    margin: 6px 6px 0 6px;
+    border: 1px solid var(--msn-panel-border) !important;
+    border-radius: 5px !important;
+    box-shadow: 0 1px 0 var(--aero-bevel-light), inset 0 1px 2px var(--aero-inner-shadow) !important;
+    overflow: hidden;
+}
+.chat_f75fb0,
+.content_f75fb0 {
+    background: var(--msn-body) !important;
+}
+.sidebarList__5e434 {
+    margin: 6px 0 0 6px;
+    border: 1px solid var(--msn-panel-border) !important;
+    border-radius: 5px 5px 0 0 !important;
+    overflow: hidden;
+}
+.container_c8ffbb,
+.content_f75fb0 > .membersWrap_c8ffbb {
+    margin: 6px 6px 6px 0;
+    border: 1px solid var(--msn-panel-border) !important;
+    border-radius: 5px !important;
+    overflow: hidden;
+}
+.form_f75fb0 {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding-top: 6px;
 }

@@ -22,6 +22,7 @@ CONF = os.environ.get("XDG_CONFIG_HOME", os.path.join(HOME, ".config"))
 STATE = os.path.join(DATA, "aerodark")
 CUSTOM = os.path.join(DATA, "aerodark", "discord", "custom")   # your hand-picked icons
 HALO = ""
+PACKS = os.path.join(DATA, "aerodark", "discord", "packs")           # icon packs to pick from
 CUSTOM_EXT = ("png", "svg", "ico", "webp", "jpg", "jpeg", "gif")
 EXTRA_THEME = "AeroDiscord"           # the add-on set with the redrawn Discord-only icons
 
@@ -133,6 +134,79 @@ def lookup(themes, names, want):
     return None
 
 
+def add_pack(src, name=None):
+    """copy an icon pack (zip or folder) into PACKS/<name>, converting .ico to .png"""
+    import shutil, tempfile, zipfile
+    name = name or re.sub(r"^[0-9a-f]{6,}-", "", os.path.splitext(os.path.basename(src.rstrip("/")))[0])
+    dst = os.path.join(PACKS, name)
+    os.makedirs(dst, exist_ok=True)
+    tmp = None
+    if zipfile.is_zipfile(src):
+        tmp = tempfile.mkdtemp()
+        with zipfile.ZipFile(src) as z:
+            for m in z.namelist():          # images only; nothing from the archive is run
+                if re.search(r"\.(png|gif|ico|svg|webp|jpe?g)$", m, re.I) and "__MACOSX" not in m and ".." not in m:
+                    z.extract(m, tmp)
+        src = tmp
+    try:
+        from PIL import Image
+    except ImportError:
+        Image = None
+    n = 0
+    for root, _, files in os.walk(src):
+        if "__MACOSX" in root:
+            continue
+        sub = os.path.relpath(root, src).replace(os.sep, "-").strip(".-")
+        for f in files:
+            stem, ext = os.path.splitext(f)
+            ext = ext.lower()
+            if ext not in (".png", ".gif", ".ico", ".svg", ".webp", ".jpg", ".jpeg"):
+                continue
+            out = re.sub(r"[^\w.&-]+", "_", (sub + "-" if sub else "") + stem)
+            if ext == ".ico":
+                if not Image:
+                    continue
+                try:
+                    im = Image.open(os.path.join(root, f))
+                    sizes = sorted(im.info.get("sizes", [im.size]), key=lambda s: s[0])
+                    best = next((s for s in sizes if s[0] >= 64), sizes[-1])
+                    im.size = best
+                    im = im.convert("RGBA")
+                    if im.width > 128:
+                        im.thumbnail((128, 128), Image.LANCZOS)
+                    im.save(os.path.join(dst, out + ".png"))
+                except Exception:
+                    continue
+            else:
+                shutil.copy(os.path.join(root, f), os.path.join(dst, out + ext))
+            n += 1
+    if tmp:
+        shutil.rmtree(tmp, ignore_errors=True)
+    print(f"Added {n} pictures to the pack '{name}' ({dst}).")
+
+
+def apply_picks(path):
+    """copy the pictures chosen in the catalog into the custom folder"""
+    import shutil
+    picks = json.load(open(path, encoding="utf-8"))
+    os.makedirs(CUSTOM, exist_ok=True)
+    base = os.path.join(DATA, "aerodark", "discord")
+    n = 0
+    for key, rel in picks.items():
+        if not re.fullmatch(r"[\w-]+", key):
+            continue
+        src = os.path.realpath(os.path.join(base, rel))
+        if not src.startswith(os.path.realpath(PACKS) + os.sep) or not os.path.isfile(src):
+            continue
+        for ext in CUSTOM_EXT:                       # replace an earlier pick for this icon
+            old = os.path.join(CUSTOM, f"{key}.{ext}")
+            if os.path.exists(old):
+                os.remove(old)
+        shutil.copy(src, os.path.join(CUSTOM, key + os.path.splitext(src)[1].lower()))
+        n += 1
+    print(f"Applied {n} picks.")
+
+
 def custom_file(*keys):
     """a hand-picked icon in the custom folder: 0024.png, 24.png, mic.svg, vc-platform-desktop.ico …"""
     for k in keys:
@@ -206,6 +280,19 @@ def data_uri(path):
         ext = path.rsplit(".", 1)[-1].lower()
         mime = {"ico": "image/x-icon", "webp": "image/webp", "jpg": "image/jpeg", "jpeg": "image/jpeg",
                 "gif": "image/gif"}.get(ext, "image/png")
+        if ext != "gif" and len(raw) > 24000:      # big pictures (icon packs): scale to 96 px for Discord
+            try:
+                import io
+                from PIL import Image
+                im = Image.open(io.BytesIO(raw))
+                if max(im.size) > 96:
+                    im = im.convert("RGBA")
+                    im.thumbnail((96, 96), Image.LANCZOS)
+                    buf = io.BytesIO()
+                    im.save(buf, "PNG", optimize=True)
+                    raw, mime = buf.getvalue(), "image/png"
+            except Exception:
+                pass
     return f"data:{mime};base64," + base64.b64encode(raw).decode()
 
 
@@ -253,7 +340,7 @@ def write_emoji(out, font, here):
     if not lst:
         return
     fam = (f"'{font}', " if font else "") + "'Noto Color Emoji', 'Twemoji', 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif"
-    head = ("/**\n * @name AeroEmoji\n * @description Discord's emoji drawn with your system emoji font. "
+    head = ("/**\n * @name AeroEmoji\n * @description Discord's emoji drawn with your system emoji font (and any imported emoticon pack). "
             "Generated by aerodark-discord-icons.\n * @author TrulySc\n * @version 1.0.0\n */\n\n")
     picker = f"""/* emoji picker: Discord puts the emoji itself on each button */
 button[class*="emojiItem_"][data-type="emoji"][data-surrogates] {{ position: relative; }}
@@ -273,13 +360,37 @@ button[class*="emojiItemLarge_"][data-surrogates]::after {{ font-size: 38px; }}
     data = json.load(open(lst, encoding="utf-8"))
     if isinstance(data, list):
         data = {e: [] for e in data}
+    # emoticon packs (import-emoticons.py): pictures named by code point, e.g. 1f60a.png for 😊
+    emo_dir = os.path.join(DATA, "aerodark", "discord", "emoticons")
+    emoticons = {}
+    if os.path.isdir(emo_dir):
+        for n in os.listdir(emo_dir):
+            stem, ext = os.path.splitext(n)
+            if ext.lower() in (".png", ".gif", ".webp", ".svg") and re.fullmatch(r"[0-9a-f]+(-[0-9a-f]+)*", stem):
+                emoticons[stem] = os.path.join(emo_dir, n)
+    code = lambda e: "-".join(f"{ord(c):x}" for c in e if ord(c) != 0xFE0F)
+    picker_pics, emo_vars = [], {}
     for e, names in data.items():
-        svg = (f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='32' y='53' "
-               f"font-size='52' text-anchor='middle'{ff}>{e}</text></svg>")
-        svg = svg.replace("%", "%25").replace("#", "%23").replace('"', "%22")
+        pic = emoticons.get(code(e))
+        if pic:
+            var = f"--emo-{code(e)}"
+            if var not in emo_vars:              # each picture once, as a variable both rules use
+                emo_vars[var] = data_uri(pic)
+            picker_pics.append(f'button[class*="emojiItem_"][data-type="emoji"][data-surrogates="{e}"]::after{{content:"";'
+                               f'background:var({var}) center/70% no-repeat;font-size:0}}')
+            rules.append(f'img.emoji:is({",".join([f"[alt=\"{e}\"]"] + [f"[alt=\":{n}:\"],[data-name=\":{n}:\"],[data-name=\"{n}\"]" for n in names])}){{content:var({var})}}')
+            continue
+        else:
+            svg = (f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='32' y='53' "
+                   f"font-size='52' text-anchor='middle'{ff}>{e}</text></svg>")
+            url = "data:image/svg+xml," + svg.replace("%", "%25").replace("#", "%23").replace('"', "%22")
         # Discord labels emoji either with the emoji itself or with its :name:
         keys = [f'[alt="{e}"]'] + [f'[alt=":{n}:"],[data-name=":{n}:"],[data-name="{n}"]' for n in names]
-        rules.append(f'img.emoji:is({",".join(keys)}){{content:url("data:image/svg+xml,{svg}")}}')
+        rules.append(f'img.emoji:is({",".join(keys)}){{content:url("{url}")}}')
+    if emo_vars:
+        rules = [":root{" + ";".join(f'{k}:url("{v}")' for k, v in emo_vars.items()) + "}"] + picker_pics + rules
+    else:
+        rules = picker_pics + rules
     with open(out, "w", encoding="utf-8") as f:
         f.write(head + picker + "\n".join(rules) + "\n")
 
@@ -308,7 +419,7 @@ def write_catalog(entries, origin, theme):
     def card(key, title, glyph, sub, uri, src):
         now = f'<img src="{uri}" alt="" style="{HALO.strip()}">' if uri else '<span class="none">—</span>'
         tag = "t-pick" if src == "your pick" else ("t-theme" if src else "t-none")
-        cards.append(f'<div class="c {tag}" data-k="{H.escape(key)} {H.escape(sub)}"><div class="g">{glyph}</div>'
+        cards.append(f'<div class="c {tag}" data-key="{H.escape(key)}" data-k="{H.escape(key)} {H.escape(sub)}"><div class="g">{glyph}</div>'
                      f'<div class="n">{now}</div><b>{H.escape(title)}</b><code>{H.escape(key)}.png</code>'
                      f'<small>{H.escape(sub)}</small><i>{H.escape(src or "Discord’s own")}</i></div>')
 
@@ -324,6 +435,19 @@ def write_catalog(entries, origin, theme):
         src, f = origin.get(e["id"], (None, None))
         card(e["id"], "#" + e["id"], glyph, " ".join(e["names"]) or "Discord-only", data_uri(f) if f else None, src)
 
+    packs_html = []
+    if os.path.isdir(PACKS):
+        for pk in sorted(os.listdir(PACKS)):
+            d = os.path.join(PACKS, pk)
+            if not os.path.isdir(d):
+                continue
+            imgs = sorted(f for f in os.listdir(d) if f.lower().endswith((".png", ".gif", ".svg", ".webp", ".jpg")))
+            tiles = "".join(f'<img loading="lazy" src="packs/{H.escape(pk)}/{H.escape(f)}" title="{H.escape(f)}" '
+                            f'data-p="packs/{H.escape(pk)}/{H.escape(f)}">' for f in imgs)
+            packs_html.append(f'<details><summary>{H.escape(pk)} <small>({len(imgs)})</small></summary><div class="pk">{tiles}</div></details>')
+    packs_block = "".join(packs_html) or ('<p class="mute">No packs yet. Add one with<br><code>aerodark-discord-icons '
+                                         '--add-pack ~/Downloads/windows-7-icons.zip</code></p>')
+
     page = f"""<!doctype html><html><head><meta charset="utf-8"><title>Discord icon catalog</title><style>
 :root{{color-scheme:light dark;--bg:#f0f0f0;--card:#fff;--line:#d9d9d9;--text:#000;--mute:#5a5a5a;--pick:#27ae27;--theme:#3c7fb1}}
 @media (prefers-color-scheme:dark){{:root{{--bg:#1c1d1f;--card:#141516;--line:#2b2d30;--text:#ececec;--mute:#9a9da2}}}}
@@ -336,16 +460,51 @@ main{{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap
 .g svg,.n img{{width:32px;height:32px;display:block;margin:auto}} .none{{display:block;text-align:center;color:var(--mute)}}
 .c b,.c code,.c small,.c i{{grid-column:1/3;overflow-wrap:anywhere}} .c small,.c i{{color:var(--mute)}}
 code{{user-select:all;cursor:copy}} .hide{{display:none}}
+.wrap{{display:grid;grid-template-columns:1fr 380px;align-items:start}} main{{min-width:0}}
+aside{{position:sticky;top:0;height:100vh;overflow:auto;border-left:1px solid var(--line);background:var(--card);padding:10px 12px;box-sizing:border-box}}
+aside h3{{margin:4px 0 6px}} aside .mute,.mute{{color:var(--mute)}}
+aside input{{font:inherit;padding:4px 6px;width:100%;box-sizing:border-box;margin-bottom:6px}}
+aside summary{{cursor:pointer;padding:4px 0;font-weight:600}}
+.pk{{display:grid;grid-template-columns:repeat(auto-fill,44px);gap:4px;padding:4px 0}}
+.pk img{{width:40px;height:40px;object-fit:contain;padding:2px;border:1px solid transparent;border-radius:3px;cursor:pointer;background:var(--bg)}}
+.pk img:hover{{border-color:var(--theme)}}
+.c{{cursor:pointer}} .c.sel{{outline:2px solid var(--theme);outline-offset:1px}}
+.c.t-new{{border-color:#e0a000;border-width:2px}}
+.bar{{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}} .bar button{{font:inherit;padding:3px 10px}}
+#cmd{{display:none;margin-top:6px}}
 </style></head><body><header><b>Discord icons — {H.escape(theme)}</b>
 <input id="q" placeholder="filter: number or name" autofocus>
 <label><input type="checkbox" id="only"> only Discord's own (not replaced yet)</label>
 <p>Left: Discord's icon. Right: what replaces it now. To use your own, save it as the file name shown
 into <code>{H.escape(CUSTOM)}</code> (png, svg, ico, webp), then run <code>aerodark-discord-icons</code>.</p></header>
-<main>{"".join(cards)}</main><script>
+<div class="wrap"><main>{"".join(cards)}</main>
+<aside><h3>Pick from your packs</h3>
+<p class="mute">1. Click an icon on the left. 2. Click a picture here to use it. 3. Save your picks and run the
+command shown. Your picks are remembered on this page until you save them.</p>
+<div class="bar"><button id="save">Save picks</button><button id="clear">Clear picks</button><span id="count" class="mute"></span></div>
+<div id="cmd" class="mute">Saved. Now run:<br><code>aerodark-discord-icons --apply-picks ~/Downloads/aerodark-picks.json</code></div>
+<input id="pq" placeholder="filter pictures by file name">
+{packs_block}</aside></div><script>
 const q=document.getElementById('q'),o=document.getElementById('only');
 function f(){{const t=q.value.toLowerCase().replace('#','');for(const c of document.querySelectorAll('.c'))
 c.classList.toggle('hide',!(c.dataset.k.toLowerCase().includes(t))||(o.checked&&!c.classList.contains('t-none')));}}
 q.oninput=f;o.onchange=f;
+let picks={{}};try{{picks=JSON.parse(localStorage.getItem('aerodark-picks')||'{{}}')}}catch(e){{}}
+let sel=null;
+const store=()=>{{try{{localStorage.setItem('aerodark-picks',JSON.stringify(picks))}}catch(e){{}}
+  document.getElementById('count').textContent=Object.keys(picks).length+' picked';}};
+const show=c=>{{const p=picks[c.dataset.key];if(!p)return;const n=c.querySelector('.n');
+  n.innerHTML='<img src="'+p+'">';c.classList.add('t-new');c.querySelector('i').textContent='new pick (not saved yet)';}};
+document.querySelectorAll('.c').forEach(c=>{{show(c);c.onclick=()=>{{if(sel)sel.classList.remove('sel');sel=c;c.classList.add('sel');}};}});
+document.querySelectorAll('.pk img').forEach(im=>im.onclick=()=>{{if(!sel){{alert('Click an icon on the left first.');return;}}
+  picks[sel.dataset.key]=im.dataset.p;show(sel);store();}});
+document.getElementById('pq').oninput=e=>{{const t=e.target.value.toLowerCase();
+  document.querySelectorAll('.pk img').forEach(im=>im.style.display=im.title.toLowerCase().includes(t)?'':'none');}};
+document.getElementById('save').onclick=()=>{{const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(picks,null,1)],{{type:'application/json'}}));
+  a.download='aerodark-picks.json';a.click();document.getElementById('cmd').style.display='block';}};
+document.getElementById('clear').onclick=()=>{{if(confirm('Forget the picks on this page?')){{picks={{}};store();location.reload();}}}};
+store();
 </script></body></html>"""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
@@ -363,11 +522,19 @@ def main():
     ap.add_argument("--emoji-font", default="", help='emoji font for AeroEmoji (default: your system emoji font)')
     ap.add_argument("--no-emoji", action="store_true", help="don't write AeroEmoji.theme.css")
     ap.add_argument("--halo", action="store_true", help="faint light outline around icons on dark schemes")
+    ap.add_argument("--add-pack", metavar="ZIP_OR_FOLDER", nargs="+", help="add icon pack(s) to pick from in the catalog")
+    ap.add_argument("--apply-picks", metavar="JSON", help="use the picks saved from the catalog (aerodark-picks.json)")
     ap.add_argument("--catalog", action="store_true", help="open the icon catalog in your browser afterwards")
     ap.add_argument("--which", nargs="+", metavar="NAME", help="just show which file each icon name resolves to")
     ap.add_argument("--if-changed", action="store_true", help="only run if the icon theme changed")
     a = ap.parse_args()
 
+    if a.add_pack:
+        for pk in a.add_pack:
+            add_pack(pk)
+        a.catalog = True
+    if a.apply_picks:
+        apply_picks(a.apply_picks)
     theme = a.theme or current_theme()
     if a.which:
         th = chain(theme)

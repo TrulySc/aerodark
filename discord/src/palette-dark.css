@@ -147,4 +147,35 @@ body {
     --aero-gloss-pressed: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 50%, rgba(255,255,255,0.06) 100%);
     --aero-orb: radial-gradient(circle at 50% 22%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.08) 45%, rgba(0,0,0,0.2) 100%);
     --aero-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    /* Messenger layer (src/msn.css) — Windows Live Messenger 2009, after dark */
+    --msn-banner: radial-gradient(ellipse 40% 140% at 78% 0%, rgba(110, 190, 255, 0.28), transparent 70%),
+                  radial-gradient(ellipse 25% 120% at 92% 10%, rgba(140, 230, 210, 0.18), transparent 70%),
+                  linear-gradient(180deg, #24384f 0%, #18273a 45%, #101a27 100%);
+    --msn-banner-edge: #05090e;
+    --msn-banner-text: #e6f1fc;
+    --msn-banner-glow: 0 0 6px rgba(110, 190, 255, 0.45), 0 1px 1px rgba(0, 0, 0, 0.8);
+    --msn-body: linear-gradient(180deg, #172230 0%, #111820 100%);
+    --msn-rail: linear-gradient(90deg, #0d131a, #131b25);
+    --msn-strip: linear-gradient(180deg, #2a3543 0%, #222b36 50%, #1a212a 100%);
+    --msn-strip-top: rgba(255, 255, 255, 0.08);
+    --msn-strip-edge: #05090e;
+    --msn-frame-in: rgba(255, 255, 255, 0.35);
+    --msn-frame-mid: #3b5674;
+    --msn-frame-out: #0a1018;
+    --msn-online: #4fbf2f;
+    --msn-away: #e8a22b;
+    --msn-busy: #d8402e;
+    --msn-offline: #59636e;
+    --msn-streaming: #8f6be6;
+    --msn-group: #9cc3ea;
+    --msn-says: #8b97a5;
+    --msn-input-bg: #0c1117;
+    --msn-input-border: #2c4058;
+    --msn-input-halo: rgba(61, 162, 240, 0.08);
+    --msn-panel-border: #2c3e52;
+    /* Windows 7 user-tile frame */
+    --tile-rim: linear-gradient(160deg, #f1f5f9 0%, #c3cfdb 30%, #7f90a3 52%, #94a6ba 75%, #c9d6e3 100%);
+    --tile-edge: #0b1016;
+    --tile-shine: rgba(255, 255, 255, 0.5);
 }

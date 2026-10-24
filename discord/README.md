@@ -51,6 +51,13 @@ Change icon packs and it follows: the `aerodark-sync` helper re-runs it when the
   `~/.local/share/aerodark/discord/custom/` and re-run `aerodark-discord-icons`; your picks beat
   everything else. `aerodark-discord-icons --catalog` opens a page listing every icon, its number,
   what replaces it now and the file name to use (buttons like the mic use names: `mic.png`, …).
+- Icon packs to pick from: `aerodark-discord-icons --add-pack pack.zip` copies a pack (PNG, ICO,
+  GIF…) into `~/.local/share/aerodark/discord/packs/` and opens the catalog; click a Discord icon,
+  click a picture from the pack, then **Save picks** and run
+  `aerodark-discord-icons --apply-picks ~/Downloads/aerodark-picks.json`.
+- Emoticons: `python3 ~/.local/share/aerodark/discord/import-emoticons.py msn-messenger-icons.zip`
+  swaps matching emoji for MSN Messenger emoticons in AeroEmoji (others keep the system emoji font).
+- Packs and emoticons stay in your home folder; they're not part of this repo.
 - Brand logos and Discord's tiny interface glyphs (chevrons, checkmarks, close crosses) are left
   alone on purpose.
 

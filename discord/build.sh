@@ -9,7 +9,7 @@ make_theme() { # name description palette outfile
  * @name $1
  * @description $2
  * @author TrulySc
- * @version 2.1.0
+ * @version 2.2.0
  * @source https://github.com/TrulySc/aerodark
 */
 
@@ -24,6 +24,8 @@ HDR
     cat src/base.css
     echo
     cat src/skeuo.css
+    echo
+    cat src/msn.css
   } > "$4"
 }
 make_theme "Aero Light" "Windows 7 for Discord, matching AeroThemePlasma: Explorer's command bar, nav-pane selection, Segoe UI 9pt, Windows 7 push buttons and text boxes. Use with Discord's Light appearance." palette-light.css AeroLight.theme.css

@@ -255,7 +255,7 @@ if have python3; then
   cp -f "$HERE/discord/icons/aerodark-discord-icons" "$BIN/aerodark-discord-icons"
   chmod +x "$BIN/aerodark-discord-icons"
   cp -f "$HERE/discord/icons/icon-map.json" "$HERE/discord/icons/redraw/redraw-pages.json" \
-        "$HERE/discord/icons/import-redrawn-icons.py" "$HERE/discord/icons/emoji-list.json" \
+        "$HERE/discord/icons/import-redrawn-icons.py" "$HERE/discord/icons/import-emoticons.py" "$HERE/discord/icons/emoji-list.json" \
         "$DATA/aerodark/discord/"
   if [ -d "$CONF/vesktop" ]; then
     "$BIN/aerodark-discord-icons" || warn "Couldn't generate the Discord icon theme."
