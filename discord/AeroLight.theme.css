@@ -144,6 +144,22 @@ body {
     --aero-mention-shine: #fffbe8;
     --aero-mention-edge: #e0a000;
     --aero-cell: linear-gradient(180deg, #ffffff 0%, #eef2f7 100%);
+
+    /* glossy buttons over Discord's solid button colours */
+    --aero-face: #e6e6e6;
+    --aero-face-hot: #cfe9f9;
+    --aero-face-pressed: #a9d6f0;
+    --aero-face-primary: #2f7fd0;
+    --aero-face-primary-hot: #4596e3;
+    --aero-face-primary-border: #1d5288;
+    --aero-face-danger: #c7432c;
+    --aero-face-danger-hot: #dc5a40;
+    --aero-button-edge: #707070;
+    --aero-button-inner: rgba(255, 255, 255, 0.55);
+    --aero-gloss: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 49%, rgba(0,0,0,0.07) 50%, rgba(255,255,255,0.1) 100%);
+    --aero-gloss-pressed: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 100%);
+    --aero-orb: radial-gradient(circle at 50% 22%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.35) 45%, rgba(0,0,0,0.08) 100%);
+    --aero-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -401,22 +417,22 @@ body,
 .theme-light:not(.custom-user-profile-theme) {
     --text-link: var(--aero-link);
 
-    --control-primary-background-default: var(--aero-button-default-bg);
-    --control-primary-background-hover: var(--aero-button-hot-bg);
-    --control-primary-background-active: var(--aero-button-pressed-bg);
-    --control-primary-border-default: var(--aero-button-default-border);
+    --control-primary-background-default: var(--aero-face-primary);
+    --control-primary-background-hover: var(--aero-face-primary-hot);
+    --control-primary-background-active: var(--aero-face-pressed);
+    --control-primary-border-default: var(--aero-face-primary-border);
     --control-primary-border-hover: var(--aero-button-hot-border);
     --control-primary-border-active: var(--aero-button-pressed-border);
-    --control-primary-text-default: var(--aero-button-text);
-    --control-primary-text-hover: var(--aero-button-text);
-    --control-primary-text-active: var(--aero-button-text);
-    --control-primary-icon-default: var(--aero-button-text);
+    --control-primary-text-default: #ffffff;
+    --control-primary-text-hover: #ffffff;
+    --control-primary-text-active: #ffffff;
+    --control-primary-icon-default: #ffffff;
     --control-primary-icon-hover: var(--aero-button-text);
     --control-primary-icon-active: var(--aero-button-text);
 
-    --control-secondary-background-default: var(--aero-button-bg);
-    --control-secondary-background-hover: var(--aero-button-hot-bg);
-    --control-secondary-background-active: var(--aero-button-pressed-bg);
+    --control-secondary-background-default: var(--aero-face);
+    --control-secondary-background-hover: var(--aero-face-hot);
+    --control-secondary-background-active: var(--aero-face-pressed);
     --control-secondary-border-default: var(--aero-button-border);
     --control-secondary-border-hover: var(--aero-button-hot-border);
     --control-secondary-border-active: var(--aero-button-pressed-border);
@@ -428,9 +444,9 @@ body,
     --control-secondary-icon-active: var(--aero-button-text);
 
     /* the bright white "Get Nitro"-style buttons → ordinary push buttons */
-    --control-expressive-background-default: var(--aero-button-bg);
-    --control-expressive-background-hover: var(--aero-button-hot-bg);
-    --control-expressive-background-active: var(--aero-button-pressed-bg);
+    --control-expressive-background-default: var(--aero-face);
+    --control-expressive-background-hover: var(--aero-face-hot);
+    --control-expressive-background-active: var(--aero-face-pressed);
     --control-expressive-border-default: var(--aero-button-border);
     --control-expressive-border-hover: var(--aero-button-hot-border);
     --control-expressive-border-active: var(--aero-button-pressed-border);
@@ -441,9 +457,9 @@ body,
     --control-expressive-icon-hover: var(--aero-button-text);
     --control-expressive-icon-active: var(--aero-button-text);
 
-    --control-critical-primary-background-default: var(--aero-button-danger-bg);
-    --control-critical-primary-background-hover: var(--aero-button-danger-hot-bg);
-    --control-critical-primary-background-active: var(--aero-button-danger-hot-bg);
+    --control-critical-primary-background-default: var(--aero-face-danger);
+    --control-critical-primary-background-hover: var(--aero-face-danger-hot);
+    --control-critical-primary-background-active: var(--aero-face-danger-hot);
     --control-critical-primary-border-default: var(--aero-button-danger-border);
     --control-critical-primary-border-hover: var(--aero-button-danger-border);
     --control-critical-primary-text-default: #ffffff;
@@ -765,4 +781,146 @@ img.avatar_c19a55,
 .pill_e5445c [class*="item_"] {
     background: var(--aero-text) !important;
     box-shadow: 0 0 4px var(--aero-select-glow);
+}
+
+/* ═══ More depth: glossy buttons everywhere, textured panes, the Friends page, Settings ═══ */
+
+/* Buttons: Discord fills its buttons with a plain colour, so the Windows 7 gloss is laid over
+   whatever colour the button has (grey, blue, red, green) — the "glass bulb" look. */
+#app-mount button:is([class*="lookFilled"], [class*="colorPrimary"], [class*="colorBrand"],
+                     [class*="colorGreen"], [class*="colorRed"], [class*="secondary_"],
+                     [class*="primary_"], [class*="critical"], [class*="expressive_"], [class*="positive_"]):not([class*="lookBlank"]):not([class*="lookLink"]):not([role="tab"]):not([role="switch"]),
+.root__49fc1 button[type="submit"] {
+    background-image: var(--aero-gloss) !important;
+    border: 1px solid var(--aero-button-edge) !important;
+    border-radius: 3px !important;
+    box-shadow: inset 0 1px var(--aero-button-shine), inset 0 0 0 1px var(--aero-button-inner), 0 1px 2px var(--aero-drop) !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+#app-mount button:is([class*="lookFilled"], [class*="secondary_"], [class*="primary_"], [class*="colorPrimary"], [class*="colorBrand"]):not([class*="lookBlank"]):hover {
+    box-shadow: inset 0 1px var(--aero-button-shine), inset 0 0 0 1px var(--aero-button-inner), 0 0 6px var(--aero-select-glow), 0 1px 2px var(--aero-drop) !important;
+}
+#app-mount button:is([class*="lookFilled"], [class*="secondary_"], [class*="primary_"], [class*="colorPrimary"], [class*="colorBrand"]):not([class*="lookBlank"]):active {
+    background-image: var(--aero-gloss-pressed) !important;
+    box-shadow: inset 0 2px 4px var(--aero-inner-shadow) !important;
+}
+
+/* Panes: a faint grain under the gradients, like brushed or frosted plastic */
+.sidebarList__5e434,
+.container_c8ffbb,
+.content_f75fb0 > .membersWrap_c8ffbb,
+.nowPlayingColumn__133bf,
+.side_aa8da2 {
+    background: var(--aero-grain), var(--aero-pane) !important;
+}
+.chatContent_f75fb0,
+.peopleColumn__133bf {
+    background: var(--aero-grain), var(--aero-chat-bg) !important;
+}
+
+/* ── Friends page ─────────────────────────────────────────────────────────── */
+/* the Online / All / Pending tabs: Windows 7 tab buttons */
+.container__133bf .item__133bf {
+    background: var(--aero-face) var(--aero-gloss) !important;
+    border: 1px solid var(--aero-button-edge) !important;
+    border-radius: 3px !important;
+    box-shadow: inset 0 1px var(--aero-button-shine) !important;
+    color: var(--aero-button-text) !important;
+    margin: 0 2px !important;
+    padding: 1px 10px !important;
+    text-shadow: 0 1px var(--aero-button-text-shadow);
+}
+.container__133bf .item__133bf:hover {
+    background: var(--aero-face-hot) var(--aero-gloss) !important;
+    border-color: var(--aero-button-hot-border) !important;
+}
+.container__133bf .item__133bf[aria-selected="true"],
+.container__133bf .item__133bf[class*="selected"] {
+    background: var(--aero-face-pressed) var(--aero-gloss-pressed) !important;
+    box-shadow: inset 0 1px 3px var(--aero-inner-shadow) !important;
+}
+
+/* friend rows: hover lifts the row like an Explorer item; the round buttons become glass orbs */
+.peopleListItem_cc6179 {
+    border-radius: 3px;
+    border-top-color: var(--aero-rule) !important;
+}
+.peopleListItem_cc6179:hover {
+    background: var(--aero-hover-bg) !important;
+    box-shadow: inset 0 0 0 1px var(--aero-hover-border);
+}
+.actionButton_f8fa06,
+.actionButton_cc1819 {
+    background: var(--aero-face) var(--aero-orb) !important;
+    border: 1px solid var(--aero-button-edge);
+    box-shadow: inset 0 1px var(--aero-button-shine), 0 1px 3px var(--aero-drop);
+}
+.actionButton_f8fa06:hover,
+.actionButton_cc1819:hover {
+    background: var(--aero-face-hot) var(--aero-orb) !important;
+    border-color: var(--aero-button-hot-border);
+}
+
+/* search boxes: sunken fields */
+.searchBar_e6b769,
+.searchBar_c322aa,
+[class*="searchBarComponent_"] {
+    background: var(--aero-field-bg) !important;
+    border: 1px solid var(--aero-field-border) !important;
+    border-top-color: var(--aero-field-border-top) !important;
+    border-radius: 2px !important;
+    box-shadow: inset 0 1px 2px var(--aero-inner-shadow), 0 1px var(--aero-bevel-light) !important;
+}
+
+/* Active Now: raised cards with a glossy title strip */
+.itemCard__7e549 {
+    background: var(--aero-cell) !important;
+    border: 1px solid var(--aero-group-border) !important;
+    border-radius: 4px !important;
+    box-shadow: inset 0 1px var(--aero-bevel-light), 0 2px 5px var(--aero-drop) !important;
+    overflow: hidden;
+}
+.itemCard__7e549 > :first-child {
+    background: var(--aero-footer) !important;
+    box-shadow: inset 0 -1px var(--aero-bevel-dark);
+}
+.nowPlayingColumn__133bf h1,
+.nowPlayingColumn__133bf h2,
+.nowPlayingColumn__133bf h3 {
+    text-shadow: var(--aero-text-shadow);
+}
+
+/* ── Settings ─────────────────────────────────────────────────────────────── */
+/* the settings page: textured gradient background, sidebar as a raised pane */
+.contentRegion__23e6b,
+.contentRegionScroller__23e6b {
+    background: var(--aero-grain), var(--aero-chat-bg) !important;
+}
+.sidebarRegion__23e6b,
+.sidebarRegionScroller__23e6b {
+    background: var(--aero-grain), var(--aero-pane) !important;
+    box-shadow: inset -1px 0 var(--aero-bevel-dark), inset -2px 0 var(--aero-bevel-light);
+}
+/* dividers between settings groups: an etched line */
+[class*="contentColumn_"] [class*="divider_"] {
+    border-top: 1px solid var(--aero-bevel-dark) !important;
+    box-shadow: 0 1px var(--aero-bevel-light);
+    background: none !important;
+}
+/* section titles: embossed */
+[class*="contentColumn_"] h1,
+[class*="contentColumn_"] h2,
+[class*="contentColumn_"] h3 {
+    text-shadow: var(--aero-text-shadow);
+}
+/* sidebar selection */
+.side_aa8da2 .item_aa8da2 {
+    text-shadow: 0 1px var(--aero-etch);
+}
+
+/* toggle switches: glossy track */
+[class*="container_"]:has(> input[role="switch"]),
+div[class*="control_"]:has(input[type="checkbox"]) > div[class*="container_"] {
+    background-image: var(--aero-gloss) !important;
+    box-shadow: inset 0 1px 2px var(--aero-inner-shadow), 0 1px var(--aero-bevel-light);
 }

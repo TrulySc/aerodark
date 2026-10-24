@@ -131,4 +131,20 @@ body {
     --aero-mention-shine: #fffbe8;
     --aero-mention-edge: #e0a000;
     --aero-cell: linear-gradient(180deg, #ffffff 0%, #eef2f7 100%);
+
+    /* glossy buttons over Discord's solid button colours */
+    --aero-face: #e6e6e6;
+    --aero-face-hot: #cfe9f9;
+    --aero-face-pressed: #a9d6f0;
+    --aero-face-primary: #2f7fd0;
+    --aero-face-primary-hot: #4596e3;
+    --aero-face-primary-border: #1d5288;
+    --aero-face-danger: #c7432c;
+    --aero-face-danger-hot: #dc5a40;
+    --aero-button-edge: #707070;
+    --aero-button-inner: rgba(255, 255, 255, 0.55);
+    --aero-gloss: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 49%, rgba(0,0,0,0.07) 50%, rgba(255,255,255,0.1) 100%);
+    --aero-gloss-pressed: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 100%);
+    --aero-orb: radial-gradient(circle at 50% 22%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.35) 45%, rgba(0,0,0,0.08) 100%);
+    --aero-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }

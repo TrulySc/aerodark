@@ -253,22 +253,22 @@ body,
 .theme-light:not(.custom-user-profile-theme) {
     --text-link: var(--aero-link);
 
-    --control-primary-background-default: var(--aero-button-default-bg);
-    --control-primary-background-hover: var(--aero-button-hot-bg);
-    --control-primary-background-active: var(--aero-button-pressed-bg);
-    --control-primary-border-default: var(--aero-button-default-border);
+    --control-primary-background-default: var(--aero-face-primary);
+    --control-primary-background-hover: var(--aero-face-primary-hot);
+    --control-primary-background-active: var(--aero-face-pressed);
+    --control-primary-border-default: var(--aero-face-primary-border);
     --control-primary-border-hover: var(--aero-button-hot-border);
     --control-primary-border-active: var(--aero-button-pressed-border);
-    --control-primary-text-default: var(--aero-button-text);
-    --control-primary-text-hover: var(--aero-button-text);
-    --control-primary-text-active: var(--aero-button-text);
-    --control-primary-icon-default: var(--aero-button-text);
+    --control-primary-text-default: #ffffff;
+    --control-primary-text-hover: #ffffff;
+    --control-primary-text-active: #ffffff;
+    --control-primary-icon-default: #ffffff;
     --control-primary-icon-hover: var(--aero-button-text);
     --control-primary-icon-active: var(--aero-button-text);
 
-    --control-secondary-background-default: var(--aero-button-bg);
-    --control-secondary-background-hover: var(--aero-button-hot-bg);
-    --control-secondary-background-active: var(--aero-button-pressed-bg);
+    --control-secondary-background-default: var(--aero-face);
+    --control-secondary-background-hover: var(--aero-face-hot);
+    --control-secondary-background-active: var(--aero-face-pressed);
     --control-secondary-border-default: var(--aero-button-border);
     --control-secondary-border-hover: var(--aero-button-hot-border);
     --control-secondary-border-active: var(--aero-button-pressed-border);
@@ -280,9 +280,9 @@ body,
     --control-secondary-icon-active: var(--aero-button-text);
 
     /* the bright white "Get Nitro"-style buttons → ordinary push buttons */
-    --control-expressive-background-default: var(--aero-button-bg);
-    --control-expressive-background-hover: var(--aero-button-hot-bg);
-    --control-expressive-background-active: var(--aero-button-pressed-bg);
+    --control-expressive-background-default: var(--aero-face);
+    --control-expressive-background-hover: var(--aero-face-hot);
+    --control-expressive-background-active: var(--aero-face-pressed);
     --control-expressive-border-default: var(--aero-button-border);
     --control-expressive-border-hover: var(--aero-button-hot-border);
     --control-expressive-border-active: var(--aero-button-pressed-border);
@@ -293,9 +293,9 @@ body,
     --control-expressive-icon-hover: var(--aero-button-text);
     --control-expressive-icon-active: var(--aero-button-text);
 
-    --control-critical-primary-background-default: var(--aero-button-danger-bg);
-    --control-critical-primary-background-hover: var(--aero-button-danger-hot-bg);
-    --control-critical-primary-background-active: var(--aero-button-danger-hot-bg);
+    --control-critical-primary-background-default: var(--aero-face-danger);
+    --control-critical-primary-background-hover: var(--aero-face-danger-hot);
+    --control-critical-primary-background-active: var(--aero-face-danger-hot);
     --control-critical-primary-border-default: var(--aero-button-danger-border);
     --control-critical-primary-border-hover: var(--aero-button-danger-border);
     --control-critical-primary-text-default: #ffffff;
