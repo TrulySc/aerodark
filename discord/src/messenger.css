@@ -1,0 +1,589 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Messenger — Discord as Windows Live Messenger 2009 (light).
+   Built on the Aero base (fonts, menus, buttons, scrollbars); this file replaces
+   the layout and look of every main surface. Accuracy over safety: some Discord
+   details are hidden or rearranged to match Messenger.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Palette: Windows Live Messenger 2009 ─────────────────────────────────── */
+:root,
+body,
+.theme-light:not(.custom-user-profile-theme) {
+    --wlm-body: linear-gradient(180deg, #d9ecfa 0px, #e8f3fc 120px, #f2f8fd 400px, #f6fafe 100%);
+    --wlm-header: radial-gradient(ellipse 55% 120% at 82% -10%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 70%),
+                  radial-gradient(ellipse 35% 90% at 96% 20%, rgba(186, 236, 218, 0.75), rgba(186, 236, 218, 0) 70%),
+                  radial-gradient(ellipse 40% 100% at 60% 120%, rgba(160, 210, 245, 0.55), rgba(160, 210, 245, 0) 70%),
+                  linear-gradient(180deg, #cfe6f8 0%, #dcedfa 45%, #ecf5fc 100%);
+    --wlm-box: #ffffff;
+    --wlm-box-border: #a7bcd3;
+    --wlm-box-border-dark: #8aa4c0;
+    --wlm-strip: linear-gradient(180deg, #f9fcff 0%, #edf4fb 55%, #e2edf8 100%);
+    --wlm-strip-edge: #b9cde2;
+    --wlm-text: #000000;
+    --wlm-name: #1e395b;
+    --wlm-grey: #6d6d6d;
+    --wlm-says: #808080;
+    --wlm-group: #000000;
+    --wlm-link: #0066cc;
+    --wlm-hover: linear-gradient(180deg, #f2f9fe, #e1f1fc);
+    --wlm-hover-border: #b8d6fb;
+    --wlm-select: linear-gradient(180deg, #dcebfc, #c4ddfa);
+    --wlm-select-border: #84acdd;
+    --wlm-tab-strip: linear-gradient(90deg, #e4effa 0%, #f3f8fd 100%);
+
+    /* MSN buddy icons, by status */
+    --wlm-buddy-online: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cdefs%3E%3CradialGradient id='h' cx='.35' cy='.3' r='.85'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.3' stop-color='%238be05a'/%3E%3Cstop offset='1' stop-color='%232f9e1a'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%239fe870'/%3E%3Cstop offset='1' stop-color='%232f9e1a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M2.3 15.5c0-3.6 2.4-5.6 5.7-5.6s5.7 2 5.7 5.6z' fill='url(%23b)' stroke='%231f6e10' stroke-width='.8'/%3E%3Ccircle cx='8' cy='5.3' r='3.7' fill='url(%23h)' stroke='%231f6e10' stroke-width='.8'/%3E%3C/svg%3E");
+    --wlm-buddy-away: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cdefs%3E%3CradialGradient id='h' cx='.35' cy='.3' r='.85'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.3' stop-color='%23ffd36a'/%3E%3Cstop offset='1' stop-color='%23e08a00'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffe08a'/%3E%3Cstop offset='1' stop-color='%23e08a00'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M2.3 15.5c0-3.6 2.4-5.6 5.7-5.6s5.7 2 5.7 5.6z' fill='url(%23b)' stroke='%239a5d00' stroke-width='.8'/%3E%3Ccircle cx='8' cy='5.3' r='3.7' fill='url(%23h)' stroke='%239a5d00' stroke-width='.8'/%3E%3Ccircle cx='12.3' cy='12.3' r='3.2' fill='%23fff' stroke='%239a5d00' stroke-width='.7'/%3E%3Cpath d='M12.3 10.6v1.9l1.2.8' fill='none' stroke='%239a5d00' stroke-width='.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    --wlm-buddy-busy: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cdefs%3E%3CradialGradient id='h' cx='.35' cy='.3' r='.85'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.3' stop-color='%23ff8a7a'/%3E%3Cstop offset='1' stop-color='%23d1301c'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff9c8c'/%3E%3Cstop offset='1' stop-color='%23d1301c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M2.3 15.5c0-3.6 2.4-5.6 5.7-5.6s5.7 2 5.7 5.6z' fill='url(%23b)' stroke='%238a1a0c' stroke-width='.8'/%3E%3Ccircle cx='8' cy='5.3' r='3.7' fill='url(%23h)' stroke='%238a1a0c' stroke-width='.8'/%3E%3Ccircle cx='12.3' cy='12.3' r='3.2' fill='%23e8402b' stroke='%23fff' stroke-width='.8'/%3E%3Cpath d='M10.6 12.3h3.4' stroke='%23fff' stroke-width='1.2'/%3E%3C/svg%3E");
+    --wlm-buddy-offline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cdefs%3E%3CradialGradient id='h' cx='.35' cy='.3' r='.85'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.3' stop-color='%23e2e6ea'/%3E%3Cstop offset='1' stop-color='%23a3adb8'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23eef1f4'/%3E%3Cstop offset='1' stop-color='%23a3adb8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M2.3 15.5c0-3.6 2.4-5.6 5.7-5.6s5.7 2 5.7 5.6z' fill='url(%23b)' stroke='%236b7682' stroke-width='.8'/%3E%3Ccircle cx='8' cy='5.3' r='3.7' fill='url(%23h)' stroke='%236b7682' stroke-width='.8'/%3E%3C/svg%3E");
+    --wlm-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%239fe870'/%3E%3Cstop offset='1' stop-color='%232f9e1a'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238fd0ff'/%3E%3Cstop offset='1' stop-color='%231d6fc0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M9.5 15.5c0-3.4 2.3-5.3 5.5-5.3s5.5 1.9 5.5 5.3z' fill='url(%23b)' stroke='%23124a85' stroke-width='.7'/%3E%3Ccircle cx='15' cy='5.6' r='3.5' fill='url(%23b)' stroke='%23124a85' stroke-width='.7'/%3E%3Cpath d='M2.5 15.5c0-3.4 2.3-5.3 5.5-5.3s5.5 1.9 5.5 5.3z' fill='url(%23g)' stroke='%231f6e10' stroke-width='.7'/%3E%3Ccircle cx='8' cy='5.6' r='3.5' fill='url(%23g)' stroke='%231f6e10' stroke-width='.7'/%3E%3C/svg%3E");
+
+    /* Discord's own colours, pulled toward Messenger */
+    --text-link: var(--wlm-link);
+    --background-base-lower: #ffffff;
+    --background-base-low: #ffffff;
+    --background-surface-high: #ffffff;
+    --chat-background-default: #ffffff;
+}
+
+/* ── Whole window ─────────────────────────────────────────────────────────── */
+#app-mount,
+#app-mount .bg__960e4,
+#app-mount .base__5e434,
+#app-mount .content__5e434,
+#app-mount .page_c48ade,
+#app-mount .chat_f75fb0,
+#app-mount .content_f75fb0 {
+    background: var(--wlm-body) !important;
+}
+
+/* top bar: the Messenger title */
+#app-mount .bar_c38106 {
+    height: 26px !important;
+    min-height: 26px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+#app-mount .title_c38106 {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    padding-left: 8px !important;
+    font-size: 0 !important;
+    opacity: 1 !important;
+}
+#app-mount .title_c38106::before {
+    content: "";
+    width: 22px;
+    height: 15px;
+    background: var(--wlm-logo) center / contain no-repeat;
+}
+#app-mount .title_c38106::after {
+    content: "Windows Live Messenger";
+    font-size: 9pt;
+    color: var(--wlm-text);
+    text-shadow: 0 0 6px #fff, 0 0 2px #fff;
+}
+body {
+    --top-bar-height: 26px;
+}
+
+/* ── Your own profile: Messenger's header above the contact list ──────────── */
+/* Discord pins the user panel to the bottom; Messenger has you at the top. */
+#app-mount .panels__5e434 {
+    top: 0 !important;
+    bottom: auto !important;
+    background: var(--wlm-header) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid var(--wlm-strip-edge) !important;
+    box-shadow: none !important;
+    padding: 6px 6px 4px !important;
+}
+#app-mount .guilds__5e434,
+#app-mount .sidebarList__5e434 {
+    margin-top: var(--custom-app-panels-height, 72px) !important;
+    margin-bottom: 0 !important;
+}
+/* the big display picture, name and status */
+#app-mount .panels__5e434 div[role="img"][class*="wrapper_"] {
+    zoom: 1.5;
+    border-radius: 3px;
+    position: relative;
+}
+#app-mount .panels__5e434 div[role="img"][class*="wrapper_"]::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    padding: 3px;
+    border-radius: 5px;
+    background: linear-gradient(160deg, #ffffff 0%, #dbe5ef 30%, #9fb1c5 52%, #b6c7d9 75%, #e6eef6 100%);
+    box-shadow: 0 0 0 1px #5a6f87, 0 2px 4px rgba(0, 0, 0, 0.25);
+    -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+#app-mount .panels__5e434 div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; }
+#app-mount .panels__5e434 div[role="img"][class*="wrapper_"] img { border-radius: 2px !important; }
+#app-mount .panels__5e434 div[role="img"][class*="wrapper_"] > svg > rect { display: none; }
+#app-mount .panels__5e434 [class*="nameTag_"],
+#app-mount .panels__5e434 [class*="panelTitleContainer_"],
+#app-mount .panels__5e434 [class*="title_"] {
+    font-size: 11pt !important;
+    color: var(--wlm-text) !important;
+}
+#app-mount .panels__5e434 [class*="subtext_"],
+#app-mount .panels__5e434 [class*="panelSubtextContainer_"] {
+    color: var(--wlm-grey) !important;
+}
+#app-mount .panels__5e434 .button__67645 {
+    color: #4a5a6c !important;
+}
+
+/* ── Server list: Messenger's vertical tab strip ──────────────────────────── */
+#app-mount .guilds__5e434 {
+    background: var(--wlm-tab-strip) !important;
+    border: none !important;
+    border-right: 1px solid var(--wlm-box-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    width: 46px !important;
+    min-width: 46px !important;
+}
+#app-mount .guilds__5e434 .listItem__650eb {
+    zoom: 0.62;
+}
+#app-mount .listItem__650eb {
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+#app-mount .listItem__650eb:hover .wrapper__6e9f8,
+#app-mount .listItem__650eb:has(.selected__6e9f8) .wrapper__6e9f8 {
+    outline: 2px solid #7fb2e5;
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+#app-mount .pill_e5445c { display: none; }
+#app-mount .wrapper__6e9f8::after { display: none; }
+
+/* ── Contact list (DMs, channels) ─────────────────────────────────────────── */
+#app-mount .sidebarList__5e434 {
+    background: var(--wlm-box) !important;
+    border: 1px solid var(--wlm-box-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin-left: 4px !important;
+    margin-right: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
+}
+#app-mount .channel__972a0,
+#app-mount .channel__972a0 > div,
+#app-mount .channel__972a0 a {
+    min-width: 0 !important;
+}
+/* "Find or start a conversation" → Messenger's search box */
+#app-mount .sidebarList__5e434 [class*="searchBar_"],
+#app-mount .sidebarList__5e434 button[class*="searchBar"] {
+    background: #ffffff !important;
+    border: 1px solid #abadb3 !important;
+    border-top-color: #9ba7b5 !important;
+    border-radius: 2px !important;
+    box-shadow: none !important;
+    color: var(--wlm-grey) !important;
+    font-style: normal;
+    height: 22px !important;
+    justify-content: flex-start !important;
+    padding-left: 6px !important;
+}
+#app-mount .sidebarList__5e434 > :first-child,
+#app-mount .headerGlass_f37cb1 {
+    background: var(--wlm-strip) !important;
+    border-bottom: 1px solid var(--wlm-strip-edge) !important;
+    box-shadow: none !important;
+}
+/* group headers: "▾ Online (7)" */
+#app-mount [class*="privateChannelsHeaderContainer_"],
+#app-mount .containerDefault__29444 [class*="name_"],
+#app-mount [class*="membersGroup_"] {
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 9pt !important;
+    font-weight: 700 !important;
+    color: var(--wlm-group) !important;
+}
+#app-mount [class*="privateChannelsHeaderContainer_"] > :first-child::before,
+#app-mount [class*="membersGroup_"] > :first-child::before {
+    content: "▾ ";
+    color: #5a6b7c;
+    font-weight: 400;
+}
+
+/* contacts: buddy icon, "Name - personal message" on one line */
+#app-mount .channel__972a0,
+#app-mount .container__91a9d {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    height: 22px !important;
+    min-height: 22px !important;
+}
+#app-mount .channel__972a0 > div,
+#app-mount .channel__972a0 a,
+#app-mount .container__91a9d > div {
+    height: 100% !important;
+    min-height: 0 !important;
+    gap: 6px !important;
+}
+#app-mount .channel__972a0 > div,
+#app-mount .container__91a9d {
+    border-radius: 2px !important;
+    color: var(--wlm-text) !important;
+}
+#app-mount .channel__972a0:hover > div,
+#app-mount .container__91a9d:hover {
+    background: var(--wlm-hover) !important;
+    box-shadow: inset 0 0 0 1px var(--wlm-hover-border) !important;
+}
+#app-mount .channel__972a0 .interactiveSelected__972a0,
+#app-mount .container__91a9d.selected__91a9d {
+    background: var(--wlm-select) !important;
+    box-shadow: inset 0 0 0 1px var(--wlm-select-border) !important;
+}
+#app-mount .channel__972a0 *,
+#app-mount .container__91a9d * {
+    color: inherit;
+}
+#app-mount .channel__972a0 div[role="img"][class*="wrapper_"],
+#app-mount .container__91a9d div[role="img"][class*="wrapper_"] {
+    width: 16px !important;
+    height: 16px !important;
+    background: var(--wlm-buddy-offline) center / 16px 16px no-repeat !important;
+    box-shadow: none !important;
+    zoom: 1 !important;
+}
+#app-mount .channel__972a0 div[role="img"][class*="wrapper_"] > *,
+#app-mount .container__91a9d div[role="img"][class*="wrapper_"] > * {
+    display: none !important;
+}
+#app-mount :is(.channel__972a0, .container__91a9d, .peopleListItem_cc6179) div[role="img"][class*="wrapper_"]:is([aria-label$="Online"], [aria-label*="Mobile"], [aria-label$="Streaming"]) {
+    background-image: var(--wlm-buddy-online) !important;
+}
+#app-mount :is(.channel__972a0, .container__91a9d, .peopleListItem_cc6179) div[role="img"][class*="wrapper_"][aria-label$="Idle"] {
+    background-image: var(--wlm-buddy-away) !important;
+}
+#app-mount :is(.channel__972a0, .container__91a9d, .peopleListItem_cc6179) div[role="img"][class*="wrapper_"][aria-label$="Do Not Disturb"] {
+    background-image: var(--wlm-buddy-busy) !important;
+}
+#app-mount .channel__972a0 [class*="nameAndDecorators_"],
+#app-mount .container__91a9d [class*="nameAndDecorators_"] {
+    flex: none;
+    white-space: nowrap;
+}
+#app-mount .channel__972a0 [class*="name__"],
+#app-mount .channel__972a0 [class*="name_"],
+#app-mount .container__91a9d [class*="name__"],
+#app-mount .container__91a9d [class*="name_"] {
+    font-size: 9pt !important;
+    font-weight: 400 !important;
+    color: var(--wlm-text) !important;
+}
+#app-mount .channel__972a0 div:has(> [class*="nameAndDecorators_"]):has(> [class*="subText_"]),
+#app-mount .container__91a9d div:has(> [class*="nameAndDecorators_"]):has(> [class*="subText_"]) {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: baseline;
+    gap: 4px;
+    min-width: 0;
+}
+#app-mount .channel__972a0 [class*="subText_"],
+#app-mount .container__91a9d [class*="subText_"] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    color: var(--wlm-grey) !important;
+    font-size: 9pt !important;
+    margin: 0 !important;
+    min-width: 0;
+}
+#app-mount .channel__972a0 [class*="subText_"]::before,
+#app-mount .container__91a9d [class*="subText_"]::before {
+    content: "- ";
+}
+/* Friends / Nitro / Shop rows at the top of the DM list */
+#app-mount .sidebarList__5e434 [class*="linkButton_"],
+#app-mount .sidebarList__5e434 a[href^="/store"],
+#app-mount .sidebarList__5e434 a[href="/channels/@me"] {
+    font-size: 9pt !important;
+}
+
+/* channel list rows (servers) */
+#app-mount .wrapper__2ea32 .link__2ea32 {
+    color: var(--wlm-text) !important;
+    border-radius: 2px !important;
+}
+#app-mount .wrapper__2ea32:hover .link__2ea32 {
+    background: var(--wlm-hover) !important;
+    box-shadow: inset 0 0 0 1px var(--wlm-hover-border) !important;
+}
+#app-mount .wrapper__2ea32.modeSelected__2ea32 .link__2ea32 {
+    background: var(--wlm-select) !important;
+    box-shadow: inset 0 0 0 1px var(--wlm-select-border) !important;
+}
+
+/* ── Member list: a contact list too ──────────────────────────────────────── */
+#app-mount .container_c8ffbb,
+#app-mount .content_f75fb0 > .membersWrap_c8ffbb {
+    background: var(--wlm-box) !important;
+    border: 1px solid var(--wlm-box-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 4px 4px 0 !important;
+}
+
+/* ── Conversation ─────────────────────────────────────────────────────────── */
+/* header: "To: Name" with the personal message, then the labelled toolbar */
+#app-mount .chat_f75fb0 > .subtitleContainer_f75fb0,
+#app-mount .container__133bf > .container__9293f,
+#app-mount .container_f391e3 > .container__9293f,
+#app-mount .homeWrapper__0920e > .container__9293f {
+    --aero-header-height: 44px;
+    height: 44px !important;
+    min-height: 44px !important;
+    background: var(--wlm-strip) !important;
+    border: none !important;
+    border-bottom: 1px solid var(--wlm-strip-edge) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+#app-mount .subtitleContainer_f75fb0 .title_f75fb0,
+#app-mount .subtitleContainer_f75fb0 h1,
+#app-mount .container__9293f h1 {
+    font-size: 12pt !important;
+    font-weight: 400 !important;
+    color: var(--wlm-text) !important;
+    text-shadow: none !important;
+}
+/* "To: Name" — Messenger's conversation header (the channel's own icon is hidden) */
+#app-mount .subtitleContainer_f75fb0 h1::before,
+#app-mount .subtitleContainer_f75fb0 .title_f75fb0::before {
+    content: "To: ";
+    font-size: 9pt;
+    color: var(--wlm-grey);
+}
+#app-mount .subtitleContainer_f75fb0 > [class*="children_"] > [class*="iconWrapper_"]:first-child,
+#app-mount .subtitleContainer_f75fb0 [class*="titleWrapper_"] > [class*="iconWrapper_"] {
+    display: none !important;
+}
+/* toolbar buttons with Messenger's labels */
+#app-mount .subtitleContainer_f75fb0 [aria-label]:is([aria-label="Start Voice Call"], [aria-label="Start Video Call"],
+    [aria-label="Pinned Messages"], [aria-label="Add Friends to DM"], [aria-label="Show User Profile"],
+    [aria-label="Hide User Profile"], [aria-label="Threads"], [aria-label="Notification Settings"],
+    [aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Inbox"], [aria-label="Help"]) {
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto !important;
+    min-width: 34px;
+    height: 40px !important;
+    padding: 2px 6px !important;
+    border-radius: 3px;
+    color: #2b4c74 !important;
+}
+#app-mount .subtitleContainer_f75fb0 [aria-label]:is([aria-label="Start Voice Call"], [aria-label="Start Video Call"],
+    [aria-label="Pinned Messages"], [aria-label="Add Friends to DM"], [aria-label="Show User Profile"],
+    [aria-label="Hide User Profile"], [aria-label="Threads"], [aria-label="Notification Settings"],
+    [aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Inbox"], [aria-label="Help"])::after {
+    font-size: 8pt;
+    line-height: 1;
+    margin-top: 2px;
+    color: var(--wlm-text);
+    white-space: nowrap;
+}
+#app-mount .subtitleContainer_f75fb0 [aria-label]:is([aria-label="Start Voice Call"], [aria-label="Start Video Call"],
+    [aria-label="Pinned Messages"], [aria-label="Add Friends to DM"], [aria-label="Show User Profile"],
+    [aria-label="Hide User Profile"], [aria-label="Threads"], [aria-label="Notification Settings"],
+    [aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Inbox"], [aria-label="Help"]):hover {
+    background: var(--wlm-hover) !important;
+    box-shadow: inset 0 0 0 1px var(--wlm-hover-border);
+}
+#app-mount [aria-label="Start Voice Call"]::after   { content: "Call"; }
+#app-mount [aria-label="Start Video Call"]::after   { content: "Video"; }
+#app-mount [aria-label="Pinned Messages"]::after    { content: "Pins"; }
+#app-mount [aria-label="Add Friends to DM"]::after  { content: "Invite"; }
+#app-mount [aria-label="Show User Profile"]::after,
+#app-mount [aria-label="Hide User Profile"]::after  { content: "Profile"; }
+#app-mount [aria-label="Threads"]::after            { content: "Threads"; }
+#app-mount [aria-label="Notification Settings"]::after { content: "Alerts"; }
+#app-mount [aria-label="Show Member List"]::after,
+#app-mount [aria-label="Hide Member List"]::after   { content: "Contacts"; }
+#app-mount .subtitleContainer_f75fb0 [aria-label="Inbox"]::after { content: "Inbox"; }
+#app-mount .subtitleContainer_f75fb0 [aria-label="Help"]::after  { content: "Help"; }
+
+/* the conversation box */
+#app-mount .chatContent_f75fb0 {
+    background: var(--wlm-box) !important;
+    border: 1px solid var(--wlm-box-border) !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    margin: 6px 6px 0 6px !important;
+    overflow: hidden;
+}
+
+/* messages: no pictures, "Name says:", bulleted lines */
+#app-mount .avatar_c19a55,
+#app-mount img.avatar_c19a55,
+#app-mount [class*="avatarDecoration_"] {
+    display: none !important;
+}
+#app-mount li[id^="chat-messages-"] [class*="cozy_"],
+#app-mount [class*="message_"][class*="cozyMessage_"] {
+    padding-left: 12px !important;
+}
+#app-mount [class*="message_"][class*="groupStart_"] {
+    margin-top: 8px !important;
+}
+#app-mount .username_c19a55 {
+    font-weight: 400 !important;
+    font-size: 9pt !important;
+    color: var(--wlm-says) !important;
+}
+#app-mount .username_c19a55::after {
+    content: " says:";
+    color: var(--wlm-says);
+}
+#app-mount .repliedMessage_c19a55 .username_c19a55::after {
+    content: none;
+}
+#app-mount .messageContent_c19a55:not(.repliedMessage_c19a55 *) {
+    padding-left: 14px !important;
+    text-indent: -10px;
+    color: var(--wlm-text) !important;
+    font-size: 10pt !important;
+}
+#app-mount .messageContent_c19a55:not(.repliedMessage_c19a55 *)::before {
+    content: "• ";
+    color: var(--wlm-text);
+}
+/* timestamps and the hover bar stay out of the way, as in Messenger */
+#app-mount [class*="timestamp_"]:not([class*="timestampVisibleOnHover"]) {
+    font-size: 8pt !important;
+    color: #a0a0a0 !important;
+}
+#app-mount [class*="message_"]:not(:hover) [class*="timestamp_"] {
+    visibility: hidden;
+}
+#app-mount [class*="message_"]:hover {
+    background: transparent !important;
+}
+/* mentions: a soft yellow line */
+#app-mount [class*="mentioned_"] {
+    background: #fff8d8 !important;
+    box-shadow: none !important;
+}
+#app-mount [class*="mentioned_"]::before {
+    background: #f0c040 !important;
+}
+/* date dividers: a quiet line */
+#app-mount [role="separator"][class*="hasContent_"] > span {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #9a9a9a !important;
+    font-weight: 400 !important;
+}
+/* emoji at Messenger size, even on their own */
+#app-mount img.emoji.jumboable {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+/* ── The typing box: white, framed, with a toolbar feel ───────────────────── */
+#app-mount .form_f75fb0 {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 6px 6px 8px !important;
+}
+#app-mount .channelTextArea_f75fb0,
+#app-mount .form_f75fb0 .themedBackground__74017 {
+    background: var(--wlm-box) !important;
+    border: 1px solid var(--wlm-box-border) !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    min-height: 64px;
+}
+#app-mount .channelTextArea_f75fb0 [class*="buttons_"] {
+    align-self: flex-end;
+}
+#app-mount .slateTextArea_ec4baf {
+    font-size: 10pt !important;
+    color: var(--wlm-text) !important;
+}
+
+/* ── Display pictures: the DM profile panel → Messenger's picture boxes ───── */
+#app-mount .content_f75fb0 > aside > .outer_c0bea0 {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+#app-mount .content_f75fb0 > aside [class*="banner"] {
+    display: none !important;
+}
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] {
+    position: relative !important;
+    top: auto !important;
+    margin: 10px auto 6px !important;
+    border-radius: 4px;
+}
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] foreignObject { mask: none !important; }
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] img { border-radius: 3px !important; }
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"] > svg > rect { display: none; }
+#app-mount .content_f75fb0 > aside div[role="img"][class*="wrapper_"]::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    padding: 6px;
+    border-radius: 9px;
+    background: linear-gradient(160deg, #ffffff 0%, #e4eef8 25%, #a9c3df 50%, #c4d7ea 75%, #eef5fb 100%);
+    box-shadow: 0 0 0 1px #6f8fb3, 0 3px 8px rgba(0, 0, 0, 0.25);
+    -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+
+/* ── Friends page and Active Now: plain Messenger panes ───────────────────── */
+#app-mount .peopleColumn__133bf,
+#app-mount .nowPlayingColumn__133bf {
+    background: var(--wlm-box) !important;
+    border: 1px solid var(--wlm-box-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+#app-mount .peopleListItem_cc6179 div[role="img"][class*="wrapper_"] {
+    width: 16px !important;
+    height: 16px !important;
+    background: var(--wlm-buddy-offline) center / 16px 16px no-repeat !important;
+}
+#app-mount .peopleListItem_cc6179 div[role="img"][class*="wrapper_"] > * {
+    display: none !important;
+}
+#app-mount .itemCard__7e549 {
+    background: #ffffff !important;
+    border: 1px solid var(--wlm-box-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* ── Text everywhere: black on white, Segoe UI 9 pt ───────────────────────── */
+#app-mount {
+    --text-default: #000000;
+    --text-normal: #000000;
+    --header-primary: #000000;
+    --header-secondary: #6d6d6d;
+    --channels-default: #000000;
+    --interactive-normal: #2b4c74;
+    --interactive-hover: #000000;
+    --interactive-active: #000000;
+}

@@ -80,7 +80,7 @@ if [ -d "$CONF/vesktop" ] || [ -d "$CONF/Vencord" ]; then
   for d in "$CONF/vesktop/themes" "$CONF/Vencord/themes"; do
     [ -d "$(dirname "$d")" ] || continue
     mkdir -p "$d"
-    cp -f "$REPO"/discord/AeroLight.theme.css "$REPO"/discord/AeroDark.theme.css "$d/"
+    cp -f "$REPO"/discord/AeroLight.theme.css "$REPO"/discord/AeroDark.theme.css "$REPO"/discord/Messenger.theme.css "$d/"
   done
   say "Updated the Discord themes"
   mkdir -p "$HOME/.local/bin" "$DATA/aerodark/discord"

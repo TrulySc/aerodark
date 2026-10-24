@@ -2,7 +2,8 @@
 # Builds AeroLight.theme.css and AeroDark.theme.css from src/ (shared base + one palette each).
 set -eu
 cd "$(dirname "$0")"
-make_theme() { # name description palette outfile
+make_theme() { # name description palette outfile [layers…]
+  local layers="${5:-src/skeuo.css src/msn.css}"
   {
     cat <<HDR
 /**
@@ -22,12 +23,10 @@ HDR
     cat "src/$3"
     echo
     cat src/base.css
-    echo
-    cat src/skeuo.css
-    echo
-    cat src/msn.css
+    for l in $layers; do echo; cat "$l"; done
   } > "$4"
 }
 make_theme "Aero Light" "Windows 7 for Discord, matching AeroThemePlasma: Explorer's command bar, nav-pane selection, Segoe UI 9pt, Windows 7 push buttons and text boxes. Use with Discord's Light appearance." palette-light.css AeroLight.theme.css
 make_theme "Aero Dark" "Windows 7 for Discord in the Aero Dark (VistaVG Black) colours, matching the Aero Dark desktop theme. Use with Discord's Dark appearance." palette-dark.css AeroDark.theme.css
-echo "built AeroLight.theme.css and AeroDark.theme.css"
+make_theme "Messenger" "Discord as Windows Live Messenger 2009. Use with Discord's Light appearance." palette-light.css Messenger.theme.css "src/messenger.css"
+echo "built AeroLight.theme.css, AeroDark.theme.css and Messenger.theme.css"

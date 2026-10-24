@@ -60,7 +60,9 @@ def code(e):
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
-    src = sys.argv[1]
+    src = os.path.expanduser(sys.argv[1])
+    if not os.path.exists(src):
+        sys.exit(f"Not found: {src}\nCheck the name with:  ls ~/Downloads | grep -i msn")
     tmp = None
     if zipfile.is_zipfile(src):
         tmp = tempfile.mkdtemp()
@@ -97,6 +99,10 @@ def main():
                 done += 1
     if tmp:
         shutil.rmtree(tmp, ignore_errors=True)
+    if not done:
+        found = sum(len(v) for v in files.values())
+        sys.exit(f"No emoticons imported: found {found} pictures in {sys.argv[1]}, but none named like the MSN "
+                 "pack (001.png …, regular_smile.png …).")
     print(f"Imported {done} emoticons into {OUT}. Now run: aerodark-discord-icons")
 
 
