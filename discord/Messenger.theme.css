@@ -2259,7 +2259,7 @@ body {
 #app-mount .privateChannels_e6b769 [class*="chiplet"] img { width: 18px !important; height: 18px !important; }
 #app-mount .header_c19a55 .vc-platform-indicator, #app-mount .header_c19a55 .vc-platform-indicator svg { height: 14px !important; width: auto !important; vertical-align: middle; }
 #app-mount .cozyMessage__5126c .contents_c19a55 > .avatar_c19a55 { top: 2px !important; left: 10px !important; }
-#app-mount .cozyMessage__5126c:has(.repliedMessage_c19a55) .contents_c19a55 > .avatar_c19a55 { top: 24px !important; }
+#app-mount .cozyMessage__5126c:has(.repliedMessage_c19a55) .contents_c19a55 > .avatar_c19a55 { top: 2px !important; }
 #app-mount .cozyMessage__5126c .repliedMessage_c19a55 .avatar_c19a55 { position: static !important; display: inline-block !important; width: 14px !important; height: 14px !important; }
 #app-mount .subtitleContainer_f75fb0 .titleWrapper__9293f { display: flex !important; flex-direction: row !important; align-items: baseline; }
 #app-mount .subtitleContainer_f75fb0 .children__9293f { flex-wrap: nowrap !important; }
@@ -2271,3 +2271,23 @@ body {
 #app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 div[role="img"] > * { display: block !important; }
 #app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 { z-index: 1; }
 #app-mount .content_f75fb0 > aside.aside_f58343 .header__7f9c0 { min-height: 130px; }
+
+/* — fix pass 3 — */
+/* the profile column: no leftover top padding, and the frame drawn on the picture itself */
+#app-mount .content_f75fb0 > aside.aside_f58343 .inner_c0bea0 { padding: 0 !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .header__7f9c0 { padding: 20px 0 26px !important; min-height: 0 !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742::after { content: none !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .avatar__75742 div[role="img"][class*="wrapper_"]::after {
+    content: "" !important; display: block !important; position: absolute; pointer-events: none; z-index: 2;
+    left: calc(-15px * 96 / 98); top: calc(-14px * 96 / 98);
+    width: calc(128px * 96 / 98); height: calc(147px * 96 / 98);
+    background: var(--wlm-img-frame-dp-base, var(--wlm-win7-frame)) 0 0 / 100% 100% no-repeat !important;
+}
+#app-mount .content_f75fb0 > aside.aside_f58343 .mutuals__6aa84 { display: block !important; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .mutuals__6aa84 > * { display: flex !important; align-items: center; gap: 4px; }
+#app-mount .content_f75fb0 > aside.aside_f58343 .spacer__6aa84 { display: none !important; }
+/* chat pictures: left of the name, never on the text */
+#app-mount .cozyMessage__5126c .contents_c19a55 > .avatar_c19a55 { left: 2px !important; top: 2px !important; }
+#app-mount .cozyMessage__5126c .header_c19a55 { padding-left: 24px !important; }
+#app-mount .cozyMessage__5126c .repliedMessage_c19a55 + .avatar_c19a55,
+#app-mount .cozyMessage__5126c:has(.repliedMessage_c19a55) .contents_c19a55 > .avatar_c19a55 { top: 2px !important; }

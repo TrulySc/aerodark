@@ -29,4 +29,5 @@ HDR
 make_theme "Aero Light" "Windows 7 for Discord, matching AeroThemePlasma: Explorer's command bar, nav-pane selection, Segoe UI 9pt, Windows 7 push buttons and text boxes. Use with Discord's Light appearance." palette-light.css AeroLight.theme.css
 make_theme "Aero Dark" "Windows 7 for Discord in the Aero Dark (VistaVG Black) colours, matching the Aero Dark desktop theme. Use with Discord's Dark appearance." palette-dark.css AeroDark.theme.css
 make_theme "Messenger" "Discord as Windows Live Messenger 2009. Use with Discord's Light appearance." palette-light.css Messenger.theme.css "src/messenger.css"
-echo "built AeroLight.theme.css, AeroDark.theme.css and Messenger.theme.css"
+make_theme "Messenger Dark" "Discord as Windows Live Messenger 2009, dark. Use with Discord's Dark appearance." palette-dark.css MessengerDark.theme.css "src/messenger-dark.css"
+echo "built AeroLight.theme.css, AeroDark.theme.css Messenger.theme.css and MessengerDark.theme.css"
